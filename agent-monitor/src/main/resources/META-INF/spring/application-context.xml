@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean class="com.winning.monitor.agent.core.collector.CollectExecutorContext"
+          init-method="start" destroy-method="shutdown">
+        <constructor-arg index="0">
+            <bean class="com.winning.monitor.agent.config.collector.impl.CollectorJsonConfigFactory"/>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <bean class="com.winning.monitor.agent.collector.api.CollectorExecutorFactory"/>
+        </constructor-arg>
+        <constructor-arg index="2" ref="collectDataSender"/>
+    </bean>
+
+
+
+
+    <bean id="collectDataSender" class="com.winning.monitor.agent.sender.collect.DefaultCollectDataSender">
+        <constructor-arg index="0" ref="messageTransport"/>
+        <constructor-arg index="1" value="5000"/>
+        <constructor-arg index="2" value="20"/>
+    </bean>
+
+
+
+    <bean id="messageTransport" class="com.winning.monitor.agent.sender.netty.transport.NettyMessageTransport"/>
+
+</beans>
