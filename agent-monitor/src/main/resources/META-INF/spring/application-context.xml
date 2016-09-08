@@ -3,28 +3,52 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean class="com.winning.monitor.agent.core.collector.CollectExecutorContext"
-          init-method="start" destroy-method="shutdown">
+    <bean class="com.winning.monitor.agent.core.collector.CollectExecutorTaskManager"
+          init-method="initialize" destroy-method="shutdown">
+        <constructor-arg ref="collectExecutorContext"/>
+    </bean>
+
+    <bean id="collectExecutorContext" class="com.winning.monitor.agent.core.collector.CollectExecutorContext"
+          init-method="initialize">
         <constructor-arg index="0">
             <bean class="com.winning.monitor.agent.config.collector.impl.CollectorJsonConfigFactory"/>
         </constructor-arg>
         <constructor-arg index="1">
             <bean class="com.winning.monitor.agent.collector.api.CollectorExecutorFactory"/>
         </constructor-arg>
-        <constructor-arg index="2" ref="collectDataSender"/>
+        <constructor-arg index="2">
+            <ref bean="collectDataStorage"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="collectDataStorage" class="com.winning.monitor.agent.sender.collect.DefaultCollectDataStorage"
+          init-method="initialize" destroy-method="shutdown">
+        <constructor-arg value="5000"/>
     </bean>
 
 
-
-
-    <bean id="collectDataSender" class="com.winning.monitor.agent.sender.collect.DefaultCollectDataSender">
-        <constructor-arg index="0" ref="messageTransport"/>
-        <constructor-arg index="1" value="5000"/>
-        <constructor-arg index="2" value="20"/>
+    <bean class="com.winning.monitor.agent.core.sender.DataEntitySenderTaskManager"
+          init-method="initialze" destroy-method="shutdown">
+        <constructor-arg index="0" ref="dataSenderContext"/>
+        <constructor-arg index="1">
+            <list>
+                <bean class="com.winning.monitor.agent.sender.collect.DefaultCollectDataSenderTask">
+                    <constructor-arg index="0" ref="collectDataStorage"/>
+                    <constructor-arg index="1" value="20"/>
+                </bean>
+            </list>
+        </constructor-arg>
     </bean>
 
+    <bean id="dataSenderContext" class="com.winning.monitor.agent.core.sender.DataSenderContext"
+          init-method="initialize">
+        <constructor-arg index="0">
+            <bean class="com.winning.monitor.agent.config.sender.DefaultSenderConfigFactory"/>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <bean class="com.winning.monitor.agent.sender.transport.factory.MessageTransportFactory"/>
+        </constructor-arg>
+    </bean>
 
-
-    <bean id="messageTransport" class="com.winning.monitor.agent.sender.netty.transport.NettyMessageTransport"/>
 
 </beans>

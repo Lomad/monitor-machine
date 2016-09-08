@@ -1,7 +1,7 @@
 package com.winning.monitor.agent.core.collector;
 
 import com.winning.monitor.agent.collector.api.executor.DataCollectExecutor;
-import com.winning.monitor.agent.sender.ICollectDataSender;
+import com.winning.monitor.agent.sender.IDataEntityStorage;
 import com.winning.monitor.message.collector.CollectData;
 
 /**
@@ -10,13 +10,14 @@ import com.winning.monitor.message.collector.CollectData;
 public class CollectExecutorTask implements Runnable {
 
     private final DataCollectExecutor executor;
-    private final ICollectDataSender collectDataSender;
+    private final IDataEntityStorage collectDataStorage;
 
     private boolean running = false;
 
-    public CollectExecutorTask(DataCollectExecutor executor, ICollectDataSender collectDataSender) {
+    public CollectExecutorTask(DataCollectExecutor executor,
+                               IDataEntityStorage collectDataStorage) {
         this.executor = executor;
-        this.collectDataSender = collectDataSender;
+        this.collectDataStorage = collectDataStorage;
     }
 
     public DataCollectExecutor getDataCollectExecutor() {
@@ -48,7 +49,7 @@ public class CollectExecutorTask implements Runnable {
 
             CollectData collectData = this.executor.collect();
             // 发送收集数据
-            this.collectDataSender.send(collectData);
+            this.collectDataStorage.put(collectData);
 
         } catch (Exception e) {
 

@@ -18,6 +18,7 @@
         <module>agent-test</module>
         <module>agent-core</module>
         <module>supervisor-receiver</module>
+        <module>agent-logging</module>
     </modules>
 
     <build>

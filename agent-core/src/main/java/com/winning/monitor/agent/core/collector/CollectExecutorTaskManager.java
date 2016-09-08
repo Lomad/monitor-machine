@@ -11,18 +11,27 @@ import java.util.concurrent.Executors;
 public class CollectExecutorTaskManager implements Runnable {
 
     private final static long DURATION = 1000;
+
+    private final CollectExecutorContext collectExecutorContext;
+
     private ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
     private List<CollectExecutorTask> executorTasks = new ArrayList<>();
     private Thread currentThread;
+    private volatile boolean active;
 
-    public void addCollectExecutorTask(CollectExecutorTask collectExecutorTask) {
-        this.executorTasks.add(collectExecutorTask);
+    public CollectExecutorTaskManager(CollectExecutorContext collectExecutorContext) {
+        this.collectExecutorContext = collectExecutorContext;
+    }
+
+    public void initialize() {
+        this.executorTasks = collectExecutorContext.getCollectExecutorTasks();
     }
 
     public void start() {
         if (currentThread != null)
             return;
 
+        this.active = true;
         this.currentThread = new Thread(this);
         this.currentThread.setDaemon(true);
         this.currentThread.start();
@@ -41,7 +50,7 @@ public class CollectExecutorTaskManager implements Runnable {
      */
     @Override
     public void run() {
-        while (true) {
+        while (active) {
             boolean hasRemoveTask = false;
             long current = System.currentTimeMillis();
             for (CollectExecutorTask task : executorTasks) {
@@ -60,7 +69,6 @@ public class CollectExecutorTaskManager implements Runnable {
                 this.removeTasks();
 
             long duration = System.currentTimeMillis() - current;
-            System.out.println("用时" + duration);
             try {
                 if (duration < DURATION) {
                     Thread.sleep(DURATION - duration);
@@ -70,6 +78,17 @@ public class CollectExecutorTaskManager implements Runnable {
             }
         }
     }
+
+    public void shutdown() {
+        this.active = false;
+        try {
+            this.currentThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        this.currentThread = null;
+    }
+
 
     private void removeTasks() {
         List<CollectExecutorTask> toRemoveTasks = new ArrayList<>();

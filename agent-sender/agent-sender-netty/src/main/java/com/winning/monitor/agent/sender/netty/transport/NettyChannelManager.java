@@ -48,6 +48,7 @@ public class NettyChannelManager {
 
         this.future = createChannel(addressList.get(0));
 
+
     }
 
     private List<InetSocketAddress> parseSocketAddress(String content) {
@@ -65,6 +66,10 @@ public class NettyChannelManager {
             logger.error(e.getMessage(), e);
         }
         return new ArrayList<InetSocketAddress>();
+    }
+
+    public ChannelFuture getChannelFuture() {
+        return this.future;
     }
 
 

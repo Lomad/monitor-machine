@@ -2,28 +2,22 @@ package com.winning.monitor.agent.sender;
 
 import com.winning.monitor.message.DataEntity;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by nicholasyan on 16/9/6.
  */
-public abstract class AbstractQueueDataSender<T extends DataEntity> implements Runnable {
+public abstract class AbstractDataSenderTask<T extends DataEntity>
+        implements Runnable {
 
     private final int MAX_ENTITIES;
-    private final BlockingQueue<T> dataEntityQueue;
+    private final IDataEntityStorage collectDataStorage;
+
     private Thread currentThread;
     private volatile boolean active = true;
 
-    public AbstractQueueDataSender() {
-        this(5000, 20);
-    }
-
-    public AbstractQueueDataSender(int maxQueueSize, int maxEntities) {
-        this.dataEntityQueue = new ArrayBlockingQueue<T>(maxQueueSize);
+    public AbstractDataSenderTask(IDataEntityStorage collectDataStorage, int maxEntities) {
+        this.collectDataStorage = collectDataStorage;
         this.MAX_ENTITIES = maxEntities;
     }
 
@@ -35,24 +29,18 @@ public abstract class AbstractQueueDataSender<T extends DataEntity> implements R
         this.currentThread = new Thread(this);
         this.currentThread.setDaemon(true);
         this.currentThread.start();
-
     }
 
     @Override
     public void run() {
         while (true) {
-            if (active == false && dataEntityQueue.size() == 0) {
+            //如果还没有处理完,等待所有队列消息处理完成
+            if (active == false && this.collectDataStorage.remainSize() == 0) {
                 return;
             }
             try {
                 int maxSize = MAX_ENTITIES;
-                List<T> dataEntities = new ArrayList<>();
-
-                while (dataEntityQueue.size() > 0 && maxSize > 0) {
-                    T entity = dataEntityQueue.poll(5, TimeUnit.MILLISECONDS);
-                    dataEntities.add(entity);
-                    maxSize--;
-                }
+                List<T> dataEntities = this.collectDataStorage.get(maxSize);
 
                 if (!dataEntities.isEmpty()) {
                     // TODO: 16/9/6 加入监控运行时间
@@ -78,25 +66,15 @@ public abstract class AbstractQueueDataSender<T extends DataEntity> implements R
         }
     }
 
-    public boolean put(T dataEntity) {
-        if (!this.active)
-            return false;
-
-        boolean result = true;
-        try {
-            result = this.dataEntityQueue.offer(dataEntity, 5, TimeUnit.MILLISECONDS);
-            return result;
-        } catch (Exception e) {
-            // TODO: 16/9/6 使用监控日志记录错误
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     public abstract boolean doSendDataEntities(List<T> dataEntities);
 
     public void stop() {
         this.active = false;
+        try {
+            this.currentThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         this.currentThread = null;
     }
 

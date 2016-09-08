@@ -1,0 +1,63 @@
+package com.winning.monitor.agent.logging.message;
+
+import com.winning.monitor.message.DataEntity;
+import com.winning.monitor.message.Message;
+
+/**
+ * Created by nicholasyan on 16/9/8.
+ */
+public interface MessageTree extends DataEntity, Message {
+
+    public static final String TYPE_NAME = "MessageTree";
+
+    public MessageTree copy();
+
+    public String getDomain();
+
+    public void setDomain(String domain);
+
+    public String getHostName();
+
+    public void setHostName(String hostName);
+
+    public String getIpAddress();
+
+    public void setIpAddress(String ipAddress);
+
+    public LogMessage getMessage();
+
+    public void setMessage(LogMessage message);
+
+    public String getMessageId();
+
+    public void setMessageId(String messageId);
+
+    public String getParentMessageId();
+
+    public void setParentMessageId(String parentMessageId);
+
+    public String getRootMessageId();
+
+    public void setRootMessageId(String rootMessageId);
+
+    public String getSessionToken();
+
+    public void setSessionToken(String sessionToken);
+
+    public String getThreadGroupName();
+
+    public void setThreadGroupName(String name);
+
+    public String getThreadId();
+
+    public void setThreadId(String threadId);
+
+    public String getThreadName();
+
+    public void setThreadName(String id);
+
+    public boolean isSample();
+
+    public void setSample(boolean sample);
+
+}

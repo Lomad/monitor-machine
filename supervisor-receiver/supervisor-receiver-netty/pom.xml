@@ -22,6 +22,11 @@
             <artifactId>netty-all</artifactId>
             <version>4.1.5.Final</version>
         </dependency>
+        <dependency>
+            <groupId>com.winning.monitor</groupId>
+            <artifactId>monitor-message-netty</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

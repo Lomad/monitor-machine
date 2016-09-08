@@ -10,6 +10,8 @@ import java.util.List;
  */
 public class CollectorMessage implements Message {
 
+    public static final String TYPE_NAME = "Collector";
+
     private List<CollectData> datas = new ArrayList<CollectData>();
 
     public List<CollectData> getDatas() {
