@@ -1,8 +1,9 @@
-package com.winning.monitor.agent.core.collector;
+package com.winning.monitor.agent.collector.task;
 
 import com.winning.monitor.agent.collector.api.entity.CollectData;
 import com.winning.monitor.agent.collector.api.executor.DataCollectExecutor;
-import com.winning.monitor.agent.sender.IDataEntityStorage;
+import com.winning.monitor.agent.collector.storage.ICollectDataStorage;
+
 
 /**
  * Created by nicholasyan on 16/9/5.
@@ -10,12 +11,12 @@ import com.winning.monitor.agent.sender.IDataEntityStorage;
 public class CollectExecutorTask implements Runnable {
 
     private final DataCollectExecutor executor;
-    private final IDataEntityStorage collectDataStorage;
+    private final ICollectDataStorage collectDataStorage;
 
     private boolean running = false;
 
     public CollectExecutorTask(DataCollectExecutor executor,
-                               IDataEntityStorage collectDataStorage) {
+                               ICollectDataStorage collectDataStorage) {
         this.executor = executor;
         this.collectDataStorage = collectDataStorage;
     }

@@ -7,7 +7,7 @@ import com.winning.monitor.agent.logging.entity.Domain;
 import com.winning.monitor.agent.logging.message.LogMessage;
 import com.winning.monitor.agent.logging.message.MessageManager;
 import com.winning.monitor.agent.logging.message.MessageTree;
-import com.winning.monitor.agent.logging.message.internal.sender.MessageTreeStorage;
+import com.winning.monitor.agent.logging.storage.MessageTreeStorage;
 import com.winning.monitor.agent.logging.transaction.DefaultTransaction;
 import com.winning.monitor.agent.logging.transaction.Transaction;
 

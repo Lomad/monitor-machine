@@ -5,4 +5,10 @@ package com.winning.monitor.message;
  */
 public interface Message {
 
+    String getHostName();
+
+
+    String getIpAddress();
+
+
 }

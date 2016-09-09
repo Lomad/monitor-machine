@@ -15,6 +15,7 @@
     <modules>
         <module>agent-collector-api</module>
         <module>agent-collector-machine</module>
+        <module>agent-collector-default</module>
     </modules>
 
 </project>

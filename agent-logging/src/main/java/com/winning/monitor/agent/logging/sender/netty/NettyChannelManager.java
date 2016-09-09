@@ -1,4 +1,4 @@
-package com.winning.monitor.agent.logging.message.internal.sender;
+package com.winning.monitor.agent.logging.sender.netty;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
@@ -19,12 +20,11 @@ import java.util.concurrent.TimeUnit;
 public class NettyChannelManager {
 
     private static Logger logger = LoggerFactory.getLogger(NettyChannelManager.class);
-
+    private static Hashtable<String, NettyChannelManager> s_managers = new Hashtable<>();
     private Bootstrap m_bootstrap;
-
     private ChannelFuture future;
 
-    public NettyChannelManager(String address) {
+    NettyChannelManager(String servers) {
 
         EventLoopGroup group = new NioEventLoopGroup(1, new ThreadFactory() {
             @Override
@@ -44,9 +44,19 @@ public class NettyChannelManager {
         });
 
         m_bootstrap = bootstrap;
-        List<InetSocketAddress> addressList = this.parseSocketAddress(address);
+        List<InetSocketAddress> addressList = this.parseSocketAddress(servers);
 
         this.future = createChannel(addressList.get(0));
+
+        s_managers.put(servers, this);
+    }
+
+    public static NettyChannelManager get(String servers) {
+        if (!s_managers.containsKey(servers)) {
+            NettyChannelManager manager = new NettyChannelManager(servers);
+            s_managers.put(servers, manager);
+        }
+        return s_managers.get(servers);
     }
 
     private List<InetSocketAddress> parseSocketAddress(String content) {

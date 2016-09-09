@@ -1,8 +1,6 @@
-package com.winning.monitor.agent.sender.collect;
+package com.winning.monitor.agent.collector.storage;
 
-import com.winning.monitor.agent.sender.AbstractDataStorage;
-import com.winning.monitor.agent.sender.IDataEntityStorage;
-import com.winning.monitor.message.collector.CollectData;
+import com.winning.monitor.agent.collector.api.entity.CollectData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,8 +9,8 @@ import java.util.List;
 /**
  * Created by nicholasyan on 16/9/6.
  */
-public class DefaultCollectDataStorage extends AbstractDataStorage<CollectData>
-        implements IDataEntityStorage<CollectData> {
+public class DefaultCollectDataStorage extends AbstractDataStorage
+        implements ICollectDataStorage {
 
     private static Logger logger = LoggerFactory.getLogger(DefaultCollectDataStorage.class);
 

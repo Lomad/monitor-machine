@@ -3,12 +3,12 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean class="com.winning.monitor.agent.core.collector.CollectExecutorTaskManager"
+    <bean class="com.winning.monitor.agent.collector.task.CollectExecutorTaskManager"
           init-method="initialize" destroy-method="shutdown">
         <constructor-arg ref="collectExecutorContext"/>
     </bean>
 
-    <bean id="collectExecutorContext" class="com.winning.monitor.agent.core.collector.CollectExecutorContext"
+    <bean id="collectExecutorContext" class="com.winning.monitor.agent.collector.CollectExecutorContext"
           init-method="initialize">
         <constructor-arg index="0">
             <bean class="com.winning.monitor.agent.config.collector.impl.CollectorJsonConfigFactory"/>
@@ -21,18 +21,18 @@
         </constructor-arg>
     </bean>
 
-    <bean id="collectDataStorage" class="com.winning.monitor.agent.sender.collect.DefaultCollectDataStorage"
+    <bean id="collectDataStorage" class="com.winning.monitor.agent.collector.storage.DefaultCollectDataStorage"
           init-method="initialize" destroy-method="shutdown">
         <constructor-arg value="5000"/>
     </bean>
 
 
-    <bean class="com.winning.monitor.agent.core.sender.DataEntitySenderTaskManager"
+    <bean class="com.winning.monitor.agent.collector.sender.CollectDataSenderTaskManager"
           init-method="initialze" destroy-method="shutdown">
         <constructor-arg index="0" ref="dataSenderContext"/>
         <constructor-arg index="1">
             <list>
-                <bean class="com.winning.monitor.agent.sender.collect.DefaultCollectDataSenderTask">
+                <bean class="com.winning.monitor.agent.collector.sender.DefaultCollectDataSenderTask">
                     <constructor-arg index="0" ref="collectDataStorage"/>
                     <constructor-arg index="1" value="20"/>
                 </bean>
@@ -40,7 +40,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="dataSenderContext" class="com.winning.monitor.agent.core.sender.DataSenderContext"
+    <bean id="dataSenderContext" class="com.winning.monitor.agent.collector.sender.CollectDataSenderContext"
           init-method="initialize">
         <constructor-arg index="0">
             <bean class="com.winning.monitor.agent.config.sender.DefaultSenderConfigFactory"/>

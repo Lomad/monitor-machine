@@ -1,4 +1,4 @@
-package com.winning.monitor.message.collector;
+package com.winning.monitor.agent.collector.api.entity;
 
 import com.winning.monitor.message.DataEntity;
 

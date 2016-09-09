@@ -1,8 +1,8 @@
 package com.winning.monitor.agent.logging.transaction;
 
+import com.winning.monitor.agent.logging.message.LogMessage;
 import com.winning.monitor.agent.logging.message.MessageManager;
 import com.winning.monitor.agent.logging.message.internal.AbstractLogMessage;
-import com.winning.monitor.agent.logging.message.LogMessage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +22,6 @@ public class DefaultTransaction extends AbstractLogMessage implements Transactio
     private boolean m_standalone;
 
     private long m_durationStart;
-
 
 
     public DefaultTransaction(String type, String name, MessageManager manager) {
@@ -45,6 +44,11 @@ public class DefaultTransaction extends AbstractLogMessage implements Transactio
             //Cat.logError(new Exception("null child message"));
         }
         return this;
+    }
+
+    @Override
+    public String getMessageType() {
+        return "DefaultTransaction";
     }
 
     @Override

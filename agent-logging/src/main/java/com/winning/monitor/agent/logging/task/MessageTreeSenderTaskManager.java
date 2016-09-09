@@ -1,8 +1,9 @@
-package com.winning.monitor.agent.logging.message.internal.sender;
+package com.winning.monitor.agent.logging.task;
 
 import com.winning.monitor.agent.logging.entity.ConfigManager;
-import com.winning.monitor.agent.sender.transport.IMessageTransport;
-import com.winning.monitor.agent.sender.transport.factory.MessageTransportFactory;
+import com.winning.monitor.agent.logging.sender.IMessageTransport;
+import com.winning.monitor.agent.logging.sender.netty.NettyMessageTreeTransport;
+import com.winning.monitor.agent.logging.storage.MessageTreeStorage;
 
 /**
  * Created by nicholasyan on 16/9/8.
@@ -10,7 +11,6 @@ import com.winning.monitor.agent.sender.transport.factory.MessageTransportFactor
 public class MessageTreeSenderTaskManager {
 
     private final ConfigManager configManager;
-    private final MessageTransportFactory messageTransportFactory = new MessageTransportFactory();
     private final MessageTreeSenderTask messageTreeSenderTask;
     private final MessageTreeStorage messageTreeStorage;
     private IMessageTransport messageTransport;
@@ -23,8 +23,8 @@ public class MessageTreeSenderTaskManager {
     }
 
     public void initialize() {
-        this.messageTransport = new NettyMessageTransport(configManager.getSenderConfig().getServers());
-//                this.messageTransportFactory.createMessageTransport(configManager.getSenderConfig());
+        String servers = configManager.getSenderConfig().getServers();
+        this.messageTransport = new NettyMessageTreeTransport(servers);
         this.messageTreeSenderTask.initialize(this.messageTransport);
     }
 

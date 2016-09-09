@@ -7,6 +7,8 @@ public interface LogMessage {
 
     public static final String SUCCESS = "0";
 
+    public String getMessageType();
+
     /**
      * add one or multiple key-value pairs to the message.
      *

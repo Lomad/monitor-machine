@@ -1,9 +1,9 @@
 package com.winning.monitor.agent.collector.machine.test;
 
 import com.winning.monitor.agent.collector.api.CollectorExecutorFactory;
+import com.winning.monitor.agent.collector.api.entity.CollectData;
 import com.winning.monitor.agent.collector.machine.core.SystemDynamicCollector;
 import com.winning.monitor.agent.collector.machine.core.SystemInfoCollector;
-import com.winning.monitor.message.collector.CollectData;
 import org.junit.Assert;
 import org.junit.Test;
 

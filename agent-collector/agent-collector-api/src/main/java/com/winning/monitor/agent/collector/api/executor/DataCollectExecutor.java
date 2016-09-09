@@ -1,7 +1,7 @@
 package com.winning.monitor.agent.collector.api.executor;
 
 
-import com.winning.monitor.message.collector.CollectData;
+import com.winning.monitor.agent.collector.api.entity.CollectData;
 
 /**
  * 动态数据收集器,根据CollectInterval设置取样间隔时间

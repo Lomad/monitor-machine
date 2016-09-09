@@ -1,4 +1,4 @@
-package com.winning.monitor.agent.logging.message.internal.sender;
+package com.winning.monitor.agent.logging.sender.netty;
 
 import io.netty.buffer.ByteBuf;
 

@@ -1,6 +1,7 @@
 package com.winning.monitor.agent.collector.api.core;
 
-import com.winning.monitor.message.collector.CollectData;
+
+import com.winning.monitor.agent.collector.api.entity.CollectData;
 
 /**
  * Created by nicholasyan on 16/9/5.

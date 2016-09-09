@@ -1,7 +1,8 @@
 package com.winning.monitor.agent;
 
-import com.winning.monitor.agent.core.collector.CollectExecutorTaskManager;
-import com.winning.monitor.agent.core.sender.DataEntitySenderTaskManager;
+
+import com.winning.monitor.agent.collector.sender.CollectDataSenderTaskManager;
+import com.winning.monitor.agent.collector.task.CollectExecutorTaskManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -28,11 +29,11 @@ public class MonitorServer {
 
         CollectExecutorTaskManager collectExecutorTaskManager
                 = applicationContext.getBean(CollectExecutorTaskManager.class);
-        DataEntitySenderTaskManager dataEntitySenderTaskManager
-                = applicationContext.getBean(DataEntitySenderTaskManager.class);
+        CollectDataSenderTaskManager collectDataSenderTaskManager
+                = applicationContext.getBean(CollectDataSenderTaskManager.class);
 
         collectExecutorTaskManager.start();
-        dataEntitySenderTaskManager.start();
+        collectDataSenderTaskManager.start();
 
         addShutdownHook(applicationContext);
 

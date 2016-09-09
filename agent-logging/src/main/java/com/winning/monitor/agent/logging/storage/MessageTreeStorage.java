@@ -1,7 +1,6 @@
-package com.winning.monitor.agent.logging.message.internal.sender;
+package com.winning.monitor.agent.logging.storage;
 
 import com.winning.monitor.agent.logging.message.MessageTree;
-import com.winning.monitor.agent.sender.AbstractDataStorage;
 import com.winning.monitor.agent.sender.IDataEntityStorage;
 
 import java.util.List;

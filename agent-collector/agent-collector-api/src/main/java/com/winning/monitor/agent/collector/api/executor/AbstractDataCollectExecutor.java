@@ -1,7 +1,7 @@
 package com.winning.monitor.agent.collector.api.executor;
 
 import com.winning.monitor.agent.collector.api.core.IDataCollector;
-import com.winning.monitor.message.collector.CollectData;
+import com.winning.monitor.agent.collector.api.entity.CollectData;
 
 /**
  *
