@@ -85,7 +85,7 @@ public class MongodbTransactionReportManager extends AbstractReportManager<Trans
             update.set("domain", transactionReportDTO.getDomain());
             update.set("idx", index);
             update.set("ips", transactionReportDTO.getIps());
-            update.set("type", "hourly");
+            update.set("type", "realtime");
             update.set("server", NetworkInterfaceManager.INSTANCE.getLocalHostAddress());
             update.set("startTime", transactionReportDTO.getStartTime());
             update.set("endTime", transactionReportDTO.getEndTime());

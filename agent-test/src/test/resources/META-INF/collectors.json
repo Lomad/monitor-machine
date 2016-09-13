@@ -5,7 +5,7 @@
     },
     {
       "collectorName": "SystemDynamic",
-      "interval": 10000
+      "interval": 1000
     }
   ]
 }

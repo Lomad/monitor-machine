@@ -39,7 +39,7 @@ public class MonitorLoggerUT {
     @Test
     public void testTransaction2K() throws InterruptedException {
         for (int i = 0; i < 2000; i++) {
-            Transaction transaction = MonitorLogger.newTransaction("SQL2", "SELECT 1");
+            Transaction transaction = MonitorLogger.newTransaction("SQL2", "SELECT 2");
             transaction.setStatus(Transaction.SUCCESS);
             transaction.complete();
         }
