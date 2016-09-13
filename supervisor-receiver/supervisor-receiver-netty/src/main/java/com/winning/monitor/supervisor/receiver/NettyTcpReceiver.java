@@ -1,5 +1,7 @@
 package com.winning.monitor.supervisor.receiver;
 
+
+import com.winning.monitor.supervisor.core.message.handle.MessageHandlerManager;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -17,21 +19,24 @@ import org.slf4j.LoggerFactory;
 public class NettyTcpReceiver implements IMessageReceiver {
 
     private static Logger logger = LoggerFactory.getLogger(NettyTcpReceiver.class);
+
     private final int m_port;
+    private MessageHandlerManager messageHandlerManager;
     private ChannelFuture m_future;
     private EventLoopGroup m_bossGroup;
     private EventLoopGroup m_workerGroup;
 
-    public NettyTcpReceiver() {
-        this(18880);
+    public NettyTcpReceiver(MessageHandlerManager messageHandlerManager) {
+        this(18880, messageHandlerManager);
     }
 
-    public NettyTcpReceiver(int port) {
+    public NettyTcpReceiver(int port, MessageHandlerManager messageHandlerManager) {
         this.m_port = port;
+        this.messageHandlerManager = messageHandlerManager;
     }
 
     @Override
-    public void initialize() {
+    public void start() {
         try {
             startServer(m_port);
         } catch (Exception e) {
@@ -52,7 +57,7 @@ public class NettyTcpReceiver implements IMessageReceiver {
             @Override
             protected void initChannel(SocketChannel ch) throws Exception {
                 ChannelPipeline pipeline = ch.pipeline();
-                pipeline.addLast("decode", new MessageDecoder());
+                pipeline.addLast("decode", new MessageDecoder(messageHandlerManager));
             }
         });
 

@@ -10,7 +10,7 @@ public class NettyTcpReceiverUT {
 
     @Test
     public void testReceiverRun() throws InterruptedException {
-        NettyTcpReceiver receiver = new NettyTcpReceiver();
+        NettyTcpReceiver receiver = new NettyTcpReceiver(null);
         receiver.startServer(18880);
         Thread.sleep(Integer.MAX_VALUE);
     }

@@ -1,13 +1,13 @@
 package com.winning.monitor.agent.sender;
 
-import com.winning.monitor.message.DataEntity;
+import com.winning.monitor.message.Message;
 
 import java.util.List;
 
 /**
  * Created by nicholasyan on 16/9/6.
  */
-public interface IDataEntityStorage<T extends DataEntity> {
+public interface IDataEntityStorage<T extends Message> {
 
     void initialize();
 

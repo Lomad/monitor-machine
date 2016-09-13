@@ -16,9 +16,11 @@
         <module>agent-sender</module>
         <module>agent-config</module>
         <module>agent-test</module>
-        <module>agent-core</module>
         <module>supervisor-receiver</module>
         <module>agent-logging</module>
+        <module>supervisor-core</module>
+        <module>supervisor-consumer</module>
+        <module>supervisor-test</module>
     </modules>
 
     <build>
@@ -37,6 +39,7 @@
     <properties>
         <slf4j.version>1.7.21</slf4j.version>
         <logback.version>1.1.7</logback.version>
+        <spring.version>4.1.6.RELEASE</spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>

@@ -9,6 +9,8 @@ import java.util.List;
  */
 public class CollectDatas implements Message {
 
+    public static final String MESSAGE_TYPE = "CollectDatas";
+
     private String hostName;
     private String ipAddress;
     private List<CollectData> datas;
@@ -39,5 +41,10 @@ public class CollectDatas implements Message {
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    @Override
+    public String getMessageType() {
+        return MESSAGE_TYPE;
     }
 }

@@ -1,14 +1,13 @@
 package com.winning.monitor.agent.logging.message;
 
-import com.winning.monitor.message.DataEntity;
 import com.winning.monitor.message.Message;
 
 /**
  * Created by nicholasyan on 16/9/8.
  */
-public interface MessageTree extends DataEntity, Message {
+public interface MessageTree extends Message {
 
-    public static final String TYPE_NAME = "MessageTree";
+    public static final String MESSAGE_TYPE = "MessageTree";
 
     public MessageTree copy();
 

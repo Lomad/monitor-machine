@@ -48,7 +48,7 @@ public class NettyMessageTreeTransport implements IMessageTransport {
 
         current = System.currentTimeMillis() - current;
 
-        System.out.println("发送消息长度:" + size + ",用时" + current + "ms");
+//        System.out.println("发送消息长度:" + size + ",用时" + current + "ms");
     }
 
     @Override

@@ -7,8 +7,8 @@ public interface Message {
 
     String getHostName();
 
-
     String getIpAddress();
 
+    String getMessageType();
 
 }

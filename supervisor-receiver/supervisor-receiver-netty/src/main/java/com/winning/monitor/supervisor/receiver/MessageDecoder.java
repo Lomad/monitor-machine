@@ -8,6 +8,7 @@ import com.winning.monitor.agent.logging.sender.netty.BufferHelper;
 import com.winning.monitor.agent.logging.sender.netty.MessageByteContext;
 import com.winning.monitor.agent.logging.sender.netty.MessageTreeMessageCodec;
 import com.winning.monitor.message.MessageHead;
+import com.winning.monitor.supervisor.core.message.handle.MessageHandlerManager;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -27,8 +28,13 @@ public class MessageDecoder extends ByteToMessageDecoder {
     private final MessageTreeMessageCodec messageTreeMessageCodec = new MessageTreeMessageCodec();
     private final CollectDatasMessageCodec collectorDataMessageCodec = new CollectDatasMessageCodec();
     private final ObjectMapper objectMapper = new ObjectMapper();
+    //    private final MessageTreeMessageHandler messageTreeMessageHandler = new MessageTreeMessageHandler();
+    private final MessageHandlerManager messageHandlerManager;
     private BufferHelper helper = new BufferHelper();
 
+    public MessageDecoder(MessageHandlerManager messageHandlerManager) {
+        this.messageHandlerManager = messageHandlerManager;
+    }
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
@@ -52,15 +58,14 @@ public class MessageDecoder extends ByteToMessageDecoder {
                 String jsonHeader = helper.read(byteContext, LF);
                 MessageHead head = this.objectMapper.readValue(jsonHeader, MessageHead.class);
 
-                if (MessageTreeMessageCodec.MESSAGE_TYPE.equals(head.getMessageType())) {
+                if (MessageTree.MESSAGE_TYPE.equals(head.getMessageType())) {
                     MessageTree tree = this.messageTreeMessageCodec.decode(byteContext);
-                    logger.info("收到来自{}的MessageTree消息:类型{}",
-                            tree.getIpAddress(), tree.getMessage().getMessageType());
-                } else if (CollectDatasMessageCodec.MESSAGE_TYPE.equals(head.getMessageType())) {
+                    this.messageHandlerManager.handle(tree);
+                } else if (CollectDatas.MESSAGE_TYPE.equals(head.getMessageType())) {
                     CollectDatas collectDatas = this.collectorDataMessageCodec.decode(byteContext);
-                    logger.info("收到来自{}的CollectDatas消息:长度{}",
-                            collectDatas.getIpAddress(), collectDatas.getDatas().size());
+                    this.messageHandlerManager.handle(collectDatas);
                 }
+
             } else {
                 buffer.readBytes(length);
             }

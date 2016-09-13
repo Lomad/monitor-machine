@@ -30,4 +30,42 @@ public class MonitorLoggerUT {
     }
 
 
+    @Test
+    public void testTransactionRunning() throws InterruptedException {
+        transactionThread();
+        Thread.sleep(60000);
+    }
+
+    @Test
+    public void testTransaction2K() throws InterruptedException {
+        for (int i = 0; i < 2000; i++) {
+            Transaction transaction = MonitorLogger.newTransaction("SQL2", "SELECT 1");
+            transaction.setStatus(Transaction.SUCCESS);
+            transaction.complete();
+        }
+        Thread.sleep(10000);
+        System.out.println("complete");
+    }
+
+    private void transactionThread() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 2000; i++) {
+                    Transaction transaction = MonitorLogger.newTransaction("SQL1", "SELECT 1");
+//                    try {
+//                        Thread.sleep(1);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+                    transaction.setStatus(Transaction.SUCCESS);
+                    transaction.complete();
+                }
+                System.out.println("complete");
+            }
+        });
+        thread.start();
+    }
+
+
 }

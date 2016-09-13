@@ -18,7 +18,6 @@ import java.util.List;
  */
 public class CollectDatasMessageCodec {
 
-    public static final String MESSAGE_TYPE = "CollectDatas";
     private static final byte TAB = '\t'; // tab character
     private static final byte LF = '\n'; // line feed character
     private final ObjectMapper objectMapper;
@@ -37,7 +36,7 @@ public class CollectDatasMessageCodec {
             buf.writeInt(0);
 
             MessageHead head = new MessageHead();
-            head.setMessageType(MESSAGE_TYPE);
+            head.setMessageType(CollectDatas.MESSAGE_TYPE);
             head.setIpAddress(NetworkInterfaceManager.INSTANCE.getLocalHostAddress());
             head.setHostName(NetworkInterfaceManager.INSTANCE.getLocalHostName());
 

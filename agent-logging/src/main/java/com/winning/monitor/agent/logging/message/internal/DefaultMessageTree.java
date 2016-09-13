@@ -83,6 +83,11 @@ public class DefaultMessageTree implements MessageTree {
     }
 
     @Override
+    public String getMessageType() {
+        return MESSAGE_TYPE;
+    }
+
+    @Override
     public LogMessage getMessage() {
         return m_message;
     }
