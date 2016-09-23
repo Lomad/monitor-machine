@@ -139,6 +139,12 @@ public class DefaultTransaction extends AbstractLogMessage implements Transactio
         m_standalone = standalone;
     }
 
+    @Override
+    public void success() {
+        this.setStatus(SUCCESS);
+        this.complete();
+    }
+
     public void setDurationStart(long durationStart) {
         m_durationStart = durationStart;
     }

@@ -1,5 +1,8 @@
 package com.winning.monitor.superisor.consumer.logging.transaction.entity;
 
+import com.winning.monitor.data.api.vo.AllDuration;
+import com.winning.monitor.data.api.vo.Range2;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 

@@ -19,4 +19,5 @@ public interface IDataEntityStorage<T extends Message> {
 
     void shutdown();
 
+    int maxSize();
 }

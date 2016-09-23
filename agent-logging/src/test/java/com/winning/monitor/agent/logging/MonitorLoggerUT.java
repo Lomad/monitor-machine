@@ -11,8 +11,10 @@ public class MonitorLoggerUT {
 
     @Test
     public void testTransaction() throws InterruptedException {
-        Transaction transaction = MonitorLogger.newTransaction("SQL ", "SELECT   ");
+        Transaction transaction = MonitorLogger.newTransaction("SQL ", "SELECT ");
         Thread.sleep(1000);
+
+
         transaction.setStatus(Transaction.SUCCESS);
         transaction.complete();
 
@@ -43,7 +45,7 @@ public class MonitorLoggerUT {
             transaction.setStatus(Transaction.SUCCESS);
             transaction.complete();
         }
-        Thread.sleep(10000);
+        Thread.sleep(300000);
         System.out.println("complete");
     }
 
@@ -67,5 +69,15 @@ public class MonitorLoggerUT {
         thread.start();
     }
 
+
+    @Test
+    public void testNestedTransaction() throws InterruptedException {
+        Transaction parentTransaction = MonitorLogger.newTransaction("PARENT", "HELLO");
+        Transaction childTransaction = MonitorLogger.newTransaction("CHILD", "HELLO");
+        Thread.sleep(10);
+        childTransaction.success();
+        parentTransaction.success();
+        Thread.sleep(10000);
+    }
 
 }

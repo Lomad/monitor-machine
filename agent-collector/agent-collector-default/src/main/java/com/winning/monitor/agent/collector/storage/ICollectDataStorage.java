@@ -20,4 +20,5 @@ public interface ICollectDataStorage {
 
     void shutdown();
 
+
 }

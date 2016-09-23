@@ -56,4 +56,7 @@ public interface Transaction extends LogMessage {
      */
     public boolean isStandalone();
 
+
+    void success();
+
 }

@@ -34,4 +34,6 @@ public class MessageTreeStorage extends AbstractDataStorage<MessageTree>
     public int remainSize() {
         return super.dataEntityQueue.size();
     }
+
+
 }

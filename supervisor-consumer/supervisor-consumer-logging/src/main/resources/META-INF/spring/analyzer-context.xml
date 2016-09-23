@@ -9,6 +9,6 @@
     </bean>
 
     <bean id="transactionReportManager"
-          class="com.winning.monitor.superisor.consumer.logging.transaction.MongodbTransactionReportManager"/>
+          class="com.winning.monitor.superisor.consumer.logging.transaction.TransactionReportManager"/>
 
 </beans>

@@ -13,4 +13,5 @@ public interface IMessageTransport {
 
     void shutdown();
 
+    boolean sendDataAvailable();
 }

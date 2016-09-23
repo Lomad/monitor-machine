@@ -35,11 +35,29 @@ public class ConfigManager {
         this.domain.setIp(NetworkInterfaceManager.INSTANCE.getLocalHostAddress());
         this.domain.setHostName(NetworkInterfaceManager.INSTANCE.getLocalHostName());
 
-        Properties properties =
-                ConfigUtils.loadProperties("META-INF/app.properties", false, false);
+        if (this.initDomainName(domain, "META-INF/winning/properties/application.properties", "application.name"))
+            return;
 
-        this.domain.setId(properties.getProperty("app.name"));
+        if (this.initDomainName(domain, "META-INF/app.properties", "app.name"))
+            return;
     }
+
+    private boolean initDomainName(Domain domain, String propertiesFile, String keyName) {
+        Properties properties =
+                ConfigUtils.loadProperties(propertiesFile, false, false);
+
+        if (properties == null || properties.keySet().size() == 0)
+            return false;
+
+        String name = properties.getProperty(keyName);
+        if (name != null || !"".equals(name)) {
+            domain.setId(name);
+            return true;
+        }
+
+        return false;
+    }
+
 
     private void initSenderConfig() {
         SenderConfig config = new SenderConfig();

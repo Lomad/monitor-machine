@@ -1,15 +1,12 @@
 package com.winning.monitor.superisor.consumer.logging.transaction;
 
 import com.winning.monitor.agent.config.utils.NetworkInterfaceManager;
+import com.winning.monitor.data.api.transaction.vo.TransactionReportType;
+import com.winning.monitor.data.api.transaction.vo.TransactionReportVO;
+import com.winning.monitor.data.storage.api.ITransactionDataStorage;
 import com.winning.monitor.superisor.consumer.api.report.AbstractReportManager;
-import com.winning.monitor.superisor.consumer.logging.transaction.dto.TransactionReportConverter;
-import com.winning.monitor.superisor.consumer.logging.transaction.dto.TransactionReportDTO;
 import com.winning.monitor.superisor.consumer.logging.transaction.entity.TransactionReport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -20,14 +17,14 @@ import java.util.UUID;
 /**
  * Created by nicholasyan on 16/9/12.
  */
-public class MongodbTransactionReportManager extends AbstractReportManager<TransactionReport>
+public class TransactionReportManager extends AbstractReportManager<TransactionReport>
         implements Runnable {
 
     private Thread thread;
     private volatile boolean active = true;
 
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private ITransactionDataStorage transactionDataStorage;
 
     @Override
     protected TransactionReport makeReport(String domain, long startTime, long duration) {
@@ -74,24 +71,15 @@ public class MongodbTransactionReportManager extends AbstractReportManager<Trans
             return;
 
         for (TransactionReport transactionReport : reports.values()) {
-            TransactionReportDTO transactionReportDTO =
-                    TransactionReportConverter.toTransactionReportDTO(transactionReport);
+            TransactionReportVO transactionReportVO =
+                    TransactionReportConverter.toTransactionReportVO(transactionReport);
 
-            Query query = new Query();
-            query.addCriteria(new Criteria("id").is(transactionReport.getId()));
-            Update update = new Update();
+            transactionReportVO.setIndex(index);
+            transactionReportVO.setServer(NetworkInterfaceManager.INSTANCE.getLocalHostAddress());
+            transactionReportVO.setType(TransactionReportType.REALTIME);
 
-            update.set("id", transactionReportDTO.getId());
-            update.set("domain", transactionReportDTO.getDomain());
-            update.set("idx", index);
-            update.set("ips", transactionReportDTO.getIps());
-            update.set("type", "realtime");
-            update.set("server", NetworkInterfaceManager.INSTANCE.getLocalHostAddress());
-            update.set("startTime", transactionReportDTO.getStartTime());
-            update.set("endTime", transactionReportDTO.getEndTime());
-            update.set("machines", transactionReportDTO.getMachines());
-
-            this.mongoTemplate.upsert(query, update, "transactionReports");
+            // TODO: 16/9/14 加入判断,未更新数据的不需要进行保存处理
+            transactionDataStorage.storeTransactionReport(transactionReportVO);
         }
 
         this.cleanup(startTime);
@@ -116,15 +104,19 @@ public class MongodbTransactionReportManager extends AbstractReportManager<Trans
 
     @Override
     public void run() {
-        try {
-            while (active) {
+        while (active) {
+            try {
                 for (long startTime : this.m_reports.keySet()) {
                     this.storeHourlyReports(startTime, 0);
                 }
-                Thread.sleep(1000);
-            }
-        } catch (Exception e) {
+            } catch (Exception e) {
 
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -38,6 +38,11 @@ public class MessageTreeSenderTask extends AbstractDataSenderTask<MessageTree> {
         return true;
     }
 
+    @Override
+    public boolean sendDataAvailable() {
+        return this.messageTransport.sendDataAvailable();
+    }
+
 
     public void shutdown() {
         logger.info("正在关闭CollectDataSender");

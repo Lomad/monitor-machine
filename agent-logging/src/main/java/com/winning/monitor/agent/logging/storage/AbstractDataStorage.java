@@ -14,9 +14,11 @@ import java.util.concurrent.TimeUnit;
 public abstract class AbstractDataStorage<T extends MessageTree> {
 
     protected final BlockingQueue<T> dataEntityQueue;
+    private final int maxSize;
     protected volatile boolean active = true;
 
     public AbstractDataStorage(int maxQueueSize) {
+        this.maxSize = maxQueueSize;
         this.dataEntityQueue = new ArrayBlockingQueue<>(maxQueueSize);
     }
 
@@ -57,6 +59,10 @@ public abstract class AbstractDataStorage<T extends MessageTree> {
 
     public void shutdown() {
         this.active = false;
+    }
+
+    public int maxSize() {
+        return maxSize;
     }
 
 }

@@ -9,6 +9,7 @@ import com.winning.monitor.agent.logging.message.MessageManager;
 import com.winning.monitor.agent.logging.message.MessageTree;
 import com.winning.monitor.agent.logging.storage.MessageTreeStorage;
 import com.winning.monitor.agent.logging.transaction.DefaultTransaction;
+import com.winning.monitor.agent.logging.transaction.ForkedTransaction;
 import com.winning.monitor.agent.logging.transaction.Transaction;
 
 import java.util.*;
@@ -412,10 +413,10 @@ public class DefaultMessageManager implements MessageManager {
                 // Instead, we create a "soft" reference to forked transaction later, via linkAsRunAway()
                 // By doing so, there is no need for synchronization between parent and child threads.
                 // Both threads can complete() anytime despite the other thread.
-//                if (!(transaction instanceof ForkedTransaction)) {
-//                    Transaction parent = m_stack.peek();
-//                    addTransactionChild(transaction, parent);
-//                }
+                if (!(transaction instanceof ForkedTransaction)) {
+                    Transaction parent = m_stack.peek();
+                    addTransactionChild(transaction, parent);
+                }
             } else {
                 m_tree.setMessage(transaction);
             }

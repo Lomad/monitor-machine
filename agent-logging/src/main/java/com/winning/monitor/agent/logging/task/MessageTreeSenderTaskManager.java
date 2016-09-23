@@ -24,7 +24,8 @@ public class MessageTreeSenderTaskManager {
 
     public void initialize() {
         String servers = configManager.getSenderConfig().getServers();
-        this.messageTransport = new NettyMessageTreeTransport(servers);
+        this.messageTransport = new NettyMessageTreeTransport(servers, this.messageTreeStorage);
+        this.messageTransport.initialize();
         this.messageTreeSenderTask.initialize(this.messageTransport);
     }
 
@@ -36,6 +37,7 @@ public class MessageTreeSenderTaskManager {
 
     public void shutdown() {
         this.messageTreeSenderTask.shutdown();
+        this.messageTransport.shutdown();
     }
 
 

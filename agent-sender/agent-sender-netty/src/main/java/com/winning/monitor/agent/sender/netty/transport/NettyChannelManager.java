@@ -16,13 +16,20 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by nicholasyan on 16/9/6.
  */
-public class NettyChannelManager {
+public class NettyChannelManager implements Runnable {
 
     private static Logger logger = LoggerFactory.getLogger(NettyChannelManager.class);
 
     private Bootstrap m_bootstrap;
 
     private ChannelFuture future;
+
+    private ChannelHolder m_activeChannelHolder;
+
+    private int m_retriedTimes = 0;
+
+
+    private boolean m_active = true;
 
     public NettyChannelManager(String address) {
 
@@ -44,12 +51,64 @@ public class NettyChannelManager {
         });
 
         m_bootstrap = bootstrap;
-        List<InetSocketAddress> addressList = this.parseSocketAddress(address);
+        List<InetSocketAddress> configedAddresses = this.parseSocketAddress(address);
+        ChannelHolder holder = initChannel(configedAddresses);
 
-        this.future = createChannel(addressList.get(0));
+        if (holder != null) {
+            m_activeChannelHolder = holder;
+        } else {
+            m_activeChannelHolder = new ChannelHolder();
+            m_activeChannelHolder.setServerAddresses(configedAddresses);
+        }
+    }
 
+
+    private ChannelHolder initChannel(List<InetSocketAddress> addresses) {
+        try {
+            int len = addresses.size();
+
+            for (int i = 0; i < len; i++) {
+                InetSocketAddress address = addresses.get(i);
+                String hostAddress = address.getAddress().getHostAddress();
+                ChannelHolder holder = null;
+
+                if (m_activeChannelHolder != null && hostAddress.equals(m_activeChannelHolder.getIp())) {
+                    holder = new ChannelHolder();
+                    holder.setActiveFuture(m_activeChannelHolder.getActiveFuture()).setConnectChanged(false);
+                } else {
+                    ChannelFuture future = createChannel(address);
+
+                    if (future != null) {
+                        holder = new ChannelHolder();
+                        holder.setActiveFuture(future).setConnectChanged(true);
+                    }
+                }
+                if (holder != null) {
+                    holder.setActiveIndex(i).setIp(hostAddress);
+//                    holder.setActiveServerConfig(serverConfig).setServerAddresses(addresses);
+
+                    logger.info("success when init Monitor server, new active holder" + holder.toString());
+                    return holder;
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+
+        try {
+            StringBuilder sb = new StringBuilder();
+
+            for (InetSocketAddress address : addresses) {
+                sb.append(address.toString()).append(";");
+            }
+            logger.info("Error when init CAT server " + sb.toString());
+        } catch (Exception e) {
+            // ignore
+        }
+        return null;
 
     }
+
 
     private List<InetSocketAddress> parseSocketAddress(String content) {
         try {
@@ -84,7 +143,7 @@ public class NettyChannelManager {
                 logger.error("Error when try connecting to " + address);
                 closeChannel(future);
             } else {
-                logger.info("Connected to CAT server at " + address);
+                logger.info("Connected to Monitor server at " + address);
                 return future;
             }
         } catch (Throwable e) {
@@ -107,5 +166,75 @@ public class NettyChannelManager {
         }
     }
 
+    /**
+     * 检查连接是否有效,如果无效则关闭连接
+     *
+     * @param activeFuture
+     */
+    private void doubleCheckActiveServer(ChannelFuture activeFuture) {
+        try {
+            if (isChannelStalled(activeFuture) || isChannelDisabled(activeFuture)) {
+                closeChannelHolder(m_activeChannelHolder);
+            }
+        } catch (Throwable e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
 
+    private void closeChannelHolder(ChannelHolder channelHolder) {
+        try {
+            ChannelFuture channel = channelHolder.getActiveFuture();
+
+            closeChannel(channel);
+            channelHolder.setActiveIndex(-1);
+        } catch (Exception e) {
+            // ignore
+        }
+    }
+
+    private boolean isChannelDisabled(ChannelFuture activeFuture) {
+        return activeFuture != null && !activeFuture.channel().isOpen();
+    }
+
+    private boolean isChannelStalled(ChannelFuture activeFuture) {
+        m_retriedTimes++;
+
+        int size = 1000;
+        boolean stalled = activeFuture != null && size >= 1000;
+
+        if (stalled) {
+            if (m_retriedTimes >= 5) {
+                m_retriedTimes = 0;
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+
+    @Override
+    public void run() {
+        while (m_active) {
+            // make save message id index asyc
+//            m_idfactory.saveMark();
+//            checkServerChanged(); 检查路由是否发生变化
+
+            //获取活动的连接
+            ChannelFuture activeFuture = m_activeChannelHolder.getActiveFuture();
+            //获取所有的服务器地址
+            List<InetSocketAddress> serverAddresses = m_activeChannelHolder.getServerAddresses();
+
+            doubleCheckActiveServer(activeFuture);
+            //reconnectDefaultServer(activeFuture, serverAddresses);
+
+            try {
+                Thread.sleep(10 * 1000L); // check every 10 seconds
+            } catch (InterruptedException e) {
+                // ignore
+            }
+        }
+    }
 }

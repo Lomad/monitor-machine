@@ -3,6 +3,7 @@ package com.winning.monitor.agent.logging.sender.netty;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.winning.monitor.agent.logging.message.LogMessage;
 import com.winning.monitor.agent.logging.message.MessageTree;
 import com.winning.monitor.agent.logging.message.internal.DefaultMessageTree;
 import com.winning.monitor.agent.logging.transaction.DefaultTransaction;
@@ -10,6 +11,9 @@ import com.winning.monitor.message.MessageHead;
 import io.netty.buffer.ByteBuf;
 import org.apache.commons.beanutils.BeanUtils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -74,18 +78,33 @@ public class MessageTreeMessageCodec {
             messageTree.setRootMessageId(String.valueOf(map.get("rootMessageId")));
 
             Map<String, Object> message = (Map<String, Object>) map.get("message");
-            String messageType = message.get("messageType").toString();
-            String type = message.get("type").toString();
-            String name = message.get("name").toString();
-
-            if ("DefaultTransaction".equals(messageType)) {
-                DefaultTransaction transaction = new DefaultTransaction(type, name, null);
-                messageTree.setMessage(transaction);
-                BeanUtils.populate(transaction, message);
-            }
-
+            LogMessage logMessage = this.createMessage(message);
+            messageTree.setMessage(logMessage);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private LogMessage createMessage(Map<String, Object> message) throws InvocationTargetException,
+            IllegalAccessException {
+        String messageType = message.get("messageType").toString();
+        String type = message.get("type").toString();
+        String name = message.get("name").toString();
+
+        //如果是Transaction
+        if ("DefaultTransaction".equals(messageType)) {
+            DefaultTransaction transaction = new DefaultTransaction(type, name, null);
+            BeanUtils.populate(transaction, message);
+            List<LinkedHashMap<String, Object>> children = (List<LinkedHashMap<String, Object>>) message.get("children");
+            if (children != null) {
+                for (LinkedHashMap<String, Object> child : children) {
+                    transaction.addChild(this.createMessage(child));
+                }
+            }
+            return transaction;
+        }
+
+        return null;
+    }
+
 }

@@ -41,22 +41,25 @@ public abstract class AbstractDataSenderTask<T extends MessageTree>
             }
             try {
                 int maxSize = MAX_ENTITIES;
-                List<T> dataEntities = this.collectDataStorage.get(maxSize);
+                if (sendDataAvailable()) {
 
-                if (!dataEntities.isEmpty()) {
-                    // TODO: 16/9/6 加入监控运行时间
-                    boolean success = false;
+                    List<T> dataEntities = this.collectDataStorage.get(maxSize);
 
-                    try {
-                        //组装数据并发送
-                        success = doSendDataEntities(dataEntities);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                    }
+                    if (!dataEntities.isEmpty()) {
+                        // TODO: 16/9/6 加入监控运行时间
+                        boolean success = false;
 
-                    if (!success) {
+                        try {
+                            //组装数据并发送
+                            success = doSendDataEntities(dataEntities);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                        }
 
+                        if (!success) {
+
+                        }
                     }
                 } else {
                     Thread.sleep(5);
@@ -68,6 +71,9 @@ public abstract class AbstractDataSenderTask<T extends MessageTree>
     }
 
     public abstract boolean doSendDataEntities(List<T> dataEntities);
+
+    public abstract boolean sendDataAvailable();
+
 
     public void stop() {
         this.active = false;

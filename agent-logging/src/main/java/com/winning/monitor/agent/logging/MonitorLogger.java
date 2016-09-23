@@ -6,8 +6,8 @@ import com.winning.monitor.agent.logging.entity.ConfigManager;
 import com.winning.monitor.agent.logging.message.MessageManager;
 import com.winning.monitor.agent.logging.message.internal.DefaultMessageManager;
 import com.winning.monitor.agent.logging.message.internal.MessageProducer;
-import com.winning.monitor.agent.logging.task.MessageTreeSenderTaskManager;
 import com.winning.monitor.agent.logging.storage.MessageTreeStorage;
+import com.winning.monitor.agent.logging.task.MessageTreeSenderTaskManager;
 import com.winning.monitor.agent.logging.transaction.Transaction;
 
 import java.io.File;
@@ -33,7 +33,7 @@ public class MonitorLogger {
     private MonitorLogger() {
     }
 
-    private static void checkAndInitialize() {
+    public static void checkAndInitialize() {
         if (!s_init) {
             synchronized (s_instance) {
                 if (!s_init) {
@@ -43,6 +43,7 @@ public class MonitorLogger {
             }
         }
     }
+
 
     private static String getHome() {
         String homePath = Properties.forString().fromEnv().fromSystem().getProperty("MONITOR_HOME", "/data/winning-monitor");

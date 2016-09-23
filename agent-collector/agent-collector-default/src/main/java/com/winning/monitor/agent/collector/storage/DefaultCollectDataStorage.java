@@ -43,4 +43,6 @@ public class DefaultCollectDataStorage extends AbstractDataStorage
         logger.info("正在关闭 CollectDataStorage");
         super.shutdown();
     }
+
+
 }
