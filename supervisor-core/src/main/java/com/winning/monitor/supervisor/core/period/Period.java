@@ -178,7 +178,7 @@ public class Period {
     public void showTaskQueueSize() {
         for (Map.Entry<String, List<PeriodTask>> tasks : m_tasks.entrySet()) {
             List<PeriodTask> taskList = tasks.getValue();
-            System.out.println("队列长度:" + taskList.get(0).getQueueSize());
+            //System.out.println("队列长度:" + taskList.get(0).getQueueSize());
         }
     }
 

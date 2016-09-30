@@ -17,5 +17,19 @@ public interface ReportManager<T> {
 
     Map<String, T> loadHourlyReports(long startTime, int index);
 
-    void storeHourlyReports(long startTime, int index);
+    void storeHourlyReports(long startTime, StoragePolicy storagePolicy, int index);
+
+    static enum StoragePolicy {
+        FILE,
+
+        FILE_AND_DB;
+
+        public boolean forDatabase() {
+            return this == FILE_AND_DB;
+        }
+
+        public boolean forFile() {
+            return this == FILE_AND_DB || this == FILE;
+        }
+    }
 }

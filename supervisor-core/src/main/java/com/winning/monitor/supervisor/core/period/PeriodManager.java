@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class PeriodManager implements Runnable {
 
     public static long EXTRATIME = 3 * 60 * 1000L;
@@ -106,7 +107,6 @@ public class PeriodManager implements Runnable {
         m_periods.add(period);
         period.start();
     }
-
 
 
 }

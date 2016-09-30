@@ -56,11 +56,11 @@ public class MessageTreeMessageHandler implements MessageHandler<MessageTree> {
 //        m_logger.info("starting do checkpoint.");
 //        MessageProducer cat = Cat.getProducer();
 //        Transaction t = cat.newTransaction("Checkpoint", getClass().getSimpleName());
-        logger.info("正在关闭!");
+        logger.info("正在关闭消息分析服务...");
         try {
             long currentStartTime = getCurrentStartTime();
             Period period = m_periodManager.findPeriod(currentStartTime);
-            period.showTaskQueueSize();
+//            period.showTaskQueueSize();
 
             for (MessageAnalyzer analyzer : period.getAnalzyers()) {
                 try {
@@ -72,10 +72,12 @@ public class MessageTreeMessageHandler implements MessageHandler<MessageTree> {
 
             try {
                 // wait dump analyzer store completed
-                Thread.sleep(10 * 1000);
+                Thread.sleep(1 * 1000);
             } catch (InterruptedException e) {
                 // ignore
             }
+
+            logger.info("消息分析服务已全部关闭!");
 //            t.setStatus(Message.SUCCESS);
         } catch (RuntimeException e) {
 //            cat.logError(e);

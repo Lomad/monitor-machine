@@ -120,4 +120,5 @@ public abstract class AbstractReportManager<T> implements ReportManager<T> {
         }
         return result;
     }
+
 }

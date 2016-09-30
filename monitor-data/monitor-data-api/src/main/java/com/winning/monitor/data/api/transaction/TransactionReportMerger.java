@@ -10,43 +10,49 @@ import com.winning.monitor.data.api.vo.Duration;
 import com.winning.monitor.data.api.vo.Range;
 import com.winning.monitor.data.api.vo.Range2;
 
+import java.util.List;
+
 public class TransactionReportMerger {
 
-    public static void mergeReport(TransactionReportVO old, TransactionReportVO other) {
-        old.getDomainNames().addAll(old.getDomainNames());
-        old.getIps().addAll(old.getIps());
+    public TransactionReportVO mergeReports(List<TransactionReportVO> reports) {
+        if (reports == null || reports.size() == 0)
+            return null;
 
-        for (TransactionMachineVO otherMachine : other.getMachines()) {
-            TransactionMachineVO oldMachine = old.getTransactionMachine(otherMachine.getIp());
+        TransactionReportVO transactionReport = reports.get(0);
 
-            //如果源Report不存在Machine
-            if (oldMachine == null) {
-                old.addTransactionMachine(otherMachine);
-            } else {
-                for (TransactionTypeVO otherType : otherMachine.getTransactionTypes()) {
-                    TransactionTypeVO oldType = oldMachine.getTransactionType(otherType.getId());
-                    if (oldType == null) {
-                        oldMachine.addTransactionType(otherType);
-                    }
-                    //如果存在相同的IP,相同的TransactionType
-                    else {
-                        //进行合并
-                        mergeType(oldType, otherType);
-                        for (TransactionNameVO otherName : otherType.getTransactionNames()) {
-                            TransactionNameVO oldName = oldType.getTransactionName(otherName.getId());
-                            if (oldName == null)
-                                oldType.addTransactionName(otherName);
-                            else
-                                mergeName(oldName, otherName);
-                        }
-                    }
+        if (reports.size() > 1) {
+            for (int i = 1; i < reports.size(); i++)
+                this.mergeReport(transactionReport, reports.get(i));
+        }
+
+        this.formatValues(transactionReport);
+
+        return transactionReport;
+    }
+
+    public void formatValues(TransactionReportVO transactionReport) {
+        for (TransactionMachineVO machineVO : transactionReport.getMachines()) {
+            for (TransactionTypeVO typeVO : machineVO.getTransactionTypes()) {
+                for (TransactionNameVO nameVO : typeVO.getTransactionNames()) {
+                    nameVO.setAvg(Math.ceil(nameVO.getAvg()));
+                    nameVO.setFailPercent(Math.ceil(nameVO.getFailPercent()));
+                    nameVO.setLine95Value(Math.ceil(nameVO.getLine95Value()));
+                    nameVO.setLine99Value(Math.ceil(nameVO.getLine99Value()));
+                    nameVO.setStd(Math.ceil(nameVO.getStd()));
+                    nameVO.setTps(Math.round(nameVO.getTps() * 100) / 100.0);
                 }
+                typeVO.setAvg(Math.ceil(typeVO.getAvg()));
+                typeVO.setFailPercent(Math.ceil(typeVO.getFailPercent()));
+                typeVO.setLine95Value(Math.ceil(typeVO.getLine95Value()));
+                typeVO.setLine99Value(Math.ceil(typeVO.getLine99Value()));
+                typeVO.setStd(Math.ceil(typeVO.getStd()));
+                typeVO.setTps(Math.round(typeVO.getTps() * 100) / 100.0);
             }
         }
     }
 
 
-    public static void mergeName(TransactionNameVO old, TransactionNameVO other) {
+    public void mergeName(TransactionNameVO old, TransactionNameVO other) {
         long totalCountSum = old.getTotalCount() + other.getTotalCount();
         if (totalCountSum > 0) {
             double line95Values = old.getLine95Value() * old.getTotalCount() + other.getLine95Value()
@@ -104,7 +110,7 @@ public class TransactionReportMerger {
         }
     }
 
-    public static void mergeRange(Range old, Range range) {
+    public void mergeRange(Range old, Range range) {
         old.setCount(old.getCount() + range.getCount());
         old.setFails(old.getFails() + range.getFails());
         old.setSum(old.getSum() + range.getSum());
@@ -114,7 +120,7 @@ public class TransactionReportMerger {
         }
     }
 
-    public static void mergeRange2(Range2 old, Range2 range) {
+    public void mergeRange2(Range2 old, Range2 range) {
         old.setCount(old.getCount() + range.getCount());
         old.setFails(old.getFails() + range.getFails());
         old.setSum(old.getSum() + range.getSum());
@@ -124,17 +130,17 @@ public class TransactionReportMerger {
         }
     }
 
-    public static void mergeDuration(Duration old, Duration duration) {
+    public void mergeDuration(Duration old, Duration duration) {
         old.setCount(old.getCount() + duration.getCount());
         old.setValue(duration.getValue());
     }
 
-    public static void mergeAllDuration(AllDuration old, AllDuration duration) {
+    public void mergeAllDuration(AllDuration old, AllDuration duration) {
         old.setCount(old.getCount() + duration.getCount());
         old.setValue(duration.getValue());
     }
 
-    public static void mergeType(TransactionTypeVO old, TransactionTypeVO other) {
+    public void mergeType(TransactionTypeVO old, TransactionTypeVO other) {
         long totalCountSum = old.getTotalCount() + other.getTotalCount();
         if (totalCountSum > 0) {
             double line95Values = old.getLine95Value() * old.getTotalCount() + other.getLine95Value()
@@ -184,7 +190,7 @@ public class TransactionReportMerger {
         }
     }
 
-    static double std(long count, double avg, double sum2, double max) {
+    double std(long count, double avg, double sum2, double max) {
         double value = sum2 / count - avg * avg;
 
         if (value <= 0 || count <= 1) {
@@ -193,6 +199,39 @@ public class TransactionReportMerger {
             return max - avg;
         } else {
             return Math.sqrt(value);
+        }
+    }
+
+    public void mergeReport(TransactionReportVO old, TransactionReportVO other) {
+        old.getDomainNames().addAll(old.getDomainNames());
+        old.getIps().addAll(old.getIps());
+
+        for (TransactionMachineVO otherMachine : other.getMachines()) {
+            TransactionMachineVO oldMachine = old.getTransactionMachine(otherMachine.getIp());
+
+            //如果源Report不存在Machine
+            if (oldMachine == null) {
+                old.addTransactionMachine(otherMachine);
+            } else {
+                for (TransactionTypeVO otherType : otherMachine.getTransactionTypes()) {
+                    TransactionTypeVO oldType = oldMachine.getTransactionType(otherType.getId());
+                    if (oldType == null) {
+                        oldMachine.addTransactionType(otherType);
+                    }
+                    //如果存在相同的IP,相同的TransactionType
+                    else {
+                        //进行合并
+                        mergeType(oldType, otherType);
+                        for (TransactionNameVO otherName : otherType.getTransactionNames()) {
+                            TransactionNameVO oldName = oldType.getTransactionName(otherName.getId());
+                            if (oldName == null)
+                                oldType.addTransactionName(otherName);
+                            else
+                                mergeName(oldName, otherName);
+                        }
+                    }
+                }
+            }
         }
     }
 

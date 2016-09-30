@@ -66,6 +66,30 @@ public class TransactionNamePO {
         this.allDurations = transactionNameVO.getAllDurations();
     }
 
+    public TransactionNameVO toTransactionNameVO() {
+        TransactionNameVO transactionNameVO = new TransactionNameVO();
+        
+        transactionNameVO.setId(id);
+        transactionNameVO.setName(name);
+        transactionNameVO.setTotalCount(totalCount);
+        transactionNameVO.setFailCount(failCount);
+        transactionNameVO.setFailPercent(failPercent);
+        transactionNameVO.setMin(min);
+        transactionNameVO.setMax(max);
+        transactionNameVO.setSum(sum);
+        transactionNameVO.setSum2(sum2);
+        transactionNameVO.setAvg(avg);
+        transactionNameVO.setStd(std);
+        transactionNameVO.setTps(tps);
+        transactionNameVO.setLine95Value(line95Value);
+        transactionNameVO.setLine99Value(line99Value);
+        transactionNameVO.setRanges(ranges);
+        transactionNameVO.setDurations(durations);
+        transactionNameVO.setAllDurations(allDurations);
+
+        return transactionNameVO;
+    }
+
     public String getId() {
         return id;
     }
@@ -201,4 +225,5 @@ public class TransactionNamePO {
     public void setAllDurations(Map<Integer, AllDuration> allDurations) {
         this.allDurations = allDurations;
     }
+
 }

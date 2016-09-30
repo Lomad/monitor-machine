@@ -23,6 +23,7 @@
         <module>supervisor-test</module>
         <module>monitor-data</module>
         <module>agent-logging-netty</module>
+        <module>supervisor-consumer-server</module>
     </modules>
 
     <build>
@@ -75,6 +76,7 @@
         <slf4j.version>1.7.21</slf4j.version>
         <logback.version>1.1.7</logback.version>
         <spring.version>4.1.6.RELEASE</spring.version>
+        <spring-mongodb.version>1.7.2.RELEASE</spring-mongodb.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>

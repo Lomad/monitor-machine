@@ -37,9 +37,13 @@ public class NettyTcpReceiver implements IMessageReceiver {
 
     @Override
     public void start() {
+        logger.info("正在启动Netty监听器,端口号{}", m_port);
+
         try {
             startServer(m_port);
+            logger.info("Netty监听器启动完毕,端口号{}", m_port);
         } catch (Exception e) {
+            logger.error("启动Netty监听器失败,{}", e.getMessage(), e);
         }
     }
 
@@ -68,9 +72,8 @@ public class NettyTcpReceiver implements IMessageReceiver {
 
         try {
             m_future = bootstrap.bind(port).sync();
-            logger.info("start netty server!");
         } catch (Exception e) {
-            logger.error("Started Netty Server Failed:" + port, e);
+            throw e;
         }
     }
 
@@ -79,12 +82,15 @@ public class NettyTcpReceiver implements IMessageReceiver {
         this.destory();
     }
 
-    public synchronized void destory() {
+    public void destory() {
+        logger.info("正在关闭Netty监听器,端口号{}", m_port);
         try {
             m_future.channel().closeFuture();
             m_bossGroup.shutdownGracefully();
             m_workerGroup.shutdownGracefully();
+            logger.info("Netty监听器关闭完毕,端口号{}", m_port);
         } catch (Exception e) {
+            logger.error("关闭Netty监听器失败", e);
         }
     }
 

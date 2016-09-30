@@ -9,6 +9,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
@@ -44,6 +46,13 @@ public class TransactionStorageUT extends
                         ("microservice", "2016-09-18 13:00:00", TransactionReportType.REALTIME);
 
         Assert.assertNotNull(list);
+    }
+
+    @Test
+    public void testQueryPerson() {
+        Criteria criteria = Criteria.where("name").lte("");
+        Query query = new Query(criteria);
+        this.mongoTemplate.find(query, Person.class, "PERSON");
     }
 
 

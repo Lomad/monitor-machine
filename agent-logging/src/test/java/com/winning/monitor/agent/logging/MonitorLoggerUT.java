@@ -72,12 +72,13 @@ public class MonitorLoggerUT {
 
     @Test
     public void testNestedTransaction() throws InterruptedException {
+        MonitorLogger.checkAndInitialize();
         Transaction parentTransaction = MonitorLogger.newTransaction("PARENT", "HELLO");
         Transaction childTransaction = MonitorLogger.newTransaction("CHILD", "HELLO");
         Thread.sleep(10);
         childTransaction.success();
         parentTransaction.success();
-        Thread.sleep(10000);
+        Thread.sleep(1000);
     }
 
 }

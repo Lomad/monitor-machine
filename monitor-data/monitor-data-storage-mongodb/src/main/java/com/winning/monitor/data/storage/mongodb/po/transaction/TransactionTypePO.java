@@ -71,6 +71,39 @@ public class TransactionTypePO {
         }
     }
 
+    public TransactionTypeVO toTransactionTypeVO() {
+        TransactionTypeVO transactionTypeVO = new TransactionTypeVO();
+        transactionTypeVO.setId(id);
+        transactionTypeVO.setName(name);
+        transactionTypeVO.setTotalCount(totalCount);
+        transactionTypeVO.setFailCount(failCount);
+        transactionTypeVO.setFailPercent(failPercent);
+
+        transactionTypeVO.setMin(min);
+        transactionTypeVO.setMax(max);
+        transactionTypeVO.setSum(sum);
+        transactionTypeVO.setSum2(sum2);
+        transactionTypeVO.setAvg(avg);
+        transactionTypeVO.setStd(std);
+        transactionTypeVO.setTps(tps);
+        transactionTypeVO.setLine95Value(line95Value);
+        transactionTypeVO.setLine99Value(line99Value);
+        transactionTypeVO.setRange2s(range2s);
+        transactionTypeVO.setAllDurations(allDurations);
+
+        List<TransactionNameVO> transactionNames = new ArrayList<>();
+
+        if (this.getTransactionNames() != null) {
+            for (TransactionNamePO transactionNamePO : this.getTransactionNames()) {
+                transactionNames.add(transactionNamePO.toTransactionNameVO());
+            }
+        }
+
+        transactionTypeVO.setTransactionNames(transactionNames);
+
+        return transactionTypeVO;
+    }
+
 
     public String getId() {
         return id;

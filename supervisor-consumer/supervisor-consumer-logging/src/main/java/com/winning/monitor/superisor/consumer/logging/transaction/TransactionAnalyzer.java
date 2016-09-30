@@ -12,12 +12,16 @@ import com.winning.monitor.superisor.consumer.api.report.ReportManager;
 import com.winning.monitor.superisor.consumer.logging.transaction.entity.TransactionName;
 import com.winning.monitor.superisor.consumer.logging.transaction.entity.TransactionReport;
 import com.winning.monitor.superisor.consumer.logging.transaction.entity.TransactionType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 
 public class TransactionAnalyzer
         extends AbstractMessageAnalyzer<MessageTree> {
+
+    private static final Logger logger = LoggerFactory.getLogger(TransactionAnalyzer.class);
 
     private final ReportManager<TransactionReport> reportReportManager;
     //    private TransactionStatisticsComputer m_computer = new TransactionStatisticsComputer();
@@ -28,7 +32,10 @@ public class TransactionAnalyzer
 
     @Override
     public void doCheckpoint(boolean atEnd) {
-        reportReportManager.storeHourlyReports(getStartTime(), m_index);
+        logger.info("TransactionAnalyzer正在执行checkpoint...");
+        reportReportManager.storeHourlyReports(getStartTime(),
+                ReportManager.StoragePolicy.FILE_AND_DB, m_index);
+        logger.info("TransactionAnalyzer执行checkpoint成功!");
     }
 
     @Override

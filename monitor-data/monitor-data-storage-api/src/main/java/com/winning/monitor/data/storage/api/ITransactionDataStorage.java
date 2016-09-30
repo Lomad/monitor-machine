@@ -13,9 +13,13 @@ public interface ITransactionDataStorage {
 
     List<TransactionReportVO> queryTransactionReports(String domain, String startTime, TransactionReportType type);
 
+    List<TransactionReportVO> queryTransactionReports(String domain, String startTime,String endTime,
+                                                      TransactionReportType type);
+
     List<TransactionReportVO> queryTransactionReportsByType(String domain, String startTime, String typeName,
                                                             TransactionReportType type);
 
     void storeTransactionReport(TransactionReportVO transactionReportVO) throws StorageException;
 
+    void storeHistoryTransactionReport(TransactionReportVO transactionReportVO);
 }

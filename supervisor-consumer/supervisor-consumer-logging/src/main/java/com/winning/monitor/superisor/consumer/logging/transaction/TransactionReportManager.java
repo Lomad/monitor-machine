@@ -6,6 +6,7 @@ import com.winning.monitor.data.api.transaction.vo.TransactionReportVO;
 import com.winning.monitor.data.storage.api.ITransactionDataStorage;
 import com.winning.monitor.superisor.consumer.api.report.AbstractReportManager;
 import com.winning.monitor.superisor.consumer.logging.transaction.entity.TransactionReport;
+import com.winning.monitor.supervisor.core.task.TaskManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +26,9 @@ public class TransactionReportManager extends AbstractReportManager<TransactionR
 
     @Autowired
     private ITransactionDataStorage transactionDataStorage;
+
+    @Autowired
+    private TaskManager taskManager;
 
     @Override
     protected TransactionReport makeReport(String domain, long startTime, long duration) {
@@ -65,7 +69,7 @@ public class TransactionReportManager extends AbstractReportManager<TransactionR
     }
 
     @Override
-    public void storeHourlyReports(long startTime, int index) {
+    public void storeHourlyReports(long startTime, StoragePolicy storagePolicy, int index) {
         Map<String, TransactionReport> reports = m_reports.get(startTime);
         if (reports == null)
             return;
@@ -80,6 +84,15 @@ public class TransactionReportManager extends AbstractReportManager<TransactionR
 
             // TODO: 16/9/14 加入判断,未更新数据的不需要进行保存处理
             transactionDataStorage.storeTransactionReport(transactionReportVO);
+
+            if (storagePolicy.forDatabase()) {
+                try {
+                    taskManager.createTask(new Date(startTime), transactionReport.getDomain(),
+                            TransactionReportBuilder.TASK_BUILDER_NAME, TaskManager.TaskProlicy.ALL);
+                } catch (Exception e) {
+
+                }
+            }
         }
 
         this.cleanup(startTime);
@@ -107,7 +120,7 @@ public class TransactionReportManager extends AbstractReportManager<TransactionR
         while (active) {
             try {
                 for (long startTime : this.m_reports.keySet()) {
-                    this.storeHourlyReports(startTime, 0);
+                    this.storeHourlyReports(startTime, StoragePolicy.FILE, 0);
                 }
             } catch (Exception e) {
 
