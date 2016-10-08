@@ -18,6 +18,7 @@ public class TransactionReportVO {
     private int index;
     private TransactionReportType type;
     private Map<String, TransactionMachineVO> machineMap = new LinkedHashMap<String, TransactionMachineVO>();
+    private String ip;
 
     public TransactionReportType getType() {
         return type;
@@ -124,4 +125,11 @@ public class TransactionReportVO {
         }
     }
 
+    public String getIp() {
+        return this.ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 }

@@ -7,6 +7,7 @@ import com.winning.monitor.agent.logging.transaction.Transaction;
 import com.winning.monitor.data.api.vo.Duration;
 import com.winning.monitor.data.api.vo.Range;
 import com.winning.monitor.data.api.vo.Range2;
+import com.winning.monitor.data.storage.api.MessageTreeStorage;
 import com.winning.monitor.superisor.consumer.api.analysis.AbstractMessageAnalyzer;
 import com.winning.monitor.superisor.consumer.api.report.ReportManager;
 import com.winning.monitor.superisor.consumer.logging.transaction.entity.TransactionName;
@@ -14,6 +15,7 @@ import com.winning.monitor.superisor.consumer.logging.transaction.entity.Transac
 import com.winning.monitor.superisor.consumer.logging.transaction.entity.TransactionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -24,7 +26,9 @@ public class TransactionAnalyzer
     private static final Logger logger = LoggerFactory.getLogger(TransactionAnalyzer.class);
 
     private final ReportManager<TransactionReport> reportReportManager;
-    //    private TransactionStatisticsComputer m_computer = new TransactionStatisticsComputer();
+
+    @Autowired
+    private MessageTreeStorage messageTreeStorage;
 
     public TransactionAnalyzer(ReportManager<TransactionReport> reportReportManager) {
         this.reportReportManager = reportReportManager;
@@ -52,11 +56,22 @@ public class TransactionAnalyzer
         report.addIp(tree.getIpAddress());
 
         if (message instanceof Transaction) {
-            Transaction root = (Transaction) message;
 
+            this.storeTransaction(tree);
+
+            Transaction root = (Transaction) message;
             processTransaction(report, tree, root);
         }
     }
+
+    protected void storeTransaction(MessageTree tree) {
+        try {
+            messageTreeStorage.storeTransaction(tree);
+        } catch (Exception e) {
+            logger.error("storeTransaction时发生错误", e);
+        }
+    }
+
 
     protected void processTransaction(TransactionReport report, MessageTree tree, Transaction t) {
         String type = t.getType();
@@ -87,6 +102,7 @@ public class TransactionAnalyzer
         }
 //        }
     }
+
 
     protected void processTypeAndName(Transaction t, TransactionType type, TransactionName name, String messageId,
                                       double duration) {

@@ -1,6 +1,5 @@
 package com.winning.monitor.data.storage.mongodb;
 
-import com.winning.monitor.data.api.transaction.vo.TransactionReportType;
 import com.winning.monitor.data.api.transaction.vo.TransactionReportVO;
 import com.winning.monitor.data.api.transaction.vo.TransactionTypeVO;
 import com.winning.monitor.data.storage.api.ITransactionDataStorage;
@@ -42,8 +41,8 @@ public class TransactionStorageUT extends
     @Test
     public void testQueryTransactionReports() {
         List<TransactionReportVO> list =
-                transactionDataStorage.queryTransactionReports
-                        ("microservice", "2016-09-18 13:00:00", TransactionReportType.REALTIME);
+                transactionDataStorage.queryRealtimeTransactionReports
+                        ("microservice", "2016-09-18 13:00:00");
 
         Assert.assertNotNull(list);
     }

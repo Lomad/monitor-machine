@@ -83,7 +83,7 @@ public class TransactionReportManager extends AbstractReportManager<TransactionR
             transactionReportVO.setType(TransactionReportType.REALTIME);
 
             // TODO: 16/9/14 加入判断,未更新数据的不需要进行保存处理
-            transactionDataStorage.storeTransactionReport(transactionReportVO);
+            transactionDataStorage.storeRealtimeTransactionReport(transactionReportVO);
 
             if (storagePolicy.forDatabase()) {
                 try {

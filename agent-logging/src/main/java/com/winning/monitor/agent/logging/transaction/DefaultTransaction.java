@@ -13,33 +13,33 @@ import java.util.List;
  */
 public class DefaultTransaction extends AbstractLogMessage implements Transaction {
 
-    private long m_durationInMicro = -1; // must be less than 0
+    private long durationInMicro = -1; // must be less than 0
 
-    private List<LogMessage> m_children;
+    private List<LogMessage> children;
 
-    private MessageManager m_manager;
+    private MessageManager manager;
 
-    private boolean m_standalone;
+    private boolean standalone;
 
-    private long m_durationStart;
+    private long durationStart;
 
 
     public DefaultTransaction(String type, String name, MessageManager manager) {
         super(type, name);
 
-        m_manager = manager;
-        m_standalone = true;
-        m_durationStart = System.nanoTime();
+        this.manager = manager;
+        this.standalone = true;
+        this.durationStart = System.nanoTime();
     }
 
     @Override
     public DefaultTransaction addChild(LogMessage message) {
-        if (m_children == null) {
-            m_children = new ArrayList<LogMessage>();
+        if (this.children == null) {
+            this.children = new ArrayList<LogMessage>();
         }
 
         if (message != null) {
-            m_children.add(message);
+            this.children.add(message);
         } else {
             //Cat.logError(new Exception("null child message"));
         }
@@ -62,12 +62,12 @@ public class DefaultTransaction extends AbstractLogMessage implements Transactio
 //                event.complete();
 //                addChild(event);
             } else {
-                m_durationInMicro = (System.nanoTime() - m_durationStart) / 1000L;
+                this.durationInMicro = (System.nanoTime() - this.durationStart) / 1000L;
 
                 setCompleted(true);
 
-                if (m_manager != null) {
-                    m_manager.end(this);
+                if (this.manager != null) {
+                    this.manager.end(this);
                 }
             }
         } catch (Exception e) {
@@ -77,23 +77,23 @@ public class DefaultTransaction extends AbstractLogMessage implements Transactio
 
     @Override
     public List<LogMessage> getChildren() {
-        if (m_children == null) {
+        if (this.children == null) {
             return Collections.emptyList();
         }
 
-        return m_children;
+        return this.children;
     }
 
     @Override
     public long getDurationInMicros() {
-        if (m_durationInMicro >= 0) {
-            return m_durationInMicro;
+        if (this.durationInMicro >= 0) {
+            return this.durationInMicro;
         } else { // if it's not completed explicitly
             long duration = 0;
-            int len = m_children == null ? 0 : m_children.size();
+            int len = this.children == null ? 0 : this.children.size();
 
             if (len > 0) {
-                LogMessage lastChild = m_children.get(len - 1);
+                LogMessage lastChild = this.children.get(len - 1);
 
                 if (lastChild instanceof Transaction) {
                     DefaultTransaction trx = (DefaultTransaction) lastChild;
@@ -109,7 +109,7 @@ public class DefaultTransaction extends AbstractLogMessage implements Transactio
     }
 
     public void setDurationInMicros(long duration) {
-        m_durationInMicro = duration;
+        this.durationInMicro = duration;
     }
 
     @Override
@@ -118,25 +118,25 @@ public class DefaultTransaction extends AbstractLogMessage implements Transactio
     }
 
     public void setDurationInMillis(long duration) {
-        m_durationInMicro = duration * 1000L;
+        this.durationInMicro = duration * 1000L;
     }
 
     protected MessageManager getManager() {
-        return m_manager;
+        return this.manager;
     }
 
     @Override
     public boolean hasChildren() {
-        return m_children != null && m_children.size() > 0;
+        return this.children != null && this.children.size() > 0;
     }
 
     @Override
     public boolean isStandalone() {
-        return m_standalone;
+        return this.standalone;
     }
 
     public void setStandalone(boolean standalone) {
-        m_standalone = standalone;
+        this.standalone = standalone;
     }
 
     @Override
@@ -146,7 +146,7 @@ public class DefaultTransaction extends AbstractLogMessage implements Transactio
     }
 
     public void setDurationStart(long durationStart) {
-        m_durationStart = durationStart;
+        this.durationStart = durationStart;
     }
 
 

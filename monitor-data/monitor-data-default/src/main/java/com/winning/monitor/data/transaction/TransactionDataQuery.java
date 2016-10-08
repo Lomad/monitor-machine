@@ -26,7 +26,7 @@ public class TransactionDataQuery implements ITransactionDataQuery {
                                                       TransactionReportType type) {
 
         List<TransactionReportVO> reports =
-                transactionDataStorage.queryTransactionReports(domain, startTime, type);
+                transactionDataStorage.queryRealtimeTransactionReports(domain, startTime);
 
 
         TransactionReportMerger transactionReportMerger = new TransactionReportMerger();

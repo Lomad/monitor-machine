@@ -95,6 +95,10 @@ public class MessageTreeMessageCodec {
         if ("DefaultTransaction".equals(messageType)) {
             DefaultTransaction transaction = new DefaultTransaction(type, name, null);
             BeanUtils.populate(transaction, message);
+            Object data = message.get("data");
+            if (data != null)
+                transaction.addData(data.toString());
+
             List<LinkedHashMap<String, Object>> children = (List<LinkedHashMap<String, Object>>) message.get("children");
             if (children != null) {
                 for (LinkedHashMap<String, Object> child : children) {

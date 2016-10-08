@@ -17,6 +17,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by nicholasyan on 16/9/14.
@@ -24,9 +25,7 @@ import java.util.List;
 public class TransactionDataStorage implements ITransactionDataStorage {
 
     private static final Logger logger = LoggerFactory.getLogger(TransactionDataStorage.class);
-    private static final String REALTIME_COLLECTION_NAME = "transactionReports";
-    private static final String HISTORY_COLLECTION_NAME = "transactionHistoryReports";
-
+    private static final String REALTIME_COLLECTION_NAME = "TransactionRealtimeReports";
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -45,11 +44,11 @@ public class TransactionDataStorage implements ITransactionDataStorage {
 
 
     @Override
-    public List<TransactionReportVO> queryTransactionReports(String domain, String startTime, TransactionReportType type) {
+    public List<TransactionReportVO> queryRealtimeTransactionReports(String domain, String startTime) {
         Query query = new Query();
         query.addCriteria(new Criteria("domain").is(domain));
         query.addCriteria(new Criteria("startTime").is(startTime));
-        query.addCriteria(new Criteria("type").is(type));
+        query.addCriteria(new Criteria("type").is(TransactionReportType.REALTIME.getName()));
 
         List<TransactionReportVO> list =
                 this.mongoTemplate.find(query, TransactionReportVO.class, REALTIME_COLLECTION_NAME);
@@ -62,16 +61,34 @@ public class TransactionDataStorage implements ITransactionDataStorage {
         return list;
     }
 
+
     @Override
-    public List<TransactionReportVO> queryTransactionReports(String domain, String startTime, String endTime, TransactionReportType type) {
+    public List<TransactionReportVO> queryRealtimeTransactionReports(String domain, String startTime, String endTime) {
         Criteria criteria = Criteria.where("domain").is(domain)
-                .and("type").is(type.getName())
+                .and("type").is(TransactionReportType.REALTIME.getName())
                 .and("startTime").gte(startTime)
                 .and("endTime").lt(endTime);
         Query query = new Query(criteria);
 
         List<TransactionReportPO> list =
                 this.mongoTemplate.find(query, TransactionReportPO.class, REALTIME_COLLECTION_NAME);
+
+        List<TransactionReportVO> transactionReports = this.convertTransactionReports(list);
+
+        return transactionReports;
+    }
+
+    @Override
+    public List<TransactionReportVO> queryHistoryTransactionReports(String domain, String startTime, String endTime, TransactionReportType type) {
+        Criteria criteria = Criteria.where("domain").is(domain)
+                .and("type").is(type.getName())
+                .and("startTime").gte(startTime).lt(endTime);
+        Query query = new Query(criteria);
+
+        String collectionName = this.getHistoryCollectionName(type);
+
+        List<TransactionReportPO> list =
+                this.mongoTemplate.find(query, TransactionReportPO.class, collectionName);
 
         List<TransactionReportVO> transactionReports = this.convertTransactionReports(list);
 
@@ -101,7 +118,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
 
 
     @Override
-    public void storeTransactionReport(TransactionReportVO transactionReport) throws StorageException {
+    public void storeRealtimeTransactionReport(TransactionReportVO transactionReport) throws StorageException {
         try {
             TransactionReportPO transactionReportPO = new TransactionReportPO(transactionReport);
 
@@ -137,18 +154,21 @@ public class TransactionDataStorage implements ITransactionDataStorage {
             query.addCriteria(new Criteria("endTime").is(transactionReport.getEndTime()));
             query.addCriteria(new Criteria("type").is(transactionReport.getType().getName()));
 
-            boolean existsReport = this.mongoTemplate.exists(query, TransactionReportPO.class, HISTORY_COLLECTION_NAME);
+            String collectionName = this.getHistoryCollectionName(transactionReport.getType());
+
+            boolean existsReport = this.mongoTemplate.exists(query, TransactionReportPO.class, collectionName);
 
             //如果不存在,则直接插入数据
             if (existsReport == false) {
-                this.mongoTemplate.insert(transactionReportPO, HISTORY_COLLECTION_NAME);
+                transactionReportPO.setId(UUID.randomUUID().toString());
+                this.mongoTemplate.insert(transactionReportPO, collectionName);
                 return;
             }
 
             //更新数据
             Update update = new Update();
             update.set("machines", transactionReportPO.getMachines());
-            this.mongoTemplate.upsert(query, update, HISTORY_COLLECTION_NAME);
+            this.mongoTemplate.upsert(query, update, collectionName);
         } catch (Exception e) {
             logger.error("保存至mongodb时执行storeTransactionReport发生错误", e);
         }
@@ -189,6 +209,27 @@ public class TransactionDataStorage implements ITransactionDataStorage {
         transactionReportVO.setEndTime(ConvertUtils.getStringValue(reportMap.get("endTime")));
 
         return transactionReportVO;
+    }
+
+    private String getHistoryCollectionName(TransactionReportType transactionReport) {
+        String collectionName = "";
+        switch (transactionReport) {
+            case HOURLY:
+                collectionName = "TransactionHourlyReports";
+                break;
+            case DAILY:
+                collectionName = "TransactionDailyReports";
+                break;
+            case WEEKLY:
+                collectionName = "TransactionWeeklyReports";
+                break;
+            case MONTHLY:
+                collectionName = "TransactionMonthlyReports";
+                break;
+            default:
+                collectionName = "TransactionHourlyReports";
+        }
+        return collectionName;
     }
 
 

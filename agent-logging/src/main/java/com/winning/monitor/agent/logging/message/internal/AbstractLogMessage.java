@@ -7,120 +7,120 @@ import com.winning.monitor.agent.logging.utils.MilliSecondTimer;
  * Created by nicholasyan on 16/9/8.
  */
 public abstract class AbstractLogMessage implements LogMessage {
-    private String m_type;
+    private String type;
 
-    private String m_name;
+    private String name;
 
-    private String m_status = "unset";
+    private String status = "unset";
 
-    private long m_timestampInMillis;
+    private long timestampInMillis;
 
-    private CharSequence m_data;
+    private CharSequence data;
 
-    private boolean m_completed;
+    private boolean completed;
 
     public AbstractLogMessage(String type, String name) {
-        m_type = String.valueOf(type);
-        m_name = String.valueOf(name);
-        m_timestampInMillis = MilliSecondTimer.currentTimeMillis();
+        this.type = String.valueOf(type);
+        this.name = String.valueOf(name);
+        this.timestampInMillis = MilliSecondTimer.currentTimeMillis();
     }
 
     @Override
     public void addData(String keyValuePairs) {
-        if (m_data == null) {
-            m_data = keyValuePairs;
-        } else if (m_data instanceof StringBuilder) {
-            ((StringBuilder) m_data).append('&').append(keyValuePairs);
+        if (this.data == null) {
+            this.data = keyValuePairs;
+        } else if (this.data instanceof StringBuilder) {
+            ((StringBuilder) this.data).append('&').append(keyValuePairs);
         } else {
-            StringBuilder sb = new StringBuilder(m_data.length() + keyValuePairs.length() + 16);
+            StringBuilder sb = new StringBuilder(this.data.length() + keyValuePairs.length() + 16);
 
-            sb.append(m_data).append('&');
+            sb.append(this.data).append('&');
             sb.append(keyValuePairs);
-            m_data = sb;
+            this.data = sb;
         }
     }
 
     @Override
     public void addData(String key, Object value) {
-        if (m_data instanceof StringBuilder) {
-            ((StringBuilder) m_data).append('&').append(key).append('=').append(value);
+        if (this.data instanceof StringBuilder) {
+            ((StringBuilder) this.data).append('&').append(key).append('=').append(value);
         } else {
             String str = String.valueOf(value);
-            int old = m_data == null ? 0 : m_data.length();
+            int old = this.data == null ? 0 : this.data.length();
             StringBuilder sb = new StringBuilder(old + key.length() + str.length() + 16);
 
-            if (m_data != null) {
-                sb.append(m_data).append('&');
+            if (this.data != null) {
+                sb.append(this.data).append('&');
             }
 
             sb.append(key).append('=').append(str);
-            m_data = sb;
+            this.data = sb;
         }
     }
 
     @Override
     public CharSequence getData() {
-        if (m_data == null) {
+        if (this.data == null) {
             return "";
         } else {
-            return m_data;
+            return this.data;
         }
     }
 
     @Override
     public String getName() {
-        return m_name;
+        return this.name;
     }
 
     public void setName(String name) {
-        m_name = name;
+        this.name = name;
     }
 
     @Override
     public String getStatus() {
-        return m_status;
+        return this.status;
     }
 
     @Override
     public void setStatus(String status) {
-        m_status = status;
+        this.status = status;
     }
 
     @Override
     public void setStatus(Throwable e) {
-        m_status = e.getClass().getName();
+        this.status = e.getClass().getName();
     }
 
     @Override
     public long getTimestamp() {
-        return m_timestampInMillis;
+        return this.timestampInMillis;
     }
 
     public void setTimestamp(long timestamp) {
-        m_timestampInMillis = timestamp;
+        this.timestampInMillis = timestamp;
     }
 
     @Override
     public String getType() {
-        return m_type;
+        return this.type;
     }
 
     public void setType(String type) {
-        m_type = type;
+        this.type = type;
     }
 
     @Override
     public boolean isCompleted() {
-        return m_completed;
+        return this.completed;
     }
 
     public void setCompleted(boolean completed) {
-        m_completed = completed;
+        this.completed = completed;
     }
 
     @Override
     public boolean isSuccess() {
-        return LogMessage.SUCCESS.equals(m_status);
+        return LogMessage.SUCCESS.equals(this.status);
     }
 
 

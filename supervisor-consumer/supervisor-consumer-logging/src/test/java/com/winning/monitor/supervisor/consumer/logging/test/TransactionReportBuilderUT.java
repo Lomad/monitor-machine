@@ -30,5 +30,30 @@ public class TransactionReportBuilderUT extends
         Assert.assertTrue(result);
     }
 
+    @Test
+    public void testMergeDailyReport() throws ParseException {
+        Date period = sdf.parse("2016-09-30 00:00:00");
+        boolean result = this.transactionReportBuilder.buildDailyTask
+                (TransactionReportBuilder.TASK_BUILDER_NAME, "test1", period);
+        Assert.assertTrue(result);
+    }
+
+    @Test
+    public void testMergeWeeklyReport() throws ParseException {
+        Date period = sdf.parse("2016-09-26 00:00:00");
+        boolean result = this.transactionReportBuilder.buildWeeklyTask
+                (TransactionReportBuilder.TASK_BUILDER_NAME, "test1", period);
+        Assert.assertTrue(result);
+    }
+
+
+    @Test
+    public void testMergeMonthReport() throws ParseException {
+        Date period = sdf.parse("2016-09-01 00:00:00");
+        boolean result = this.transactionReportBuilder.buildMonthlyTask
+                (TransactionReportBuilder.TASK_BUILDER_NAME, "test1", period);
+        Assert.assertTrue(result);
+    }
+
 
 }

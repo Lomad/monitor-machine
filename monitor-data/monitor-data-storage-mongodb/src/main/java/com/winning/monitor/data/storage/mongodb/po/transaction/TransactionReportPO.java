@@ -26,6 +26,7 @@ public class TransactionReportPO {
     private String server;
     private String startTime;
     private String endTime;
+    private String ip;
 
     private List<TransactionMachinePO> machines;
 
@@ -42,6 +43,7 @@ public class TransactionReportPO {
         this.server = transactionReportVO.getServer();
         this.startTime = transactionReportVO.getStartTime();
         this.endTime = transactionReportVO.getEndTime();
+        this.ip = transactionReportVO.getIp();
 
         List<TransactionMachinePO> machines = new ArrayList<>();
         if (transactionReportVO.getMachines() != null) {
@@ -62,6 +64,8 @@ public class TransactionReportPO {
         transactionReportVO.setServer(this.server);
         transactionReportVO.setStartTime(this.startTime);
         transactionReportVO.setEndTime(this.endTime);
+        transactionReportVO.setIp(this.ip);
+
         List<TransactionMachineVO> machines = new ArrayList<>();
         if (this.getMachines() != null) {
             for (TransactionMachinePO machinePO : this.getMachines()) {
@@ -145,4 +149,11 @@ public class TransactionReportPO {
         this.machines = machines;
     }
 
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 }

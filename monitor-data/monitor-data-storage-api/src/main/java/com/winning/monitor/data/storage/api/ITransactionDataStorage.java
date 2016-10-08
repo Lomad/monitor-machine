@@ -11,15 +11,17 @@ import java.util.List;
  */
 public interface ITransactionDataStorage {
 
-    List<TransactionReportVO> queryTransactionReports(String domain, String startTime, TransactionReportType type);
+    List<TransactionReportVO> queryRealtimeTransactionReports(String domain, String startTime);
 
-    List<TransactionReportVO> queryTransactionReports(String domain, String startTime,String endTime,
-                                                      TransactionReportType type);
+    List<TransactionReportVO> queryRealtimeTransactionReports(String domain, String startTime, String endTime);
+
+    List<TransactionReportVO> queryHistoryTransactionReports(String domain, String startTime, String endTime,
+                                                             TransactionReportType type);
 
     List<TransactionReportVO> queryTransactionReportsByType(String domain, String startTime, String typeName,
                                                             TransactionReportType type);
 
-    void storeTransactionReport(TransactionReportVO transactionReportVO) throws StorageException;
+    void storeRealtimeTransactionReport(TransactionReportVO transactionReportVO) throws StorageException;
 
     void storeHistoryTransactionReport(TransactionReportVO transactionReportVO);
 }

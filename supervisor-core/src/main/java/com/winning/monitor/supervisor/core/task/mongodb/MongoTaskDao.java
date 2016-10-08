@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class MongoTaskDao implements ITaskDao {
 
-    private static final String COLLECTION_NAME = "tasks";
+    private static final String COLLECTION_NAME = "ReportTasks";
     private MongoTemplate mongoTemplate;
 
     @Override

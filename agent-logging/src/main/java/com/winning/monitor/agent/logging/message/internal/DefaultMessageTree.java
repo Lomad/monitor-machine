@@ -6,47 +6,46 @@ import com.winning.monitor.agent.logging.message.MessageTree;
 
 public class DefaultMessageTree implements MessageTree {
 
+    private String domain;
 
-    private String m_domain;
+    private String hostName;
 
-    private String m_hostName;
+    private String ipAddress;
 
-    private String m_ipAddress;
+    private LogMessage message;
 
-    private LogMessage m_message;
+    private String messageId;
 
-    private String m_messageId;
+    private String parentMessageId;
 
-    private String m_parentMessageId;
+    private String rootMessageId;
 
-    private String m_rootMessageId;
+    private String sessionToken;
 
-    private String m_sessionToken;
+    private String threadGroupName;
 
-    private String m_threadGroupName;
+    private String threadId;
 
-    private String m_threadId;
+    private String threadName;
 
-    private String m_threadName;
-
-    private boolean m_sample = true;
+    private boolean sample = true;
 
     @Override
     public MessageTree copy() {
         MessageTree tree = new DefaultMessageTree();
 
-        tree.setDomain(m_domain);
-        tree.setHostName(m_hostName);
-        tree.setIpAddress(m_ipAddress);
-        tree.setMessageId(m_messageId);
-        tree.setParentMessageId(m_parentMessageId);
-        tree.setRootMessageId(m_rootMessageId);
-        tree.setSessionToken(m_sessionToken);
-        tree.setThreadGroupName(m_threadGroupName);
-        tree.setThreadId(m_threadId);
-        tree.setThreadName(m_threadName);
-        tree.setMessage(m_message);
-        tree.setSample(m_sample);
+        tree.setDomain(domain);
+        tree.setHostName(hostName);
+        tree.setIpAddress(ipAddress);
+        tree.setMessageId(messageId);
+        tree.setParentMessageId(parentMessageId);
+        tree.setRootMessageId(rootMessageId);
+        tree.setSessionToken(sessionToken);
+        tree.setThreadGroupName(threadGroupName);
+        tree.setThreadId(threadId);
+        tree.setThreadName(threadName);
+        tree.setMessage(message);
+        tree.setSample(sample);
 
         return tree;
     }
@@ -54,32 +53,32 @@ public class DefaultMessageTree implements MessageTree {
 
     @Override
     public String getDomain() {
-        return m_domain;
+        return domain;
     }
 
     @Override
     public void setDomain(String domain) {
-        m_domain = domain;
+        this.domain = domain;
     }
 
     @Override
     public String getHostName() {
-        return m_hostName;
+        return hostName;
     }
 
     @Override
     public void setHostName(String hostName) {
-        m_hostName = hostName;
+        this.hostName = hostName;
     }
 
     @Override
     public String getIpAddress() {
-        return m_ipAddress;
+        return ipAddress;
     }
 
     @Override
     public void setIpAddress(String ipAddress) {
-        m_ipAddress = ipAddress;
+        this.ipAddress = ipAddress;
     }
 
     @Override
@@ -89,98 +88,98 @@ public class DefaultMessageTree implements MessageTree {
 
     @Override
     public LogMessage getMessage() {
-        return m_message;
+        return message;
     }
 
     @Override
     public void setMessage(LogMessage message) {
-        m_message = message;
+        this.message = message;
     }
 
     @Override
     public String getMessageId() {
-        return m_messageId;
+        return messageId;
     }
 
     @Override
     public void setMessageId(String messageId) {
         if (messageId != null && messageId.length() > 0) {
-            m_messageId = messageId;
+            this.messageId = messageId;
         }
     }
 
     @Override
     public String getParentMessageId() {
-        return m_parentMessageId;
+        return parentMessageId;
     }
 
     @Override
     public void setParentMessageId(String parentMessageId) {
         if (parentMessageId != null && parentMessageId.length() > 0) {
-            m_parentMessageId = parentMessageId;
+            this.parentMessageId = parentMessageId;
         }
     }
 
     @Override
     public String getRootMessageId() {
-        return m_rootMessageId;
+        return rootMessageId;
     }
 
     @Override
     public void setRootMessageId(String rootMessageId) {
         if (rootMessageId != null && rootMessageId.length() > 0) {
-            m_rootMessageId = rootMessageId;
+            this.rootMessageId = rootMessageId;
         }
     }
 
     @Override
     public String getSessionToken() {
-        return m_sessionToken;
+        return sessionToken;
     }
 
     @Override
     public void setSessionToken(String sessionToken) {
-        m_sessionToken = sessionToken;
+        this.sessionToken = sessionToken;
     }
 
     @Override
     public String getThreadGroupName() {
-        return m_threadGroupName;
+        return threadGroupName;
     }
 
     @Override
     public void setThreadGroupName(String threadGroupName) {
-        m_threadGroupName = threadGroupName;
+        this.threadGroupName = threadGroupName;
     }
 
     @Override
     public String getThreadId() {
-        return m_threadId;
+        return threadId;
     }
 
     @Override
     public void setThreadId(String threadId) {
-        m_threadId = threadId;
+        this.threadId = threadId;
     }
 
     @Override
     public String getThreadName() {
-        return m_threadName;
+        return threadName;
     }
 
     @Override
     public void setThreadName(String threadName) {
-        m_threadName = threadName;
+        this.threadName = threadName;
     }
 
     @Override
     public boolean isSample() {
-        return m_sample;
+        return sample;
     }
 
     @Override
     public void setSample(boolean sample) {
-        m_sample = sample;
+        this.sample = sample;
     }
 
 

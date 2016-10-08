@@ -81,4 +81,16 @@ public class MonitorLoggerUT {
         Thread.sleep(1000);
     }
 
+    @Test
+    public void testTransactionData() throws InterruptedException {
+        MonitorLogger.checkAndInitialize();
+        Transaction parentTransaction = MonitorLogger.newTransaction("PARENT", "HELLO");
+        parentTransaction.addData("data1", "data1");
+        Transaction childTransaction = MonitorLogger.newTransaction("CHILD", "HELLO");
+        Thread.sleep(10);
+        childTransaction.success();
+        parentTransaction.success();
+        Thread.sleep(1000);
+    }
+
 }
