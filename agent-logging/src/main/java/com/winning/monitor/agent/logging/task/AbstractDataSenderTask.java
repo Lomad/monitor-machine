@@ -61,9 +61,10 @@ public abstract class AbstractDataSenderTask<T extends MessageTree>
 
                         }
                     }
-                } else {
-                    Thread.sleep(5);
                 }
+
+                Thread.sleep(5);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
