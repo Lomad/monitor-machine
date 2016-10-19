@@ -12,9 +12,8 @@ public class TransactionMachineVO {
 
     private String ip;
 
-    private List<TransactionTypeVO> transactionTypes = new ArrayList<>();
-    private Map<String, TransactionTypeVO> typeMap = new LinkedHashMap<String, TransactionTypeVO>();
-
+    private List<TransactionClientVO> transactionClients = new ArrayList<>();
+    private Map<String, TransactionClientVO> transactionClientMap = new LinkedHashMap<String, TransactionClientVO>();
 
     public String getIp() {
         return ip;
@@ -24,26 +23,26 @@ public class TransactionMachineVO {
         this.ip = ip;
     }
 
-    public List<TransactionTypeVO> getTransactionTypes() {
-        return transactionTypes;
+    public List<TransactionClientVO> getTransactionClients() {
+        return transactionClients;
     }
 
-    public void setTransactionTypes(List<TransactionTypeVO> transactionTypes) {
-        this.transactionTypes = transactionTypes;
-        this.typeMap.clear();
-        if (transactionTypes == null)
+    public void setTransactionClients(List<TransactionClientVO> transactionClients) {
+        this.transactionClients = transactionClients;
+        this.transactionClientMap.clear();
+        if (transactionClients == null)
             return;
-        for (TransactionTypeVO transactionType : transactionTypes) {
-            this.typeMap.put(transactionType.getId(), transactionType);
+        for (TransactionClientVO transactionClient : transactionClients) {
+            this.transactionClientMap.put(transactionClient.getId(), transactionClient);
         }
     }
 
-    public void addTransactionType(TransactionTypeVO transactionType) {
-        this.transactionTypes.add(transactionType);
-        this.typeMap.put(transactionType.getId(), transactionType);
+    public void addTransactionClient(TransactionClientVO transactionClient) {
+        this.transactionClients.add(transactionClient);
+        this.transactionClientMap.put(transactionClient.getId(), transactionClient);
     }
 
-    public TransactionTypeVO getTransactionType(String id) {
-        return this.typeMap.get(id);
+    public TransactionClientVO getTransactionClient(String id) {
+        return this.transactionClientMap.get(id);
     }
 }

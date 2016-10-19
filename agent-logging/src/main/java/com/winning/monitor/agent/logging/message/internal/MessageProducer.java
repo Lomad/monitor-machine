@@ -1,6 +1,7 @@
 package com.winning.monitor.agent.logging.message.internal;
 
 import com.winning.monitor.agent.logging.entity.ConfigManager;
+import com.winning.monitor.agent.logging.message.Caller;
 import com.winning.monitor.agent.logging.message.MessageManager;
 import com.winning.monitor.agent.logging.transaction.DefaultTransaction;
 import com.winning.monitor.agent.logging.transaction.Transaction;
@@ -37,4 +38,16 @@ public class MessageProducer {
             return null;
         }
     }
+
+    public void setCaller(String callerName, String callerIP, String callerType) {
+        Caller caller = m_manager.getThreadLocalMessageTree().getCaller();
+        if (caller == null) {
+            caller = new Caller();
+        }
+        caller.setIp(callerIP);
+        caller.setName(callerName);
+        caller.setType(callerType);
+        m_manager.getThreadLocalMessageTree().setCaller(caller);
+    }
+
 }

@@ -9,6 +9,10 @@ public interface MessageTree extends Message {
 
     public static final String MESSAGE_TYPE = "MessageTree";
 
+    public Caller getCaller();
+
+    public void setCaller(Caller caller);
+
     public MessageTree copy();
 
     public String getDomain();

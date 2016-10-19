@@ -1,33 +1,24 @@
 package com.winning.monitor.agent.logging.message.internal;
 
 
+import com.winning.monitor.agent.logging.message.Caller;
 import com.winning.monitor.agent.logging.message.LogMessage;
 import com.winning.monitor.agent.logging.message.MessageTree;
 
 public class DefaultMessageTree implements MessageTree {
 
+    private Caller caller;
     private String domain;
-
     private String hostName;
-
     private String ipAddress;
-
     private LogMessage message;
-
     private String messageId;
-
     private String parentMessageId;
-
     private String rootMessageId;
-
     private String sessionToken;
-
     private String threadGroupName;
-
     private String threadId;
-
     private String threadName;
-
     private boolean sample = true;
 
     @Override
@@ -47,7 +38,25 @@ public class DefaultMessageTree implements MessageTree {
         tree.setMessage(message);
         tree.setSample(sample);
 
+        if (caller != null) {
+            Caller caller = new Caller();
+            caller.setIp(this.caller.getIp());
+            caller.setName(this.caller.getName());
+            caller.setType(this.caller.getType());
+            tree.setCaller(caller);
+        }
+
         return tree;
+    }
+
+    @Override
+    public Caller getCaller() {
+        return caller;
+    }
+
+    @Override
+    public void setCaller(Caller caller) {
+        this.caller = caller;
     }
 
 

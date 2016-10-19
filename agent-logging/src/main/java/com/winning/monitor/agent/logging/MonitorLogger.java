@@ -103,7 +103,12 @@ public class MonitorLogger {
     }
 
     public static Transaction newTransaction(String type, String name) {
+
         return MonitorLogger.getMessageProducer().newTransaction(type, name);
+    }
+
+    public static void setCaller(String callerName, String callerIP, String callerType) {
+        MonitorLogger.getMessageProducer().setCaller(callerName, callerIP, callerType);
     }
 
     private static MessageProducer getMessageProducer() {

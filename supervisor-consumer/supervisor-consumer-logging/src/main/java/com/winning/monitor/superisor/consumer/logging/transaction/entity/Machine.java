@@ -4,21 +4,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Machine {
-    private String m_ip;
+    private String ip;
 
-    private Map<String, TransactionType> m_types = new LinkedHashMap<String, TransactionType>();
+    private Map<String, Client> clients = new LinkedHashMap<String, Client>();
 
     public Machine() {
     }
 
     public Machine(String ip) {
-        m_ip = ip;
-    }
-
-
-    public Machine addType(TransactionType type) {
-        m_types.put(type.getId(), type);
-        return this;
+        this.ip = ip;
     }
 
     @Override
@@ -26,7 +20,7 @@ public class Machine {
         if (obj instanceof Machine) {
             Machine _o = (Machine) obj;
 
-            if (!m_ip.equals(_o.getIp())) {
+            if (!ip.equals(_o.getIp())) {
                 return false;
             }
 
@@ -36,51 +30,48 @@ public class Machine {
         return false;
     }
 
-    public TransactionType findType(String id) {
-        return m_types.get(id);
+    public String getIp() {
+        return ip;
     }
 
-    public TransactionType findOrCreateType(String id) {
-        TransactionType type = m_types.get(id);
+    public Machine setIp(String ip) {
+        this.ip = ip;
+        return this;
+    }
 
-        if (type == null) {
-            synchronized (m_types) {
-                type = m_types.get(id);
+    public Client findClient(String domain, String ip, String type) {
+        String id = domain + "-" + ip + "-" + type;
+        return clients.get(id);
+    }
 
-                if (type == null) {
-                    type = new TransactionType(id);
-                    m_types.put(id, type);
+    public Client findOrCreateClient(String domain, String ip, String type) {
+        String id = domain + "-" + ip + "-" + type;
+        Client client = clients.get(id);
+
+        if (client == null) {
+            synchronized (this.clients) {
+                client = clients.get(id);
+                if (client == null) {
+                    client = new Client(domain, ip, type);
+                    clients.put(id, client);
                 }
             }
         }
 
-        return type;
+        return client;
     }
 
-    public String getIp() {
-        return m_ip;
-    }
-
-    public Machine setIp(String ip) {
-        m_ip = ip;
-        return this;
-    }
-
-    public Map<String, TransactionType> getTypes() {
-        return m_types;
+    public Map<String, Client> getClients() {
+        return this.clients;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
 
-        hash = hash * 31 + (m_ip == null ? 0 : m_ip.hashCode());
+        hash = hash * 31 + (ip == null ? 0 : ip.hashCode());
 
         return hash;
-    }
-
-    public TransactionType removeType(String id) {
-        return m_types.remove(id);
     }
 
 }

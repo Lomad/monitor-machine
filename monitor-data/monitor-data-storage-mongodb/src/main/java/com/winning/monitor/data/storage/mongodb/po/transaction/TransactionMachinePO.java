@@ -1,11 +1,9 @@
 package com.winning.monitor.data.storage.mongodb.po.transaction;
 
+import com.winning.monitor.data.api.transaction.vo.TransactionClientVO;
 import com.winning.monitor.data.api.transaction.vo.TransactionMachineVO;
-import com.winning.monitor.data.api.transaction.vo.TransactionTypeVO;
-import com.winning.monitor.data.storage.mongodb.ConvertUtils;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -14,7 +12,7 @@ import java.util.List;
 public class TransactionMachinePO {
 
     private String ip;
-    private List<TransactionTypePO> transactionTypes = new ArrayList<>();
+    private List<TransactionClientPO> transactionClients = new ArrayList<>();
 
     public TransactionMachinePO() {
 
@@ -22,29 +20,23 @@ public class TransactionMachinePO {
 
     public TransactionMachinePO(TransactionMachineVO transactionMachineVO) {
         this.ip = transactionMachineVO.getIp();
-        if (transactionMachineVO.getTransactionTypes() != null) {
-            for (TransactionTypeVO transactionTypeVO : transactionMachineVO.getTransactionTypes()) {
-                this.transactionTypes.add(new TransactionTypePO(transactionTypeVO));
+        if (transactionMachineVO.getTransactionClients() != null) {
+            for (TransactionClientVO transactionClientVO : transactionMachineVO.getTransactionClients()) {
+                this.transactionClients.add(new TransactionClientPO(transactionClientVO));
             }
         }
     }
-
-    public TransactionMachinePO(LinkedHashMap<String, Object> hashMap) {
-        this.ip = ConvertUtils.getStringValue(hashMap.get("ip"));
-
-    }
-
 
     public TransactionMachineVO toTransactionMachineVO() {
         TransactionMachineVO transactionMachineVO = new TransactionMachineVO();
         transactionMachineVO.setIp(this.ip);
-        List<TransactionTypeVO> transactionTypeVOs = new ArrayList<>();
-        if (this.getTransactionTypes() != null) {
-            for (TransactionTypePO transactionTypePO : this.getTransactionTypes()) {
-                transactionTypeVOs.add(transactionTypePO.toTransactionTypeVO());
+        List<TransactionClientVO> transactionClientVOs = new ArrayList<>();
+        if (this.getTransactionClients() != null) {
+            for (TransactionClientPO transactionClientPO : this.getTransactionClients()) {
+                transactionClientVOs.add(transactionClientPO.toTransactionClientVO());
             }
         }
-        transactionMachineVO.setTransactionTypes(transactionTypeVOs);
+        transactionMachineVO.setTransactionClients(transactionClientVOs);
         return transactionMachineVO;
     }
 
@@ -56,11 +48,11 @@ public class TransactionMachinePO {
         this.ip = ip;
     }
 
-    public List<TransactionTypePO> getTransactionTypes() {
-        return transactionTypes;
+    public List<TransactionClientPO> getTransactionClients() {
+        return transactionClients;
     }
 
-    public void setTransactionTypes(List<TransactionTypePO> transactionTypes) {
-        this.transactionTypes = transactionTypes;
+    public void setTransactionClients(List<TransactionClientPO> transactionClients) {
+        this.transactionClients = transactionClients;
     }
 }

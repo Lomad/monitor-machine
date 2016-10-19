@@ -1,16 +1,10 @@
 package com.winning.monitor.superisor.consumer.logging.transaction;
 
 import com.winning.monitor.data.api.transaction.TransactionStatisticsComputer;
-import com.winning.monitor.data.api.transaction.vo.TransactionMachineVO;
-import com.winning.monitor.data.api.transaction.vo.TransactionNameVO;
-import com.winning.monitor.data.api.transaction.vo.TransactionReportVO;
-import com.winning.monitor.data.api.transaction.vo.TransactionTypeVO;
+import com.winning.monitor.data.api.transaction.vo.*;
 import com.winning.monitor.data.api.vo.Range;
 import com.winning.monitor.data.api.vo.Range2;
-import com.winning.monitor.superisor.consumer.logging.transaction.entity.Machine;
-import com.winning.monitor.superisor.consumer.logging.transaction.entity.TransactionName;
-import com.winning.monitor.superisor.consumer.logging.transaction.entity.TransactionReport;
-import com.winning.monitor.superisor.consumer.logging.transaction.entity.TransactionType;
+import com.winning.monitor.superisor.consumer.logging.transaction.entity.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -47,15 +41,33 @@ public class TransactionReportConverter {
     }
 
     public static TransactionMachineVO toTransactionMachineVO(Machine machine) {
-        TransactionMachineVO TransactionMachineVO = new TransactionMachineVO();
-        TransactionMachineVO.setIp(machine.getIp());
+        TransactionMachineVO transactionMachineVO = new TransactionMachineVO();
+        transactionMachineVO.setIp(machine.getIp());
+        List<TransactionClientVO> clientVOs = new ArrayList<>();
+
+        for (Client client : machine.getClients().values()) {
+            clientVOs.add(toTransactionClientVO(client));
+        }
+        transactionMachineVO.setTransactionClients(clientVOs);
+        return transactionMachineVO;
+    }
+
+    public static TransactionClientVO toTransactionClientVO(Client client) {
+        TransactionClientVO transactionClientVO = new TransactionClientVO();
+        transactionClientVO.setId(client.getId());
+        transactionClientVO.setIp(client.getIp());
+        transactionClientVO.setDomain(client.getDomain());
+        transactionClientVO.setType(client.getType());
+
         List<TransactionTypeVO> typeDTOList = new ArrayList<>();
-        for (TransactionType transactionType : machine.getTypes().values()) {
+
+        for (TransactionType transactionType : client.getTypes().values()) {
             typeDTOList.add(toTransactionTypeVO(transactionType));
         }
-        TransactionMachineVO.setTransactionTypes(typeDTOList);
-        return TransactionMachineVO;
+        transactionClientVO.setTransactionTypes(typeDTOList);
+        return transactionClientVO;
     }
+
 
     public static TransactionTypeVO toTransactionTypeVO(TransactionType transactionType) {
         TransactionTypeVO transactionTypeVO = new TransactionTypeVO();

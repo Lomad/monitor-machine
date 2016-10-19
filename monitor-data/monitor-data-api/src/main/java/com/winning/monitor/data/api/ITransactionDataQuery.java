@@ -15,4 +15,5 @@ public interface ITransactionDataQuery {
                                              TransactionReportType type);
 
 
+
 }

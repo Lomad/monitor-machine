@@ -118,9 +118,12 @@ public class TransactionReportVO {
         this.domainNames.add(domain);
         this.setMachines(machines);
         for (TransactionMachineVO machine : machines) {
-            machine.setTransactionTypes(machine.getTransactionTypes());
-            for (TransactionTypeVO type : machine.getTransactionTypes()) {
-                type.setTransactionNames(type.getTransactionNames());
+            machine.setTransactionClients(machine.getTransactionClients());
+            for (TransactionClientVO client : machine.getTransactionClients()) {
+                client.setTransactionTypes(client.getTransactionTypes());
+                for (TransactionTypeVO type : client.getTransactionTypes()) {
+                    type.setTransactionNames(type.getTransactionNames());
+                }
             }
         }
     }

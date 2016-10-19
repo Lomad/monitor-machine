@@ -1,6 +1,7 @@
 package com.winning.monitor.superisor.consumer.logging.transaction;
 
 
+import com.winning.monitor.agent.logging.message.Caller;
 import com.winning.monitor.agent.logging.message.LogMessage;
 import com.winning.monitor.agent.logging.message.MessageTree;
 import com.winning.monitor.agent.logging.transaction.Transaction;
@@ -10,9 +11,7 @@ import com.winning.monitor.data.api.vo.Range2;
 import com.winning.monitor.data.storage.api.MessageTreeStorage;
 import com.winning.monitor.superisor.consumer.api.analysis.AbstractMessageAnalyzer;
 import com.winning.monitor.superisor.consumer.api.report.ReportManager;
-import com.winning.monitor.superisor.consumer.logging.transaction.entity.TransactionName;
-import com.winning.monitor.superisor.consumer.logging.transaction.entity.TransactionReport;
-import com.winning.monitor.superisor.consumer.logging.transaction.entity.TransactionType;
+import com.winning.monitor.superisor.consumer.logging.transaction.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +84,21 @@ public class TransactionAnalyzer
         // if (pair.getKey().booleanValue()) {
 
         String ip = tree.getIpAddress();
-        TransactionType transactionType = report.findOrCreateMachine(ip).findOrCreateType(type);
+        Machine machine = report.findOrCreateMachine(ip);
+        Caller caller = tree.getCaller();
+
+        String clientDomain = "";
+        String clientIp = "";
+        String clientType = "";
+
+        if (caller != null) {
+            clientDomain = caller.getName() == null ? "" : caller.getName();
+            clientIp = caller.getIp() == null ? "" : caller.getIp();
+            clientType = caller.getType() == null ? "" : caller.getType();
+        }
+
+        Client client = machine.findOrCreateClient(clientDomain, clientIp, clientType);
+        TransactionType transactionType = client.findOrCreateType(type);
         TransactionName transactionName = transactionType.findOrCreateName(name);
         String messageId = tree.getMessageId();
 

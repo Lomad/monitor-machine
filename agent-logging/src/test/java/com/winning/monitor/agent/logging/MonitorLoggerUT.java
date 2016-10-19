@@ -84,6 +84,8 @@ public class MonitorLoggerUT {
     @Test
     public void testTransactionData() throws InterruptedException {
         MonitorLogger.checkAndInitialize();
+
+        MonitorLogger.setCaller("HIS", "192.16.0.1", "PC");
         Transaction parentTransaction = MonitorLogger.newTransaction("PARENT", "HELLO");
         parentTransaction.addData("data1", "data1");
         Transaction childTransaction = MonitorLogger.newTransaction("CHILD", "HELLO");
