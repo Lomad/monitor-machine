@@ -24,6 +24,7 @@ public class MongoMessageTreeStorage implements MessageTreeStorage {
     public void storeTransaction(MessageTree tree) {
         if (tree == null)
             return;
+
         String collectionName = this.getCollectionName(tree.getDomain());
         MessageTreePO messageTreePO = new MessageTreePO(tree);
         this.mongoTemplate.insert(messageTreePO, collectionName);
@@ -31,7 +32,7 @@ public class MongoMessageTreeStorage implements MessageTreeStorage {
 
 
     public String getCollectionName(String domain) {
-        return "MenuTree-" + domain;
+        return "Messages-" + domain;
     }
 
 }

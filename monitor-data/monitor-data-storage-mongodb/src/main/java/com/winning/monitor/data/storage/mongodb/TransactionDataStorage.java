@@ -32,7 +32,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
 
     @PostConstruct
     public void checkConnect() {
-        logger.info("正在检测与mongodb之间的连接...");
+        logger.info("正在检测与mongodb之间的连接,address={}", mongoTemplate.getDb().getMongo().getAddress());
         try {
             this.mongoTemplate.getDb().getStats();
         } catch (Exception e) {
