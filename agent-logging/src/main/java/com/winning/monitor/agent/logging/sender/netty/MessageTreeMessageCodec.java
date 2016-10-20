@@ -3,6 +3,7 @@ package com.winning.monitor.agent.logging.sender.netty;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.winning.monitor.agent.logging.message.Caller;
 import com.winning.monitor.agent.logging.message.LogMessage;
 import com.winning.monitor.agent.logging.message.MessageTree;
 import com.winning.monitor.agent.logging.message.internal.DefaultMessageTree;
@@ -76,6 +77,14 @@ public class MessageTreeMessageCodec {
             messageTree.setMessageId(String.valueOf(map.get("messageId")));
             messageTree.setParentMessageId(String.valueOf(map.get("parentMessageId")));
             messageTree.setRootMessageId(String.valueOf(map.get("rootMessageId")));
+            if (map.containsKey("caller")) {
+                Map<String, Object> callerMap = (Map<String, Object>) map.get("caller");
+                Caller caller = new Caller();
+                caller.setIp((String.valueOf(callerMap.get("ip"))));
+                caller.setName((String.valueOf(callerMap.get("name"))));
+                caller.setType((String.valueOf(callerMap.get("type"))));
+                messageTree.setCaller(caller);
+            }
 
             Map<String, Object> message = (Map<String, Object>) map.get("message");
             LogMessage logMessage = this.createMessage(message);
