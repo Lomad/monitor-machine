@@ -1,8 +1,10 @@
 package com.winning.monitor.data.api;
 
 import com.winning.monitor.data.api.transaction.domain.TransactionCallTimesReport;
+import com.winning.monitor.data.api.transaction.domain.TransactionMessageList;
 import com.winning.monitor.data.api.transaction.domain.TransactionStatisticReport;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 /**
@@ -50,6 +52,28 @@ public interface ITransactionDataQueryService {
                                                                                    String transactionTypeName,
                                                                                    String serverIpAddress);
 
+
+    /**
+     * 获取最近一小时内的调用消息明细记录
+     *
+     * @param serverAppName       应用服务系统名称,非空
+     * @param transactionTypeName 服务大类名称,非空
+     * @param transactionName     服务名称,可选
+     * @param serverIpAddress     服务端系统IP地址,可选,不填表示所有服务端主机
+     * @param clientAppName       客户端系统名称,可选,不填表示所有客户端系统
+     * @param clientIpAddress     客户端系统IP地址,可选,不填表示所有客户端主机
+     * @param status              传入需要查询的状态,可选,可填成功或失败,不填表示所有状态记录
+     * @param orderby             排序参数, key表示需要排序的字段,value表示排序顺序,DESC或ASC,且要按照顺序,不填则不进行排序
+     * @return 详细调用Transaction的明细清单
+     */
+    TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
+                                                               String transactionTypeName,
+                                                               String transactionName,
+                                                               String serverIpAddress,
+                                                               String clientAppName,
+                                                               String clientIpAddress,
+                                                               String status,
+                                                               LinkedHashMap<String, String> orderby);
 
 
 }
