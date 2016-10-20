@@ -5235,7 +5235,9 @@ table.table-mail tr td {
 .lh34 {
     line-height: 34px;
 }
-
+.lh50 {
+    line-height: 50px;
+}
 .h34 {
     height: 34px;
 }
@@ -5304,11 +5306,16 @@ table.table-mail tr td {
 .m3 {
     margin: 3px;
 }
+.m15 {
+    margin: 15px;
+}
 
 .mt7 {
     margin-top: 7px;
 }
-
+.mt12 {
+    margin-top: 12px;
+}
 .mt15 {
     margin-top: 15px;
 }
@@ -5324,19 +5331,28 @@ table.table-mail tr td {
 .mt40 {
     margin-top: 40px;
 }
-
+.ml0 {
+    margin-left: 0px;
+}
 .ml15 {
     margin-left: 15px;
 }
-
+.mr0 {
+    margin-right: 0px;
+}
 .mb0 {
     margin-bottom: 0px;
 }
 
+.mb15 {
+    margin-bottom: 15px;
+}
 .mb7 {
     margin-bottom: 7px;
 }
-
+.mb12 {
+    margin-bottom: 12px;
+}
 .bt1 {
     border-top: 1px solid #e7ebed;
 }
@@ -5372,7 +5388,9 @@ table.table-mail tr td {
 .blw0 {
     border-left-width: 0px;
 }
-
+.bgf {
+   background:#fff;
+}
 .c888888 {
     color: #888888
 }
@@ -5408,6 +5426,20 @@ table.table-mail tr td {
 .table-border > tbody > tr:nth-child(odd) > td, .table-border > tbody > tr:nth-child(odd) > th {
     background-color: #fafafa;
 }
+.table-head th {
+    line-height: 30px !important;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #fafafa;
+}
+
+.table-head td {
+    line-height: 24px !important;
+    color: #7d8387;
+    background-color: #fff;
+    font-size: 12px;
+}
+
 
 .dropdown-menu-right {
     right: 0;
