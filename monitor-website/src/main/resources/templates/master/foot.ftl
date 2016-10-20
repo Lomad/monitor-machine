@@ -45,23 +45,33 @@
 <!-- BEGIN PAGE LEVEL PLUGINS -->
 <script src="${contextPath}/assets/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
-
+<script src="${contextPath}/js/index.js" type="text/javascript"></script>
 
 <script type="text/javascript">
+    $(".firstMenu").on("click",function(){
+        $(this).addClass("active").siblings().removeClass("active");
+        var obj =this;
+        $.each($(".page-sidebar-menu>li:gt(0)"),function(i,v){
+            if($(v).data("level") ==$(obj).data("level")){$(v).show();}
+            else{$(v).hide();}
+        });
+        //$(".page-sidebar-menu").find("li[data-level='"+$(this).data("level")+"']" ).show().siblings("not:li[data-level='"+$(this).data("level"):gt(0)").hide();
+    });
     var pathname = window.location.pathname.replace("#", "");
-    if (pathname.indexOf("userwizard") > -1) {
-        pathname = "/user";
-    }
     var li = $("a[href='" + pathname + "']").parent("li");
+    var level =$(li).data("level");
+//    var pli =$(li).parents("li").data("level");
     li.addClass("active");
     $(li).parent("ul").show();
     $(li).parents("li").addClass("open");
     $(li).parents("li").find(".arrow ").addClass("open");
+    console.log( $("#firstMenu>li[data-level='"+level+"']"))
+    $("#firstMenu>li[data-level='"+level+"']").trigger("click");
     jQuery(document).ready(function () {
-        $(".page-content").height($(".page-sidebar-menu").height())
-        App.init(); // initlayout and core plugins
-        Index.init();
-        bootbox.setDefaults("locale", "zh_CN");//bootbox默认中文
+//        $(".page-content").height($(".page-sidebar-menu").height())
+//        App.init(); // initlayout and core plugins
+//        Index.init();
+//        bootbox.setDefaults("locale", "zh_CN");//bootbox默认中文
     <#--var loginId='${Session["href"]}';-->
     <#--if(loginId=="" || loginId=="null"){-->
     <#--location.href="/dologin";-->

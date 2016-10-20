@@ -119,12 +119,12 @@ ul.page-sidebar-menu > li:last-child > a {
 ul.page-sidebar-menu > li a i {
   /*color: #bbb !important;*/
 }
-ul.page-sidebar-menu > li.open > a,
-ul.page-sidebar-menu > li > a:hover,
-ul.page-sidebar-menu > li:hover > a {
- /* background: #eee;*/
-  border-top: 1px solid #e8e8e8;
-}
+/*ul.page-sidebar-menu > li.open > a,*/
+/*ul.page-sidebar-menu > li > a:hover,*/
+/*ul.page-sidebar-menu > li:hover > a {*/
+  /*background: #efefef url(../../img/selected_left.png)no-repeat !important;*/
+  /*border-top: 1px solid #e8e8e8;*/
+/*}*/
 ul.page-sidebar-menu > li.active > a .selected {
   right:-7px;
   top:0px;
@@ -133,15 +133,15 @@ ul.page-sidebar-menu > li.active > a .selected {
   background-image: url("../../img/sidebar-menu-arrow-green.png");
 }  
 ul.page-sidebar-menu > li.active i {
-  color: #fff !important;
+  color: #333 !important;
 }
 .page-sidebar-fixed ul.page-sidebar-menu > li.active > a .selected {
   display: none;
 }
 ul.page-sidebar-menu > li.active > a{
-  background: #28b779 !important;
+  background: #efefef url(../../img/selected_left.png)no-repeat !important;
   border-top-color: transparent !important;
-  color:#fff !important;
+  color:#333 !important;
 }  
 ul.page-sidebar-menu > li.active > a i {
   color: #fff;
@@ -165,7 +165,7 @@ ul.page-sidebar-menu ul.sub-menu > li > a {
 ul.page-sidebar-menu ul.sub-menu > li.active > a,
 ul.page-sidebar-menu ul.sub-menu > li > a:hover {
   color: #818181 !important;
-  background: #efefef !important; 
+  background: #efefef !important;
 }
 
 ul.page-sidebar-menu > li > ul.sub-menu a .arrow:before,
@@ -365,15 +365,15 @@ Landscape phone to portrait tablet
     /*background-color: #dddddd  !important;*/
   /*}*/
   ul.page-sidebar-menu ul.sub-menu > li.active > a, ul.page-sidebar-menu ul.sub-menu > li > a:hover, ul.page-sidebar-menu ul.sub-menu > li.open > a {
-    color: #818181 !important;
+    color: #333 !important;
     background: #efefef url(/images/selected_left.png)no-repeat !important;
   }
   ul.page-sidebar-menu > li.open > a {
     border-bottom-color: transparent !important;
   }
   ul.page-sidebar-menu > li.active > a {
-    color: #ffffff !important;
-    background-color: #28b779 !important;
+    color: #333 !important;
+    background-color: #efefef !important;
   }
 
   ul.page-sidebar-menu ul.sub-menu > li > a {
