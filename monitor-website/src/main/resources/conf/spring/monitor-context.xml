@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+
+    <!-- ========================================权限配置数据源========================================= -->
+    <!--<bean id="permissionDataAccessService" class="com.winning.dapi.data.sqlserver.SqlserverDataAccessService">-->
+        <!--<constructor-arg>-->
+            <!--<value>core</value>-->
+        <!--</constructor-arg>-->
+        <!--<constructor-arg>-->
+            <!--<ref bean="permissionDataSource"/>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
+
+    <!--<bean id="permissionDataSource"-->
+          <!--class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">-->
+        <!--&lt;!&ndash;<property name="url"&ndash;&gt;-->
+        <!--&lt;!&ndash;value="jdbc:sqlserver://10.211.55.3:1433; DatabaseName=WINNING_SSO_XTYQX"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;<property name="username" value="sa"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;<property name="password" value="saadmin"/>&ndash;&gt;-->
+
+        <!--<property name="url"-->
+                  <!--value="jdbc:sqlserver://172.16.0.116:1433;DatabaseName=WINNING_SSO_DEMO"/>-->
+        <!--<property name="username" value="sa"/>-->
+        <!--<property name="password" value="winning"/>-->
+
+        <!--&lt;!&ndash; 初始化连接大小 &ndash;&gt;-->
+        <!--<property name="initialSize" value="0"/>-->
+        <!--&lt;!&ndash; 连接池最大使用连接数量 &ndash;&gt;-->
+        <!--<property name="maxActive" value="20"/>-->
+        <!--&lt;!&ndash; 连接池最小空闲 &ndash;&gt;-->
+        <!--<property name="minIdle" value="0"/>-->
+        <!--&lt;!&ndash; 获取连接最大等待时间 &ndash;&gt;-->
+        <!--<property name="maxWait" value="60000"/>-->
+        <!--&lt;!&ndash;-->
+        <!--<property name="poolPreparedStatements" value="true" />-->
+        <!--<property name="maxPoolPreparedStatementPerConnectionSize" value="33" />-->
+        <!--&ndash;&gt;-->
+        <!--<property name="validationQuery" value="select 1"/>-->
+        <!--<property name="testOnBorrow" value="false"/>-->
+        <!--<property name="testOnReturn" value="false"/>-->
+        <!--<property name="testWhileIdle" value="true"/>-->
+        <!--&lt;!&ndash; 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 &ndash;&gt;-->
+        <!--<property name="timeBetweenEvictionRunsMillis" value="60000"/>-->
+        <!--&lt;!&ndash; 配置一个连接在池中最小生存的时间，单位是毫秒 &ndash;&gt;-->
+        <!--<property name="minEvictableIdleTimeMillis" value="25200000"/>-->
+        <!--&lt;!&ndash; 打开removeAbandoned功能 &ndash;&gt;-->
+        <!--<property name="removeAbandoned" value="true"/>-->
+        <!--&lt;!&ndash; 1800秒，也就是30分钟 &ndash;&gt;-->
+        <!--<property name="removeAbandonedTimeout" value="1800"/>-->
+        <!--&lt;!&ndash; 关闭abanded连接时输出错误日志 &ndash;&gt;-->
+        <!--<property name="logAbandoned" value="true"/>-->
+        <!--&lt;!&ndash; 监控数据库 &ndash;&gt;-->
+        <!--&lt;!&ndash; <property name="filters" value="stat" /> &ndash;&gt;-->
+        <!--<property name="filters" value="mergeStat"/>-->
+    <!--</bean>-->
+
+    <!-- 配置Spring的事务管理器 -->
+    <!--<bean id="tmPermission" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+        <!--<property name="dataSource" ref="permissionDataSource"/>-->
+    <!--</bean>-->
+
+    <!-- 注解方式配置事物 -->
+    <tx:annotation-driven transaction-manager="tmPermission"/>
+
+    <!-- ========================================权限配置数据源END========================================= -->
+
+</beans>

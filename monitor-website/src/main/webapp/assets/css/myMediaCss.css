@@ -1,0 +1,15 @@
+﻿@media (min-width: 768px)
+{
+    .md_pull_right
+    {
+        float: right !important;
+    }
+}
+@media (min-width: 480px){
+.form-inline1 .form-group {
+    display: inline-block;
+    margin-bottom: 10;
+    vertical-align: middle;
+    
+}
+}
