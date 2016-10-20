@@ -62,8 +62,10 @@ public interface ITransactionDataQueryService {
      * @param serverIpAddress     服务端系统IP地址,可选,不填表示所有服务端主机
      * @param clientAppName       客户端系统名称,可选,不填表示所有客户端系统
      * @param clientIpAddress     客户端系统IP地址,可选,不填表示所有客户端主机
-     * @param status              传入需要查询的状态,可选,可填成功或失败,不填表示所有状态记录
-     * @param orderby             排序参数, key表示需要排序的字段,value表示排序顺序,DESC或ASC,且要按照顺序,不填则不进行排序
+     * @param status              过滤消息状态,可选,可填成功或失败,不填表示所有状态记录
+     * @param startIndex          分页起始位置,非空
+     * @param pageSize            分页每页的条数,非空
+     * @param orderBy             排序参数, key表示需要排序的字段,value表示排序顺序,DESC或ASC,且要按照顺序,不填则不进行排序
      * @return 详细调用Transaction的明细清单
      */
     TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
@@ -73,7 +75,9 @@ public interface ITransactionDataQueryService {
                                                                String clientAppName,
                                                                String clientIpAddress,
                                                                String status,
-                                                               LinkedHashMap<String, String> orderby);
+                                                               long startIndex,
+                                                               int pageSize,
+                                                               LinkedHashMap<String, String> orderBy);
 
 
 }
