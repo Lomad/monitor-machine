@@ -14,10 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by nicholasyan on 16/9/14.
@@ -42,6 +39,13 @@ public class TransactionDataStorage implements ITransactionDataStorage {
         logger.info("与mongodb之间的连接成功!");
     }
 
+
+    @Override
+    public LinkedHashSet<String> findAllTransactionDomains() {
+        List<String> domains = this.mongoTemplate.getCollection(REALTIME_COLLECTION_NAME).distinct("domain");
+        Collections.sort(domains);
+        return new LinkedHashSet<>(domains);
+    }
 
     @Override
     public List<TransactionReportVO> queryRealtimeTransactionReports(String domain, String startTime) {

@@ -5,9 +5,9 @@ package com.winning.monitor.agent.logging.message;
  */
 public class Caller {
 
-    private String name;
-    private String ip;
-    private String type;
+    private String name = "";
+    private String ip = "";
+    private String type = "";
 
     public String getName() {
         return name;
@@ -31,5 +31,14 @@ public class Caller {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getId() {
+        return this.name + "-" + this.ip + "-" + this.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
     }
 }

@@ -16,8 +16,9 @@ public class TransactionStatisticData {
     private String transactionName;
     //服务端IP名称
     private String serverIpAddress;
-
+    //客户端APP名称
     private String clientAppName;
+
     private String clientIpAddress;
     private String clientType;
 
@@ -188,4 +189,9 @@ public class TransactionStatisticData {
     public void setTransactionStatisticDataDetails(List<TransactionStatisticData> transactionStatisticDataDetails) {
         this.transactionStatisticDataDetails = transactionStatisticDataDetails;
     }
+
+    public void addTransactionStatisticData(TransactionStatisticData transactionStatisticData) {
+        this.transactionStatisticDataDetails.add(transactionStatisticData);
+    }
+
 }

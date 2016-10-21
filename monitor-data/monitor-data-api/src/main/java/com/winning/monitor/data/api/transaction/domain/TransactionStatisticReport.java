@@ -1,5 +1,6 @@
 package com.winning.monitor.data.api.transaction.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  */
 public class TransactionStatisticReport {
 
-    private List<TransactionStatisticData> transactionStatisticDatas;
+    private List<TransactionStatisticData> transactionStatisticDatas = new ArrayList<>();
 
     private long totalSize;
 
@@ -17,6 +18,10 @@ public class TransactionStatisticReport {
 
     public void setTransactionStatisticDatas(List<TransactionStatisticData> transactionStatisticDatas) {
         this.transactionStatisticDatas = transactionStatisticDatas;
+    }
+
+    public void addTransactionStatisticData(TransactionStatisticData transactionStatisticData) {
+        this.transactionStatisticDatas.add(transactionStatisticData);
     }
 
     public long getTotalSize() {

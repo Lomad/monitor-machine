@@ -86,11 +86,16 @@ public class MonitorLoggerUT {
         MonitorLogger.checkAndInitialize();
 
         MonitorLogger.setCaller("HIS", "192.16.0.1", "PC");
-        Transaction parentTransaction = MonitorLogger.newTransaction("PARENT", "HELLO");
+        Transaction parentTransaction = MonitorLogger.newTransaction("挂号", "");
         parentTransaction.addData("data1", "data1");
-        Transaction childTransaction = MonitorLogger.newTransaction("CHILD", "HELLO");
+
+        Transaction childTransaction = MonitorLogger.newTransaction("挂号", "读取数据库");
         Thread.sleep(10);
         childTransaction.success();
+        childTransaction = MonitorLogger.newTransaction("挂号", "写入数据库");
+        Thread.sleep(50);
+        childTransaction.success();
+
         parentTransaction.success();
         Thread.sleep(1000);
     }
