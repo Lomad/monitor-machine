@@ -103,8 +103,15 @@ public class MonitorLogger {
     }
 
     public static Transaction newTransaction(String type, String name) {
-
         return MonitorLogger.getMessageProducer().newTransaction(type, name);
+    }
+
+    public static Transaction beginTransactionType(String type) {
+        return MonitorLogger.getMessageProducer().newTransaction(type, "");
+    }
+
+    public static Transaction beginTransactionName(Transaction type, String name) {
+        return MonitorLogger.getMessageProducer().newTransaction(type.getType(), name);
     }
 
     public static void setCaller(String callerName, String callerIP, String callerType) {

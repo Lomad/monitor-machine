@@ -15,6 +15,7 @@ import com.winning.monitor.superisor.consumer.logging.transaction.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -99,7 +100,10 @@ public class TransactionAnalyzer
 
         Client client = machine.findOrCreateClient(clientDomain, clientIp, clientType);
         TransactionType transactionType = client.findOrCreateType(type);
-        TransactionName transactionName = transactionType.findOrCreateName(name);
+        TransactionName transactionName = null;
+        if (StringUtils.hasText(name))
+            transactionName = transactionType.findOrCreateName(name);
+
         String messageId = tree.getMessageId();
 
         processTypeAndName(t, transactionType, transactionName, messageId,
@@ -119,26 +123,32 @@ public class TransactionAnalyzer
 
     protected void processTypeAndName(Transaction t, TransactionType type, TransactionName name, String messageId,
                                       double duration) {
-        type.incTotalCount();
-        name.incTotalCount();
+
+        //如果name为空,表示是一个父节点
+        if (name == null)
+            type.incTotalCount();
+        else
+            name.incTotalCount();
 
         if (t.isSuccess()) {
             if (type.getSuccessMessageUrl() == null) {
                 type.setSuccessMessageUrl(messageId);
             }
 
-            if (name.getSuccessMessageUrl() == null) {
+            if (name != null && name.getSuccessMessageUrl() == null) {
                 name.setSuccessMessageUrl(messageId);
             }
         } else {
-            type.incFailCount();
-            name.incFailCount();
+            if (name == null)
+                type.incFailCount();
+            else
+                name.incFailCount();
 
             if (type.getFailMessageUrl() == null) {
                 type.setFailMessageUrl(messageId);
             }
 
-            if (name.getFailMessageUrl() == null) {
+            if (name != null && name.getFailMessageUrl() == null) {
                 name.setFailMessageUrl(messageId);
             }
         }
@@ -147,23 +157,27 @@ public class TransactionAnalyzer
         int allDuration = ((int) computeDuration(duration));
         double sum = duration * duration;
 
-        name.setMax(Math.max(name.getMax(), duration));
-        name.setMin(Math.min(name.getMin(), duration));
-        name.setSum(name.getSum() + duration);
-        name.setSum2(name.getSum2() + sum);
-        name.findOrCreateAllDuration(allDuration).incCount();
-
-        type.setMax(Math.max(type.getMax(), duration));
-        type.setMin(Math.min(type.getMin(), duration));
-        type.setSum(type.getSum() + duration);
-        type.setSum2(type.getSum2() + sum);
-        type.findOrCreateAllDuration(allDuration).incCount();
+        if (name != null) {
+            name.setMax(Math.max(name.getMax(), duration));
+            name.setMin(Math.min(name.getMin(), duration));
+            name.setSum(name.getSum() + duration);
+            name.setSum2(name.getSum2() + sum);
+            name.findOrCreateAllDuration(allDuration).incCount();
+        } else {
+            type.setMax(Math.max(type.getMax(), duration));
+            type.setMin(Math.min(type.getMin(), duration));
+            type.setSum(type.getSum() + duration);
+            type.setSum2(type.getSum2() + sum);
+            type.findOrCreateAllDuration(allDuration).incCount();
+        }
 
         long current = t.getTimestamp() / 1000 / 60;
         int min = (int) (current % (60));
 
-        processNameGraph(t, name, min, duration);
-        processTypeRange(t, type, min, duration);
+        if (name != null)
+            processNameGraph(t, name, min, duration);
+        else
+            processTypeRange(t, type, min, duration);
 
         //this.reportReportManager.storeHourlyReports(this.getStartTime(), m_index);
     }
