@@ -101,6 +101,9 @@ public class TransactionStatisticDataMerger {
 
                     if (groupType == StatisticGroupType.Server) {
                         String serverIp = (String) entry.getKey();
+                        if (ALL_MACHINE.equals(serverIp))
+                            continue;
+
                         statisticData = this.toTransactionStatisticData(serverIp, null, transactionType);
                     } else {
                         Caller caller = (Caller) entry.getKey();
