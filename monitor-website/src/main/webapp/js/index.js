@@ -7,4 +7,5 @@ $(document).ready(function(){
     Index.init();
     bootbox.setDefaults("locale", "zh_CN");//bootbox默认中文
     $(".getContent").slimScroll({height: (parseInt($(window).height()) - 168).toString() + "px"});
+    //$("#time3v").slimScroll({height: "200px"});
 });
