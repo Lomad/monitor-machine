@@ -5340,6 +5340,9 @@ table.table-mail tr td {
 .mr0 {
     margin-right: 0px;
 }
+.mr15 {
+    margin-right: 15px;
+}
 .mb0 {
     margin-bottom: 0px;
 }
@@ -5389,8 +5392,9 @@ table.table-mail tr td {
     border-left-width: 0px;
 }
 .bgf {
-   background:#fff;
+   background-color:#fff;
 }
+
 .c888888 {
     color: #888888
 }
@@ -5432,15 +5436,20 @@ table.table-mail tr td {
     font-weight: bold;
     background-color: #fafafa;
 }
-
+.table-head table th {
+    background-color: #fff;
+    border-bottom: 1px solid #e7ebed !important;
+}
 .table-head td {
     line-height: 24px !important;
     color: #7d8387;
-    background-color: #fff;
     font-size: 12px;
+    border-bottom: 1px solid #e7ebed;
+    border-top-width: 0px !important;
+    background-color: #fff;
 }
-
-
+.table-head th.numeric{text-align: center;}
+.table-head td.numeric{text-align: center;}
 .dropdown-menu-right {
     right: 0;
     left: auto;
@@ -5452,6 +5461,7 @@ table.table-mail tr td {
     text-align: right;
     border-top: 1px solid #e5e5e5;
 }
+/*.btn.active{background: #EBEBEB}*/
 
 /**end琚晨样式**/
 /*这是百科右侧导航代码的样式表*/

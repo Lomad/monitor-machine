@@ -6,5 +6,5 @@ $(document).ready(function(){
     App.init(); // initlayout and core plugins
     Index.init();
     bootbox.setDefaults("locale", "zh_CN");//bootbox默认中文
-
+    $(".getContent").slimScroll({height: (parseInt($(window).height()) - 168).toString() + "px"});
 });
