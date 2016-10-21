@@ -11,12 +11,21 @@
     <artifactId>monitor-website</artifactId>
     <packaging>war</packaging>
     <name>monitor-website</name>
-    <url>http://maven.apache.org</url>
     <build>
         <finalName>monitor-website</finalName>
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>com.winning.monitor</groupId>
+            <version>1.0-SNAPSHOT</version>
+            <artifactId>monitor-data-default</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.winning.monitor</groupId>
+            <version>1.0-SNAPSHOT</version>
+            <artifactId>monitor-data-storage-mongodb</artifactId>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -38,6 +47,13 @@
             <artifactId>spring-web</artifactId>
             <version>4.1.6.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>4.1.6.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

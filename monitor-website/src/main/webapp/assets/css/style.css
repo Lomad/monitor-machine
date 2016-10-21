@@ -5405,7 +5405,7 @@ table.table-mail tr td {
 .c444444 {
     color: #444444
 }
-
+.numeric.red{color:#d84a38;}
 .tabletitle {
     float: left;
     cursor: default;
@@ -5451,8 +5451,11 @@ table.table-mail tr td {
     border-top-width: 0px !important;
     background-color: #fff;
 }
-.table-head th.numeric{text-align: center;}
-.table-head td.numeric{text-align: center;}
+table .sorting{background: url('../img/sort_both.png') no-repeat center right; background-color: #fafafa; cursor: pointer;}
+table .sorting.desc{background: url('../img/sort_desc.png') no-repeat center right; background-color: #fafafa; cursor: pointer;}
+table .sorting.asc{background: url('../img/sort_asc.png') no-repeat center right; background-color: #fafafa; cursor: pointer;}
+.table-head th.numeric{text-align: left;}
+.table-head td.numeric{text-align: left;}
 .dropdown-menu-right {
     right: 0;
     left: auto;
