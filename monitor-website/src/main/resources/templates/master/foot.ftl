@@ -46,7 +46,7 @@
 <script src="${contextPath}/assets/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <script src="${contextPath}/js/index.js" type="text/javascript"></script>
-
+<script src="${contextPath}/js/common.manage.helper.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(".firstMenu").on("click",function(){
         $(this).addClass("active").siblings().removeClass("active");
