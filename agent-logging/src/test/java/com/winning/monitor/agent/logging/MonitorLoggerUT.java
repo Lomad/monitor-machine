@@ -85,20 +85,23 @@ public class MonitorLoggerUT {
     public void testTransactionData() throws InterruptedException {
         MonitorLogger.checkAndInitialize();
 
-        MonitorLogger.setCaller("HIS", "192.16.0.1", "PC");
-        Transaction parentTransaction = MonitorLogger.beginTransactionType("挂号");
-        parentTransaction.addData("data1", "data1");
 
-        Transaction childTransaction = MonitorLogger.beginTransactionName(parentTransaction, "读取数据库");
-        Thread.sleep(10);
-        childTransaction.success();
+        while (true) {
+            MonitorLogger.setCaller("HIS", "192.16.0.1", "PC");
+            Transaction parentTransaction = MonitorLogger.beginTransactionType("挂号");
+            parentTransaction.addData("data1", "data1");
 
-        childTransaction = MonitorLogger.beginTransactionName(parentTransaction, "写入数据库");
-        Thread.sleep(10);
-        childTransaction.success();
+            Transaction childTransaction = MonitorLogger.beginTransactionName(parentTransaction, "读取数据库");
+            Thread.sleep(10);
+            childTransaction.success();
 
-        parentTransaction.success();
-        Thread.sleep(1000);
+            childTransaction = MonitorLogger.beginTransactionName(parentTransaction, "写入数据库");
+            Thread.sleep(10);
+            childTransaction.success();
+
+            parentTransaction.success();
+            Thread.sleep(1000);
+        }
     }
 
 }
