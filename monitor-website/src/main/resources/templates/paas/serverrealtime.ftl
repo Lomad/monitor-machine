@@ -80,6 +80,7 @@
                     <th class="numeric">吞吐量</th>
                     <th class="numeric sorting" data-id="failCount">失败次数</th>
                     <th class="numeric">失败率</th>
+                    <th class="numeric">方差</th>
                     <th class="numeric">显示图表</th>
                 </tr>
                 </thead>

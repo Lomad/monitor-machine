@@ -161,14 +161,15 @@ var global_Object = {
             tr += '<td>' + data.max + '</td>';
             tr += '<td>' + data.tps + '</td>';
             tr += '<td>' + data.failCount + '</td>';
-            tr += '<td>' + data.failPercent + '</td>';
+            tr += '<td>' + data.failPercent*100 + '%</td>';
+            tr += '<td>' + data.std + '</td>';
             tr += '<td><i class="fa  fa-bar-chart-o cp" data-toggle="modal" href="#picEdit"></i></td>';
             return tr;
         };
         var html = [];
         $.each(global_Object.tableData, function (i, v) {
             html.push(alltr(v, "transactionTypeName"));
-            var tableHtml = '<tr class="" style="display: none"><td colspan="11"><div class="ml15 mr15"> <table class="table table-head  table-condensed flip-content"> <thead class="flip-content ">';
+            var tableHtml = '<tr class="" style="display: none"><td colspan="12"><div class="ml15 mr15"> <table class="table table-head  table-condensed flip-content"> <thead class="flip-content ">';
             tableHtml += '<tr>';
             tableHtml += '<th class="">服务器地址</th>';
             tableHtml += ' <th class="numeric ">调用次数</th>';
@@ -190,7 +191,7 @@ var global_Object = {
             tableHtml += ' </tbody></table></div></td></tr>';
             html.push(tableHtml);
         });
-        console.log(html);
+        //console.log(html);
         $("#fTable tbody").html(html.join(""));
         $("#fTable .icon").on("click", function () {
             var tr = $(this).parents("tr");
