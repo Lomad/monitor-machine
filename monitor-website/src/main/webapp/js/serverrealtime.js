@@ -33,6 +33,7 @@ var global_Object = {
     tableData:[],
     flname:"",
     url:"/paas/queryTransactionTypeList",
+    totalSize:0,
     initDomEvent: function () {
         $("#fTable .icon").on("click", function () {
             var tr = $(this).parents("tr");
@@ -81,16 +82,56 @@ var global_Object = {
     },
     queryTableData:function(){
         $.post(global_Object.url, {flname:global_Object.flname}, function (data) {
+            global_Object.tableData=data.transactionStatisticDatas;
+            global_Object.totalSize=data.totalSize;
            global_Object.setTable();
         });
     },
     setTable:function(){
-        var alltr=function(data){
-            var tr ='<tr><td><i class="fa  icon cp fa-chevron-down"></i>'+data.a+'</td><td>'+data.b+'</td>';
+        var alltr=function(data,type){
+            var tr="";
+            if(type="transactionTypeName"){
+                tr ='<tr><td><i class="fa  icon cp fa-chevron-down"></i>'+data.transactionTypeName+'</td>';
+            }
+            else if(type="serverIpAddress"){
+                tr ='<tr><td><i class="fa  icon cp fa-chevron-down"></i>'+data.serverIpAddress+'</td>';
+            }
+
+            tr +='<td>'+data.totalCount+'</td>';
+            tr +='<td>'+data.avg+'</td>';
+            tr +='<td>'+data.line99Value+'</td>';
+            tr +='<td>'+data.line95Value+'</td>';
+            tr +='<td>'+data.min+'</td>';
+            tr +='<td>'+data.max+'</td>';
+            tr +='<td>'+data.tps+'</td>';
+            tr +='<td>'+data.failCount+'</td>';
+            tr +='<td>'+data.failPercent+'</td>';
+            tr +='<td><i class="fa  fa-bar-chart-o cp" data-toggle="modal" href="#picEdit"></i></td>';
 
         };
-        $.each(global_Object.tableData,function(){
-            //$("")
+        var html =[];
+        $.each(global_Object.tableData,function(i,v){
+            html.push(alltr(v,"transactionTypeName"));
+            var tableHtml='<tr class="" style="display: none"><td colspan="11"><div class="ml15 mr15"> <table class="table table-head  table-condensed flip-content"> <thead class="flip-content ">';
+            tableHtml +='<tr>';
+            tableHtml +='<th class="">服务名称</th>';
+            tableHtml +=' <th class="numeric ">调用次数</th>';
+            tableHtml +=' <th class="numeric ">99%</th>';
+            tableHtml +=' <th class="numeric ">95%</th>';
+            tableHtml +=' <th class="numeric ">最短耗时</th>';
+            tableHtml +=' <th class="numeric ">最长耗时</th>';
+            tableHtml +=' <th class="numeric ">吞吐量</th>';
+            tableHtml +=' <th class="numeric ">失败次数</th>';
+            tableHtml +=' <th class="numeric ">失败率</th>';
+            tableHtml +=' <th class="numeric ">显示图表</th>';
+            tableHtml +='</tr></thead><tbody>';
+            if(v.transactionStatisticDataDetails !=null && v.transactionStatisticDataDetails.length>0){
+                $.each(v.transactionStatisticDataDetails,function(i2,v2){
+                    tableHtml +=alltr(v,"serverIpAddress");
+                });
+            }
+            tableHtml +=' </tbody></table></div></td></tr>';
+            html.push(tableHtml);
         });
     },
     queryTableDataLocal:function(){},

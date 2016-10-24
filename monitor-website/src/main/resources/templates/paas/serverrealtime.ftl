@@ -73,7 +73,9 @@
                     <th>服务名称</th>
                     <th class="numeric sorting">调用次数</th>
                     <th class="numeric sorting">平均耗时</th>
-                    <th class="numeric">最小耗时</th>
+                    <th class="numeric">99%</th>
+                    <th class="numeric">95%</th>
+                    <th class="numeric">最短耗时</th>
                     <th class="numeric">最大耗时</th>
                     <th class="numeric">吞吐量</th>
                     <th class="numeric sorting">失败次数</th>
@@ -86,6 +88,8 @@
                     <td><i class="fa  icon cp fa-chevron-down"></i> EMPI基础服务</td>
                     <td class="numeric">100</td>
                     <td class="numeric">10</td>
+                    <td class="numeric">8</td>
+                    <td class="numeric">8</td>
                     <td class="numeric">3</td>
                     <td class="numeric">15</td>
                     <td class="numeric">100</td>
@@ -94,7 +98,7 @@
                     <td class="numeric"><i class="fa  fa-bar-chart-o cp" data-toggle="modal" href="#picEdit"></i></td>
                 </tr>
                 <tr class="" style="display: none">
-                    <td colspan="9">
+                    <td colspan="11">
                         <div class="ml15 mr15">
                             <table class="table table-head  table-condensed flip-content">
                                 <thead class="flip-content ">
@@ -102,7 +106,9 @@
                                     <th class="">服务名称</th>
                                     <th class="numeric ">调用次数</th>
                                     <th class="numeric ">平均耗时</th>
-                                    <th class="numeric ">最小耗时</th>
+                                    <th class="numeric">99%</th>
+                                    <th class="numeric">95%</th>
+                                    <th class="numeric ">最短耗时</th>
                                     <th class="numeric ">最大耗时</th>
                                     <th class="numeric ">吞吐量</th>
                                     <th class="numeric ">失败次数</th>
@@ -149,166 +155,7 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td><i class="fa  icon cp fa-chevron-down"></i> EMPI基础服务</td>
-                    <td class="numeric">101</td>
-                    <td class="numeric">10</td>
-                    <td class="numeric">3</td>
-                    <td class="numeric">15</td>
-                    <td class="numeric">100</td>
-                    <td class="numeric">9</td>
-                    <td class="numeric">1%</td>
-                    <td class="numeric"><i class="fa  fa-bar-chart-o cp" data-toggle="modal" href="#picEdit"></i></td>
-                </tr>
-                <tr class="" style="display: none"><td colspan="9">
-                <div class="ml15 mr15">
-                <table class="table table-head  table-condensed flip-content">
-                <thead class="flip-content ">
-                <tr>
-                <th class="">服务名称</th>
-                <th class="numeric ">调用次数</th>
-                <th class="numeric ">平均耗时</th>
-                <th class="numeric ">最小耗时</th>
-                <th class="numeric ">最大耗时</th>
-                <th class="numeric ">吞吐量</th>
-                <th class="numeric ">失败次数</th>
-                <th class="numeric ">失败率</th>
-                <th class="numeric">显示图表</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr><td >192.168.0.1</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                <tr><td >192.168.0.2</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                <tr><td >192.168.0.3</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                </tbody>
-                </table>
-                </div>
-                </td></tr>
-                <tr><td><i class="fa  icon cp fa-chevron-down"></i> EMPI基础服务</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o cp" data-toggle="modal" href="#picEdit"></i></td></tr>
-                <tr class="" style="display: none"><td colspan="9">
-                <div class="ml15 mr15">
-                <table class="table table-head  table-condensed flip-content">
-                <thead class="flip-content ">
-                <tr>
-                <th class="">服务名称</th>
-                <th class="numeric ">调用次数</th>
-                <th class="numeric ">平均耗时</th>
-                <th class="numeric ">最小耗时</th>
-                <th class="numeric ">最大耗时</th>
-                <th class="numeric ">吞吐量</th>
-                <th class="numeric ">失败次数</th>
-                <th class="numeric ">失败率</th>
-                <th class="numeric">显示图表</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr><td >192.168.0.1</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                <tr><td >192.168.0.2</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                <tr><td >192.168.0.3</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                </tbody>
-                </table>
-                </div>
-                </td></tr>
-                <tr><td><i class="fa  icon cp fa-chevron-down"></i> EMPI基础服务</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o cp" data-toggle="modal" href="#picEdit"></i></td></tr>
-                <tr class="" style="display: none"><td colspan="9">
-                <div class="ml15 mr15">
-                <table class="table table-head  table-condensed flip-content">
-                <thead class="flip-content ">
-                <tr>
-                <th class="">服务名称</th>
-                <th class="numeric ">调用次数</th>
-                <th class="numeric ">平均耗时</th>
-                <th class="numeric ">最小耗时</th>
-                <th class="numeric ">最大耗时</th>
-                <th class="numeric ">吞吐量</th>
-                <th class="numeric ">失败次数</th>
-                <th class="numeric ">失败率</th>
-                <th class="numeric">显示图表</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr><td >192.168.0.1</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                <tr><td >192.168.0.2</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                <tr><td >192.168.0.3</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                </tbody>
-                </table>
-                </div>
-                </td></tr>
-                <tr><td><i class="fa  icon cp fa-chevron-down"></i> EMPI基础服务</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o cp" data-toggle="modal" href="#picEdit"></i></td></tr>
-                <tr class="" style="display: none"><td colspan="9">
-                <div class="ml15 mr15">
-                <table class="table table-head  table-condensed flip-content">
-                <thead class="flip-content ">
-                <tr>
-                <th class="">服务名称</th>
-                <th class="numeric ">调用次数</th>
-                <th class="numeric ">平均耗时</th>
-                <th class="numeric ">最小耗时</th>
-                <th class="numeric ">最大耗时</th>
-                <th class="numeric ">吞吐量</th>
-                <th class="numeric ">失败次数</th>
-                <th class="numeric ">失败率</th>
-                <th class="numeric">显示图表</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr><td >192.168.0.1</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                <tr><td >192.168.0.2</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                <tr><td >192.168.0.3</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                </tbody>
-                </table>
-                </div>
-                </td></tr>
-                <tr><td><i class="fa  icon cp fa-chevron-down"></i> EMPI基础服务</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o cp" data-toggle="modal" href="#picEdit"></i></td></tr>
-                <tr class="" style="display: none"><td colspan="9">
-                <div class="ml15 mr15">
-                <table class="table table-head  table-condensed flip-content">
-                <thead class="flip-content ">
-                <tr>
-                <th class="">服务名称</th>
-                <th class="numeric ">调用次数</th>
-                <th class="numeric ">平均耗时</th>
-                <th class="numeric ">最小耗时</th>
-                <th class="numeric ">最大耗时</th>
-                <th class="numeric ">吞吐量</th>
-                <th class="numeric ">失败次数</th>
-                <th class="numeric ">失败率</th>
-                <th class="numeric">显示图表</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr><td >192.168.0.1</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                <tr><td >192.168.0.2</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                <tr><td >192.168.0.3</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                </tbody>
-                </table>
-                </div>
-                </td></tr>
-                <tr><td><i class="fa  icon cp fa-chevron-down"></i> EMPI基础服务</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o cp" data-toggle="modal" href="#picEdit"></i></td></tr>
-                <tr class="" style="display: none"><td colspan="9">
-                <div class="ml15 mr15">
-                <table class="table table-head  table-condensed flip-content">
-                <thead class="flip-content ">
-                <tr>
-                <th class="">服务名称</th>
-                <th class="numeric ">调用次数</th>
-                <th class="numeric ">平均耗时</th>
-                <th class="numeric ">最小耗时</th>
-                <th class="numeric ">最大耗时</th>
-                <th class="numeric ">吞吐量</th>
-                <th class="numeric ">失败次数</th>
-                <th class="numeric ">失败率</th>
-                <th class="numeric">显示图表</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr><td >192.168.0.1</td><td class="numeric sorting">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                <tr><td >192.168.0.2</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                <tr><td >192.168.0.3</td><td class="numeric">100</td><td class="numeric">10</td><td class="numeric">3</td><td class="numeric">15</td><td class="numeric">100</td><td class="numeric">9</td><td class="numeric">1%</td><td class="numeric"><i class="fa  fa-bar-chart-o"></i></td></tr>
-                </tbody>
-                </table>
-                </div>
-                </td></tr>
+
                 </tbody>
             </table>
         </div>
