@@ -65,7 +65,8 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            /WEB-INF/classes/META-INF/spring/**/*.xml
+            classpath*:META-INF/spring/*.xml
+            <!--/WEB-INF/classes/META-INF/spring/**/*.xml-->
         </param-value>
     </context-param>
     <listener>

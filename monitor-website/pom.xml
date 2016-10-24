@@ -1,20 +1,31 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <parent>
-        <artifactId>winning-monitor</artifactId>
-        <groupId>com.winning.monitor</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
+    <!--<parent>-->
+        <!--<artifactId>winning-monitor</artifactId>-->
+        <!--<groupId>com.winning.monitor</groupId>-->
+        <!--<version>1.0-SNAPSHOT</version>-->
+    <!--</parent>-->
+    <groupId>com.winning.monitor</groupId>
+    <version>1.0-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>monitor-website</artifactId>
     <packaging>war</packaging>
     <name>monitor-website</name>
-    <url>http://maven.apache.org</url>
     <build>
         <finalName>monitor-website</finalName>
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>com.winning.monitor</groupId>
+            <version>1.0-SNAPSHOT</version>
+            <artifactId>monitor-data-default</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.winning.monitor</groupId>
+            <version>1.0-SNAPSHOT</version>
+            <artifactId>monitor-data-storage-mongodb</artifactId>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -31,6 +42,18 @@
             <artifactId>winning-webapp-framework-web</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>4.1.6.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>4.1.6.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>
