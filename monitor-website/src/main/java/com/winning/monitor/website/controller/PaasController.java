@@ -247,13 +247,13 @@ public class PaasController {
         }
         String serverAppName=map.get("serverAppName").toString();
         String transactionTypeName=map.get("transactionTypeName").toString();
-        String transactionName=map.get("transactionName").toString();
+        String transactionName="";//map.get("transactionName").toString();
         String serverIpAddress=map.get("serverIpAddress").toString();
         String clientAppName=map.get("clientAppName").toString();
         String clientIpAddress=map.get("clientIpAddress").toString();
         String status=map.get("status").toString();
-        int startIndex=Integer.parseInt(map.get("star").toString());
-        int pageSize=Integer.parseInt(map.get("clientAppName").toString());
+        int startIndex=Integer.parseInt(map.get("start").toString());
+        int pageSize=Integer.parseInt(map.get("pageSize").toString());
         LinkedHashMap<String, String> orderBy = null;
         TransactionMessageList report = transactionDataQuery.queryLastHourTransactionMessageList(serverAppName, transactionTypeName,transactionName, serverIpAddress,clientAppName,clientIpAddress,status,startIndex,pageSize,orderBy);
         return  report;

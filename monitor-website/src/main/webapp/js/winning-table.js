@@ -98,14 +98,13 @@
                     start: data.start,
                     search: data.search.value
                 };
-
                 var params = $.extend(reqParams, reqdatas);
                 $.post(ajaxurl, {datas:JSON.stringify(params)}, function (res) {
-                    //console.log(res);
+                    console.log(res);
                     callback({
                         recordsTotal: res.totalSize,
                         recordsFiltered: res.totalSize,
-                        data: res.datas
+                        data: res.transactionMessages
                     });
                 });
             }

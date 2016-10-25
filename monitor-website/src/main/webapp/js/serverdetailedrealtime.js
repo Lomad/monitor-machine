@@ -1,45 +1,51 @@
 /**
  * Created by Admin on 2016/10/25.
  */
-var fTable
+var fTable;
+var index=0;
+var json=[];
+var index2=0;
+var json2=[];
 $(document).ready(function () {
+    global_Object.serverAppName=$("#serverAppName").val();
+    global_Object.transactionTypeName=$("#transactionTypeName").val();
+    global_Object.serverIpAddress=$("#serverIpAddress").val();
+    global_Object.clientAppName=$("#clientAppName").val();
+    global_Object.clientIpAddress=$("#clientIpAddress").val();
+    global_Object.status=$("#status").val();
+    global_Object.type = $("#type").val();
+    global_Object.time = $("#time").val();
+    global_Object.initDomEvent();
     fTable = $("#fTable").winningTable({
-        "pageLength": 13,
+        "pageLength": 10,
         "processing": false,
         "columns": [
 
-            {"title": "时间", "data": "startTime"},//,sClass:"text-center"
-            {"title": "服务名称", "data": "transactionTypeName"},
 
-            {"title": "服务器IP", "data": "serverIpAddress"},
-            {"title": "消费方系统名称", "data": "serverIpAddress"},
-            {
-                "title": "记录状态", "data": "jlzt",
-                "render": function (data, type, full, meta) {
-                    return data == "1" ? "有效" : "作废";
+            {"title": "服务名称", "data": "transactionTypeName",
+                "render":function(data, type, full, meta){
+                    json.push(full.children);
+                    var html = '<i class="fa  icon cp fa-chevron-down"  onclick="global_Object.bzClick(this,'+index+')"></i> '+data;
+                    index++;
+                    return html;
                 }
             },
+            {"title": "服务器IP", "data": "serverIpAddress"},
+            {"title": "消费方系统名称", "data": "clientAppName"},
+            {"title": "消费方IP地址", "data": "clientIpAddress"},
+            {"title": "耗时", "data": "useTime"},
+            {"title": "状态", "data": "status"},
+            {"title": "时间", "data": "startTime"},//,sClass:"text-center"
             {
-                "title": "操作", "data": "userid",
+                "title": "详情", "data": "startTime",
                 "render": function (data, type, full, meta) {
-                    //console.log(full);
-                    var html = "";
-                    html += '<i data-id="' + data + '" class="fa fa-edit cp" onclick="global_Object.editUser(this)" title="修改"></i>&nbsp;&nbsp;';
-                    html += '<i data-id="' + data + '" class="fa  fa-exchange cp" onclick="global_Object.systemUser(this)" title="系统映射"></i>&nbsp;&nbsp;';
-                    //html +='<i data-id="'+data+'" class="fa fa-lock cp" onclick="global_Object.Lock(this)" title="上锁"></i>&nbsp;&nbsp;';
-                    if (full.jlzt == "0") {
-                        html += '<i data-id="' + data + '" onclick="global_Object.enableUser(this)" class="fa fa-link cp" title="启用"></i>&nbsp;&nbsp;'
-                    }
-                    else {
-                        html += '<i data-id="' + data + '" onclick="global_Object.disableUser(this)" class="fa fa-unlink cp" title="禁用"></i>&nbsp;&nbsp;'
-                    }
-                    html += '<i data-id="' + data + '" class="fa fa-reply cp" onclick="global_Object.updatePassword(this)" title="重置密码"></i>&nbsp;&nbsp;';
-                    if (full.loginnum > 4) {
-                        html += '<i data-id="' + data + '" class="fa fa-unlock cp" onclick="global_Object.unLock(this)" title="解锁"></i>';
-                    }
+                    json2.push(full.datas);
+                    var html = '<i class="fa  icon cp fa-bar-chart-o"  onclick=global_Object.detail(this,'+JSON.stringify(full.datas)+')></i> ';
+                    index2++;
                     return html;
                 }
             }
+
         ],
         "drawCallback": function (a) {
         },
@@ -47,5 +53,74 @@ $(document).ready(function () {
         "responsive": true,
         "width": "100%"
     });
-    fTable.queryDataInPage("/paas/queryLastHourTransactionMessageList", {orgid: "00000000"});
+    console.log(global_Object)
+    fTable.queryDataInPage("/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
 });
+var global_Object = {
+    serverAppName:$("serverAppName").val(),
+    transactionTypeName:$("transactionTypeName").val(),
+    serverIpAddress:$("serverIpAddress").val(),
+    clientAppName:$("clientAppName").val(),
+    clientIpAddress:$("clientIpAddress").val(),
+    status:$("status").val(),
+    type:"",
+    time:"",
+    initDomEvent:function(){
+        $("#statusselect a").on("click", function () {
+            $("#statusvalue").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
+            global_Object.status = $(this).text();
+            if(global_Object.status=="请选择状态"){
+                global_Object.status="";
+            }
+            global_Object.queryTableData();
+        });
+    },
+    queryTableData:function(){
+        index=0;
+        json=[];
+        index2=0;
+        json2=[];
+        fTable.queryDataInPage("/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
+    },
+    bzClick:function(obj,index){
+//console.log(json[index]);
+        if ($(obj).hasClass("fa-chevron-down")) {
+
+
+        var tableHtml = '<tr class="" style="display: none"><td colspan="12"><div class="ml15 mr15"> <table class="table table-head  table-condensed flip-content"> <thead class="flip-content ">';
+        tableHtml += '<tr>';
+        tableHtml += '<th class="">序号</th>';
+        tableHtml += '<th class="">服务步骤</th>';
+        tableHtml += ' <th class=" ">耗时</th>';
+        tableHtml += ' <th class=" ">状态</th>';
+        tableHtml += ' <th class=" ">开始时间</th>';
+        tableHtml += ' <th class=" ">详情</th>';
+
+        tableHtml += '</tr></thead><tbody>';
+        if (json[index] != null && json[index].length > 0) {
+            $.each(json[index],function (i, v) {
+                tableHtml += '<tr><td>'+i+'</td><td>'+ v.transactionName+'</td><td>'+v.useTime+'</td><td>'+v.status+'</td><td>'+v.startTime+'</td><td>'+'<i class="fa  icon cp fa-bar-chart-o"  onclick=global_Object.detail(this,'+JSON.stringify(v.datas)+')></i> '+'</td></tr>';
+            });
+        }
+         $(obj).parents("tr").after(tableHtml);
+            $(obj).parents("tr").next("tr").fadeIn();
+            $(obj).addClass("fa-chevron-up").removeClass("fa-chevron-down");
+        }
+        else{
+            $(obj).parents("tr").next("tr").fadeOut();
+            $(obj).parents("tr").next("tr").remove();
+            $(obj).addClass("fa-chevron-down").removeClass("fa-chevron-up");
+        }
+    },
+    detail: function (obj,json) {
+        $("#xqEdit").modal("show");
+        console.log(json);
+        var html ="";
+        for(var key in json){
+            html +="<tr><td>"+key+"</td><td>"+json[key]+"</td></tr>";
+            //name.push(key);
+            //json.push(data.durations[key]);
+        }
+        $("#xqTable tbody").html(html);
+    }
+}
