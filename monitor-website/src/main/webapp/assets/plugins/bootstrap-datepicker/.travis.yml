@@ -1,4 +1,9 @@
+sudo: false
+
+language: node_js
+
+node_js:
+  - "5"
+
 before_script:
-  - cd ./tests
-  - echo "new Date().toString();" | phantomjs
-script: phantomjs run-qunit.js tests.html
+  - npm install -g grunt-cli
