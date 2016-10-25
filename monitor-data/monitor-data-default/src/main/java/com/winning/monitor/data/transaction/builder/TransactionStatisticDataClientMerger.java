@@ -7,45 +7,51 @@ import com.winning.monitor.data.api.transaction.domain.TransactionStatisticRepor
 import com.winning.monitor.data.api.transaction.vo.*;
 import org.springframework.util.StringUtils;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by nicholasyan on 16/10/21.
  */
-public class TransactionStatisticDataMerger {
+public class TransactionStatisticDataClientMerger {
 
     private final static TransactionReportMerger transactionMerger = new TransactionReportMerger();
     private final static String ALL_MACHINE = "ALL";
     private final String serverDomain;
+    private final String serverIpAddress;
+    private final String transactionTypeName;
     private final TransactionLevel transactionLevel;
-    private final StatisticGroupType groupType;
-    private Map<Object, Map<String, TransactionTypeVO>> transactionTypeMap;
-    private Map<Object, Map<String, TransactionNameVO>> transactionNameMap;
-    private Map<String, TransactionTypeVO> allMachineTransactionTypes;
-    private Map<String, TransactionNameVO> allMachineTransactionNames;
+    private Map<String, Map<Object, TransactionTypeVO>> transactionTypeMap;
+    private Map<String, Map<Object, TransactionNameVO>> transactionNameMap;
+    private Map<Object, TransactionTypeVO> allMachineTransactionTypes;
+    private Map<Object, TransactionNameVO> allMachineTransactionNames;
 
-    public TransactionStatisticDataMerger(String serverDomain,
-                                          TransactionLevel transactionLevel,
-                                          StatisticGroupType groupType) {
+    public TransactionStatisticDataClientMerger(String serverDomain,
+                                                TransactionLevel transactionLevel,
+                                                String serverIpAddress,
+                                                String transactionTypeName) {
         this.serverDomain = serverDomain;
         this.transactionLevel = transactionLevel;
-        this.groupType = groupType;
+        this.serverIpAddress = serverIpAddress;
+        this.transactionTypeName = transactionTypeName;
 
         if (this.transactionLevel == TransactionLevel.TransactionName) {
             this.transactionNameMap = new LinkedHashMap<>();
-            this.allMachineTransactionNames = new LinkedHashMap<>();
-            this.transactionNameMap.put(ALL_MACHINE, this.allMachineTransactionNames);
+//            this.allMachineTransactionNames = new LinkedHashMap<>();
+//            this.transactionNameMap.put(ALL_MACHINE, this.allMachineTransactionNames);
         } else {
             this.transactionTypeMap = new LinkedHashMap<>();
-            this.allMachineTransactionTypes = new LinkedHashMap<>();
-            this.transactionTypeMap.put(ALL_MACHINE, this.allMachineTransactionTypes);
+//            this.allMachineTransactionTypes = new LinkedHashMap<>();
+//            this.transactionTypeMap.put(ALL_MACHINE, this.allMachineTransactionTypes);
         }
     }
 
     public void add(TransactionReportVO report) {
         for (TransactionMachineVO machine : report.getMachines()) {
             String serverIp = machine.getIp();
+            if (StringUtils.hasText(this.serverIpAddress) &&
+                    !this.serverIpAddress.equals(serverIp))
+                continue;
+
             for (TransactionClientVO client : machine.getTransactionClients()) {
                 Caller caller = new Caller();
                 if (StringUtils.isEmpty(client.getDomain()) || "null".equals(client.getDomain()))
@@ -62,39 +68,24 @@ public class TransactionStatisticDataMerger {
                     caller.setType(client.getType());
 
                 for (TransactionTypeVO transactionType : client.getTransactionTypes()) {
+                    if (!transactionType.getName().equals(transactionTypeName))
+                        continue;
+
                     //如果是统计TransactionType数据
                     if (this.transactionLevel == TransactionLevel.TransactionType) {
-                        //如果是根据服务器地址进行分组
-                        if (this.groupType == StatisticGroupType.Server) {
-                            //首先判断是否存在当前Server的IP
-                            Map<String, TransactionTypeVO> transactionTypes =
-                                    this.transactionTypeMap.get(serverIp);
-                            //当前IP不存在,则加入当前的IP地址
-                            if (transactionTypes == null) {
-                                transactionTypes = new LinkedHashMap<>();
-                                this.transactionTypeMap.put(serverIp, transactionTypes);
-                            }
-                            //合并当前IP的transactionTypes
-                            this.mergeTransactionType(transactionTypes, transactionType);
-                            //合并所有Machine的transactionTypes
-                            this.mergeTransactionType(this.allMachineTransactionTypes, transactionType);
-                        }
-                        //如果是根据客户端进行分组
-                        else {
-                            //首先判断是否存在当前的AppClientDomain
-                            Map<String, TransactionTypeVO> transactionTypes =
-                                    this.transactionTypeMap.get(caller);
+                        //首先判断是否存在当前的AppClientDomain
+                        Map<Object, TransactionTypeVO> transactionTypes =
+                                this.transactionTypeMap.get(caller.getName());
 
-                            //当前AppClientDomain不存在,则加入当前的AppClientDomain
-                            if (transactionTypes == null) {
-                                transactionTypes = new LinkedHashMap<>();
-                                this.transactionTypeMap.put(caller, transactionTypes);
-                            }
-                            //合并当前AppClientDomain的transactionTypes
-                            this.mergeTransactionType(transactionTypes, transactionType);
-                            //合并所有Machine的transactionTypes
-                            this.mergeTransactionType(this.allMachineTransactionTypes, transactionType);
+                        //当前AppClientDomain不存在,则加入当前的AppClientDomain
+                        if (transactionTypes == null) {
+                            transactionTypes = new LinkedHashMap<>();
+                            this.transactionTypeMap.put(caller.getName(), transactionTypes);
                         }
+
+                        //合并当前AppClientDomain的transactionTypes
+                        this.mergeTransactionType(transactionTypes, caller, transactionType);
+
                     } else {
                         for (TransactionNameVO transactionName : transactionType.getTransactionNames()) {
 
@@ -110,34 +101,46 @@ public class TransactionStatisticDataMerger {
         TransactionStatisticReport transactionStatisticReport = new TransactionStatisticReport();
 
         if (this.transactionLevel == TransactionLevel.TransactionType) {
-            for (TransactionTypeVO allMachineTransactionType : this.allMachineTransactionTypes.values()) {
-                String transactionTypeName = allMachineTransactionType.getName();
-                //所有机器的总的统计数据合计
-                TransactionStatisticData allStatisticData =
-                        this.toTransactionStatisticData(null, null, allMachineTransactionType);
+            Map<String, TransactionTypeVO> domainTransactionTypes = new HashMap<>();
+            Map<String, List<TransactionStatisticData>> transactionStatisticDataMap = new HashMap<>();
 
-                transactionStatisticReport.addTransactionStatisticData(allStatisticData);
+            //遍历所有的Caller进行合并
+            for (Map.Entry<String, Map<Object, TransactionTypeVO>> entry : this.transactionTypeMap.entrySet()) {
+                String appClientDomain = entry.getKey();
+                Map<Object, TransactionTypeVO> clientMap = entry.getValue();
 
-                for (Map.Entry<Object, Map<String, TransactionTypeVO>> entry : this.transactionTypeMap.entrySet()) {
-                    TransactionTypeVO transactionType = entry.getValue().get(transactionTypeName);
-                    if (transactionType == null)
-                        continue;
+                for (Map.Entry<Object, TransactionTypeVO> callerEntry : clientMap.entrySet()) {
+                    Caller caller = (Caller) callerEntry.getKey();
+                    TransactionTypeVO transactionTypeVO = callerEntry.getValue();
+                    TransactionTypeVO appDomainTransactionType = domainTransactionTypes.get(appClientDomain);
+                    List<TransactionStatisticData> transactionStatisticDatas =
+                            transactionStatisticDataMap.get(appClientDomain);
 
-                    TransactionStatisticData statisticData;
-
-                    if (groupType == StatisticGroupType.Server) {
-                        String serverIp = (String) entry.getKey();
-                        if (ALL_MACHINE.equals(serverIp))
-                            continue;
-
-                        statisticData = this.toTransactionStatisticData(serverIp, null, transactionType);
-                    } else {
-                        Caller caller = (Caller) entry.getKey();
-                        statisticData = this.toTransactionStatisticData(null, caller, transactionType);
+                    if (appDomainTransactionType == null) {
+                        appDomainTransactionType = new TransactionTypeVO();
+                        appDomainTransactionType.setId(transactionTypeVO.getId());
+                        appDomainTransactionType.setName(transactionTypeVO.getName());
+                        domainTransactionTypes.put(appClientDomain, appDomainTransactionType);
+                        transactionStatisticDatas = new ArrayList<>();
+                        transactionStatisticDataMap.put(appClientDomain, transactionStatisticDatas);
                     }
 
-                    allStatisticData.addTransactionStatisticData(statisticData);
+                    transactionMerger.mergeType(appDomainTransactionType, transactionTypeVO);
+                    TransactionStatisticData statisticData =
+                            this.toTransactionStatisticData(serverIpAddress, caller, transactionTypeVO);
+                    transactionStatisticDatas.add(statisticData);
                 }
+            }
+
+            for (String appDomain : domainTransactionTypes.keySet()) {
+                TransactionTypeVO transactionTypeVO = domainTransactionTypes.get(appDomain);
+                Caller caller = new Caller();
+                caller.setName(appDomain);
+                TransactionStatisticData statisticData =
+                        this.toTransactionStatisticData(serverIpAddress, caller, transactionTypeVO);
+                List<TransactionStatisticData> details = transactionStatisticDataMap.get(appDomain);
+                statisticData.setTransactionStatisticDataDetails(details);
+                transactionStatisticReport.addTransactionStatisticData(statisticData);
             }
         } else {
 
@@ -149,6 +152,7 @@ public class TransactionStatisticDataMerger {
 
     private TransactionStatisticData toTransactionStatisticData(String serverIp, Caller caller,
                                                                 TransactionTypeVO transactionType) {
+
         TransactionStatisticData statisticData = new TransactionStatisticData();
         statisticData.setServerAppName(serverDomain);
         statisticData.setTransactionTypeName(transactionType.getName());
@@ -179,19 +183,21 @@ public class TransactionStatisticDataMerger {
     }
 
 
-    private void mergeTransactionType(Map<String, TransactionTypeVO> transactionTypes, TransactionTypeVO transactionType) {
-        TransactionTypeVO oldTransactionTypeVO = transactionTypes.get(transactionType.getName());
+    private void mergeTransactionType(Map<Object, TransactionTypeVO> transactionTypes,
+                                      Caller caller,
+                                      TransactionTypeVO transactionType) {
+
+        TransactionTypeVO oldTransactionTypeVO = transactionTypes.get(caller);
         //如果当前是第一个transactionType
         if (oldTransactionTypeVO == null) {
             oldTransactionTypeVO = new TransactionTypeVO();
             oldTransactionTypeVO.setId(transactionType.getId());
             oldTransactionTypeVO.setName(transactionType.getName());
-            transactionTypes.put(oldTransactionTypeVO.getName(), oldTransactionTypeVO);
+            transactionTypes.put(caller, oldTransactionTypeVO);
         }
 
         //合并TransactionType
         transactionMerger.mergeType(oldTransactionTypeVO, transactionType);
-
     }
 
 

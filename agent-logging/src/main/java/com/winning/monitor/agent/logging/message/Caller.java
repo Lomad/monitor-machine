@@ -41,4 +41,15 @@ public class Caller {
     public int hashCode() {
         return getId().hashCode();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Caller) {
+            if (((Caller) obj).getId().equals(this.getId()))
+                return true;
+            else
+                return false;
+        }
+        return false;
+    }
 }

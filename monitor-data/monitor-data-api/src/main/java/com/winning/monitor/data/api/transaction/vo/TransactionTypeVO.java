@@ -39,8 +39,8 @@ public class TransactionTypeVO {
     private double line95Value;
     private double line99Value;
     private List<TransactionNameVO> transactionNames;
-    private Map<Integer, Range2> range2s;
-    private Map<Integer, AllDuration> allDurations;
+    private Map<Integer, Range2> range2s = new LinkedHashMap<>();
+    private Map<Integer, AllDuration> allDurations = new LinkedHashMap<>();
 
     private Map<String, TransactionNameVO> nameMap = new LinkedHashMap<String, TransactionNameVO>();
 

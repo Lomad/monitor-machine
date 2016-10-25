@@ -89,7 +89,7 @@ public class TransactionReportMerger {
             if (oldRange == null)
                 old.getRanges().put(otherRange.getValue(), otherRange);
             else
-                mergeRange(oldRange, oldRange);
+                mergeRange(oldRange, otherRange);
         }
 
         for (AllDuration otherDuration : other.getAllDurations().values()) {
@@ -177,7 +177,7 @@ public class TransactionReportMerger {
             if (oldRange2 == null)
                 old.getRange2s().put(otherRange2.getValue(), otherRange2);
             else
-                mergeRange2(oldRange2, oldRange2);
+                mergeRange2(oldRange2, otherRange2);
         }
 
         for (AllDuration otherDuration : other.getAllDurations().values()) {

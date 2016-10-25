@@ -25,6 +25,7 @@ public class MessageTreePO {
         this.messageId = messageTree.getMessageId();
     }
 
+
     public String getTime() {
         return time;
     }
