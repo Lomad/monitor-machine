@@ -1,5 +1,6 @@
 package com.winning.monitor.data.api.transaction.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  */
 public class TransactionMessageList {
 
-    private List<TransactionMessage> transactionMessages;
+    private List<TransactionMessage> transactionMessages = new ArrayList<>();
 
     private long totalSize;
 
@@ -25,5 +26,9 @@ public class TransactionMessageList {
 
     public void setTotalSize(long totalSize) {
         this.totalSize = totalSize;
+    }
+
+    public void addTransactionMessage(TransactionMessage transactionMessage) {
+        this.transactionMessages.add(transactionMessage);
     }
 }

@@ -1,5 +1,7 @@
 package com.winning.monitor.data.api.transaction.domain;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +10,7 @@ import java.util.Map;
  */
 public class TransactionMessage {
 
-    private List<TransactionMessage> children;
+    private List<TransactionMessage> children = new ArrayList<>();
 
     //开始时间yyyy-MM-dd HH:mm:ss
     private String startTime;
@@ -34,7 +36,7 @@ public class TransactionMessage {
     //错误消息
     private String errorMessage;
     //记录值
-    private Map<String, String> datas;
+    private Map<String, String> datas = new LinkedHashMap<>();
 
     public List<TransactionMessage> getChildren() {
         return children;
@@ -138,5 +140,9 @@ public class TransactionMessage {
 
     public void setDatas(Map<String, String> datas) {
         this.datas = datas;
+    }
+
+    public void addTransactionMessage(TransactionMessage transactionMessage) {
+        this.children.add(transactionMessage);
     }
 }

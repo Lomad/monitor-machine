@@ -5,6 +5,7 @@ import com.winning.monitor.data.api.vo.AllDuration;
 import com.winning.monitor.data.api.vo.Duration;
 import com.winning.monitor.data.api.vo.Range;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -38,10 +39,9 @@ public class TransactionNameVO {
     private double line99Value;
 
 
-    private Map<Integer, Range> ranges;
-    private Map<Integer, Duration> durations;
-    private Map<Integer, AllDuration> allDurations;
-
+    private Map<Integer, Range> ranges = new LinkedHashMap<>();
+    private Map<Integer, Duration> durations = new LinkedHashMap<>();
+    private Map<Integer, AllDuration> allDurations = new LinkedHashMap<>();
 
 
     public double getAvg() {

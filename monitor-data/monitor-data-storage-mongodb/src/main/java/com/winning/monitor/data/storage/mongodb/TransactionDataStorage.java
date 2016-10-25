@@ -48,6 +48,16 @@ public class TransactionDataStorage implements ITransactionDataStorage {
     }
 
     @Override
+    public LinkedHashSet<String> findAllServerIpAddress(String domain) {
+        Query query = new Query();
+        query.addCriteria(new Criteria("domain").is(domain));
+        List<String> ips = this.mongoTemplate.getCollection(REALTIME_COLLECTION_NAME)
+                .distinct("machines.ip", query.getQueryObject());
+        Collections.sort(ips);
+        return new LinkedHashSet<>(ips);
+    }
+
+    @Override
     public List<TransactionReportVO> queryRealtimeTransactionReports(String domain, String startTime) {
         Query query = new Query();
         query.addCriteria(new Criteria("domain").is(domain));
@@ -65,13 +75,59 @@ public class TransactionDataStorage implements ITransactionDataStorage {
         return list;
     }
 
+    @Override
+    public List<TransactionReportVO> queryRealtimeTransactionReports(Map<String, Object> map) {
+        Query query = new Query();
+        query.addCriteria(new Criteria("type").is(TransactionReportType.REALTIME.getName()));
+        if (map != null && map.containsKey("domain"))
+            query.addCriteria(new Criteria("domain").is(map.get("domain")));
+        if (map != null && map.containsKey("startTime"))
+            query.addCriteria(new Criteria("startTime").is(map.get("startTime")));
+        if (map != null && map.containsKey("transactionType"))
+            query.addCriteria(new Criteria("machines.transactionClients.transactionTypes.name").is(map.get("transactionType")));
+        if (map != null && map.containsKey("serverIp"))
+            query.addCriteria(new Criteria("machines.ip").is(map.get("serverIp")));
+
+        List<TransactionReportVO> list =
+                this.mongoTemplate.find(query, TransactionReportVO.class, REALTIME_COLLECTION_NAME);
+
+        if (list != null) {
+            for (TransactionReportVO report : list)
+                report.initialReport();
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<TransactionReportVO> queryRealtimeTransactionReports(String domain, String startTime, String endTime, Map<String, Object> map) {
+        Query query = new Query();
+        query.addCriteria(new Criteria("domain").is(domain));
+        query.addCriteria(new Criteria("startTime").gte(startTime).lte(endTime));
+        query.addCriteria(new Criteria("type").is(TransactionReportType.REALTIME.getName()));
+
+        if (map != null && map.containsKey("transactionType"))
+            query.addCriteria(new Criteria("machines.transactionClients.transactionTypes.name").is(map.get("transactionType")));
+        if (map != null && map.containsKey("serverIp"))
+            query.addCriteria(new Criteria("machines.ip").is(map.get("serverIp")));
+
+        List<TransactionReportVO> list =
+                this.mongoTemplate.find(query, TransactionReportVO.class, REALTIME_COLLECTION_NAME);
+
+        if (list != null) {
+            for (TransactionReportVO report : list)
+                report.initialReport();
+        }
+
+        return list;
+    }
+
 
     @Override
     public List<TransactionReportVO> queryRealtimeTransactionReports(String domain, String startTime, String endTime) {
         Criteria criteria = Criteria.where("domain").is(domain)
                 .and("type").is(TransactionReportType.REALTIME.getName())
-                .and("startTime").gte(startTime)
-                .and("endTime").lt(endTime);
+                .and("startTime").gte(startTime).lte(endTime);
         Query query = new Query(criteria);
 
         List<TransactionReportPO> list =
@@ -81,6 +137,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
 
         return transactionReports;
     }
+
 
     @Override
     public List<TransactionReportVO> queryHistoryTransactionReports(String domain, String startTime, String endTime, TransactionReportType type) {
