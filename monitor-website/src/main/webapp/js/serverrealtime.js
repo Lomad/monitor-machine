@@ -157,14 +157,14 @@ var global_Object = {
                 tr += '<td><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)" >' + data.serverIpAddress + '</a></td>';
             }
 
-            tr += '<td>' + data.totalCount + '次</td>';
-            tr += '<td>' + data.avg + 'ms</td>';
+            tr += '<td><a onclick="global_Object.openPostTotalCount(this)" href="javascript:void(0)">' + data.totalCount + '次</a></td>';
+            tr += '<td><a onclick="global_Object.openPostAvg(this)" href="javascript:void(0)">' + data.avg + 'ms</a></td>';
             tr += '<td>' + data.line99Value + 'ms</td>';
             tr += '<td>' + data.line95Value + 'ms</td>';
             tr += '<td>' + data.min + 'ms</td>';
             tr += '<td>' + data.max + 'ms</td>';
             tr += '<td>' + data.tps + '</td>';
-            tr += '<td>' + data.failCount + '次</td>';
+            tr += '<td><a onclick="global_Object.openPostFalse(this)" href="javascript:void(0)">' + data.failCount + '次</a></td>';
             tr += '<td>' + data.failPercent*100 + '%</td>';
             tr += '<td>' + data.std + 'ms</td>';
             tr += '<td><i class="fa  fa-bar-chart-o cp" onclick="global_Object.queryPic(this)"></i></td>';
@@ -278,6 +278,24 @@ var global_Object = {
     },
     openPostWindow:function(obj){
         var url ="/paas/serversysrealtime";
+        //alert($(obj).parents("tr").data("transactiontypename"))
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
+        //console.log(datas);
+        //alert($(obj).data("transactionyypename"))
+        JqCommon.openPostWindow(url,datas);
+    },
+    openPostTotalCount:function(obj){
+        var url ="/paas/serverdetailedrealtime";
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":""};
+        JqCommon.openPostWindow(url,datas);
+    },
+    openPostFalse:function(obj){
+        var url ="/paas/serverdetailedrealtime";
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":"失败"};
+        JqCommon.openPostWindow(url,datas);
+    },
+    openPostAvg:function(obj){
+        var url ="/paas/serversteprealtime";
         //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
         //console.log(datas);
