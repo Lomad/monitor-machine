@@ -22,11 +22,11 @@
             <#else>
             ${serverIpAddress}
             </#if>
-                 <i class="fa  fa-caret-down"></i></span>
-            <ul class="dropdown-menu mr15 pull-right"  id="serverIpAddresss2" role="menu" aria-labelledby="dropdownMenu1">
+                <i class="fa  fa-caret-down"></i></span>
+        <ul class="dropdown-menu mr15 pull-right"  id="serverIpAddresss2" role="menu" aria-labelledby="dropdownMenu1">
             <li role="presentation"><a role="menuitem" tabindex="-1">192.168.0.1</a></li>
             <li role="presentation"><a role="menuitem" tabindex="-1">192.168.0.2</a></li>
-            </ul>
+        </ul>
 
 
     </div>

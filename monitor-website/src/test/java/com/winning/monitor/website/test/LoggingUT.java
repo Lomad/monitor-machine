@@ -14,8 +14,8 @@ public class LoggingUT {
         MonitorLogger.checkAndInitialize();
 
         while (true) {
-            MonitorLogger.setCaller("HIS", "192.16.0.1", "PC");//调用方
-            Transaction parentTransaction = MonitorLogger.beginTransactionType("测试");//大服务
+            MonitorLogger.setCaller("Lis", "192.16.0.2", "PC");//调用方
+            Transaction parentTransaction = MonitorLogger.beginTransactionType("挂号");//大服务
             parentTransaction.addData("data1", "data1");
 
             Transaction childTransaction = MonitorLogger.beginTransactionName(parentTransaction, "读取数据库");//步骤

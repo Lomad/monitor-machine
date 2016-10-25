@@ -35,17 +35,17 @@ var global_Object = {
     flname: "",
     url: "/paas/queryTransactionTypeList",
     totalSize: 0,
-    type:"当前一小时",
+    type:"最近一小时",
     time:"",
     initDomEvent: function () {
         $("#time1").on("click", function () {
             global_Object.url = "/paas/queryTransactionTypeList";
-            global_Object.type="当前一小时";
+            global_Object.type="最近一小时";
             $(this).addClass("active").siblings().removeClass("active");
             global_Object.queryTableData();
         });
         $("#time2").on("click", function () {
-            global_Object.url = "/paas/queryTransactionTypeList";
+            global_Object.url = "/paas/queryTodayTransactionTypeReportByServer";
             global_Object.type="当天";
             $(this).addClass("active").siblings().removeClass("active");
             global_Object.queryTableData();
@@ -62,9 +62,9 @@ var global_Object = {
             $("#time3").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
             global_Object.queryTableData();
         });
-        $("#picEdit").on("show.bs.modal", function () {
-            global_Object.queryPic();
-        });
+        //$("#picEdit").on("show.bs.modal", function () {
+        //    global_Object.queryPic();
+        //});
         $("#querybtn").on("click",function(){
             global_Object.setTableData("search",this);
         });
@@ -82,7 +82,7 @@ var global_Object = {
     },
     queryTableData: function () {
         $.post(global_Object.url, {flname: global_Object.flname}, function (data) {
-            console.log(data);
+            //console.log(data);
             global_Object.tableDataOld =data.transactionStatisticDatas;
             global_Object.tableData = data.transactionStatisticDatas;
             global_Object.totalSize = data.totalSize;
@@ -149,12 +149,12 @@ var global_Object = {
     },
     setTable: function () {
         var alltr = function (data, type) {
-            var tr = "";
+            var tr = '<tr data-transactiontypename="'+data.transactionTypeName+'" data-serveripaddress="'+data.serverIpAddress+'">';
             if (type == "transactionTypeName") {
-                tr = '<tr><td><i class="fa  icon cp fa-chevron-down"></i><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)" data-transactionyypename="'+data.transactionTypeName+'">' + data.transactionTypeName + '</a></td>';
+                tr += '<td><i class="fa  icon cp fa-chevron-down"></i><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)">' + data.transactionTypeName + '</a></td>';
             }
             else if (type == "serverIpAddress") {
-                tr = '<tr><td><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)" data-transactionyypename="'+data.transactionTypeName+'" data-serveripaddress="'+data.serverIpAddress+'">' + data.serverIpAddress + '</a></td>';
+                tr += '<td><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)" >' + data.serverIpAddress + '</a></td>';
             }
 
             tr += '<td>' + data.totalCount + '次</td>';
@@ -167,7 +167,7 @@ var global_Object = {
             tr += '<td>' + data.failCount + '次</td>';
             tr += '<td>' + data.failPercent*100 + '%</td>';
             tr += '<td>' + data.std + 'ms</td>';
-            tr += '<td><i class="fa  fa-bar-chart-o cp" data-toggle="modal" href="#picEdit"></i></td>';
+            tr += '<td><i class="fa  fa-bar-chart-o cp" onclick="global_Object.queryPic(this)"></i></td>';
             return tr;
         };
         //console.log(global_Object.tableData)
@@ -213,49 +213,73 @@ var global_Object = {
         $("#form").submit({ serverAppName: "123", age: "年龄" });
     },
 
-    queryPic: function () {
+    queryPic: function (obj) {
         $("#echart").css("width", $("#picEdit").width() * 0.6 - 30);
-        var option = {
-            color: ['#3398DB'],
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                }
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: [
-                {
-                    type: 'category',
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        $("#picEdit").modal("show");
+        var url =""
+        if(global_Object.type=="最近一小时"){
+            url ="/paas/queryLastHourTransactionTypeCallTimesReportByServer";
+        }
+        else if(global_Object.type=="当天"){
+            url ="/paas/queryTodayTransactionTypeCallTimesReportByServer";
+        }
+        else if(global_Object.type=="指定小时"){
+            url ="/paas/queryLastHourTransactionTypeCallTimesReportByServer";
+        }
+//console.log($(obj).data("transactiontypename"))
+        //alert($(obj).data("transactiontypename"));alert(global_Object.flname);alert($(obj).data("serveripaddress"))
+        $.post(url, {serverAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress")}, function (data) {
+            var json=[];
+            var name =[]
+            for(var key in data.durations){
+                name.push(key);
+                json.push(data.durations[key]);
+            }
+            //console.log(name);console.log(json);
+            var option = {
+                color: ['#3398DB'],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: name
 
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value'
-                }
-            ],
-            series: [
-                {
-                    name: '直接访问',
-                    type: 'bar',
-                    barWidth: '60',
-                    data: [10, 52, 200, 334, 390, 330, 220]
-                }
-            ]
-        };
-        var myChart = echarts.init(document.getElementById("echart"));
-        myChart.setOption(option);
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: '直接访问',
+                        type: 'bar',
+                        //barWidth: '60',
+                        data: json
+                    }
+                ]
+            };
+            var myChart = echarts.init(document.getElementById("echart"));
+            myChart.setOption(option);
+        });
+
     },
     openPostWindow:function(obj){
         var url ="/paas/serversysrealtime";
-        var datas={"transactionTypeName":$(obj).data("transactionyypename"),"serverIpAddress":$(obj).data("serveripaddress")==undefined?"":$(obj).data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
+        //alert($(obj).parents("tr").data("transactiontypename"))
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
         //console.log(datas);
         //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
