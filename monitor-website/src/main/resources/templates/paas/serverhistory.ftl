@@ -28,9 +28,9 @@
             <div class="input-group-btn dropdown">
                 <button id="selbtn" type="button" class="btn dropdown-toggle" data-toggle="dropdown">日查询 <i class="fa fa-angle-down"></i></button>
                 <ul id="sel" class="dropdown-menu">
-                    <li><a data="1" href="#">日查询</a></li>
-                    <li><a data="2" href="#">周查询</a></li>
-                    <li><a data="3" href="#">月查询</a></li>
+                    <li><a data="day" href="#">日查询</a></li>
+                    <li><a data="week" href="#">周查询</a></li>
+                    <li><a data="month" href="#">月查询</a></li>
                 </ul>
             </div>
             <div id="date_picker"  class="input-group input-medium date date-picker" data-date-end-date="+0d">

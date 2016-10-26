@@ -58,8 +58,11 @@
         //$(".page-sidebar-menu").find("li[data-level='"+$(this).data("level")+"']" ).show().siblings("not:li[data-level='"+$(this).data("level"):gt(0)").hide();
     });
     var pathname = window.location.pathname.replace("#", "");
-    if(pathname=="/paas/serverdetailedrealtime" || pathname=="/paas/serversysrealtime"){
+    if(pathname=="/paas/serverdetailedrealtime" || pathname=="/paas/serversysrealtime" || pathname=="/paas/serversteprealtime"){
         pathname="/paas/serverrealtime";
+    }
+    if(pathname=="/paas/serverdetailedhistory" || pathname=="/paas/serversyshistory" || pathname=="/paas/serverstephistory"){
+        pathname="/paas/serverhistory";
     }
     var li = $("a[href='" + pathname + "']").parent("li");
     var level =$(li).data("level");
@@ -68,7 +71,7 @@
     $(li).parent("ul").show();
     $(li).parents("li").addClass("open");
     $(li).parents("li").find(".arrow ").addClass("open");
-    console.log( $("#firstMenu>li[data-level='"+level+"']"))
+//    console.log( $("#firstMenu>li[data-level='"+level+"']"))
     $("#firstMenu>li[data-level='"+level+"']").trigger("click");
     jQuery(document).ready(function () {
 //        $(".page-content").height($(".page-sidebar-menu").height())
