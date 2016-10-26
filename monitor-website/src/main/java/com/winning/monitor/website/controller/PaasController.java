@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Admin on 2016/10/20.
@@ -271,9 +269,19 @@ public class PaasController {
         String clientAppName=map.get("clientAppName").toString();
         String clientIpAddress=map.get("clientIpAddress").toString();
         String status=map.get("status").toString();
+        int orderNum =Integer.parseInt(map.get("ordernum").toString());
+        String orderValue =map.get("ordervalue").toString();
         int startIndex=Integer.parseInt(map.get("start").toString());
         int pageSize=Integer.parseInt(map.get("pageSize").toString());
-        LinkedHashMap<String, String> orderBy = null;
+        String[] linkkey={"transactionTypeName","serverIpAddress","clientAppName","clientIpAddress","duration","status","time"};
+        LinkedHashMap<String, String> orderBy = new LinkedHashMap<String, String>();
+        if(orderValue.equals("desc")){
+            orderValue="DESC";
+        }
+        else if(orderValue.equals("asc")){
+            orderValue="ASC";
+        }
+        orderBy.put(linkkey[orderNum],orderValue);
         TransactionMessageList report = transactionDataQuery.queryLastHourTransactionMessageList(serverAppName, transactionTypeName,transactionName, serverIpAddress,clientAppName,clientIpAddress,status,startIndex,pageSize,orderBy);
         return  report;
     }

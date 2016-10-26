@@ -61,7 +61,7 @@
             <#--</div>-->
         <#--</div>-->
         <div class=" pl0 pr0">
-            <table id="fTable" class="table table-head  table-condensed flip-content">
+            <table id="fTable" class="table table-head  flip-content">
                 <thead class="flip-content">
                 <tr>
 

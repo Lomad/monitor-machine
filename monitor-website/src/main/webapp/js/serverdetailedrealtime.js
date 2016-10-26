@@ -19,10 +19,12 @@ $(document).ready(function () {
     fTable = $("#fTable").winningTable({
         "pageLength": 10,
         "processing": false,
+        "ordering": true, //排序功能
+        "order": [[ 6, "desc" ]],
         "columns": [
 
 
-            {"title": "服务名称", "data": "transactionTypeName",
+            {"title": "服务名称", "data": "transactionTypeName", "orderable": false,
                 "render":function(data, type, full, meta){
                     json.push(full.children);
                     var html = '<i class="fa  icon cp fa-chevron-down"  onclick="global_Object.bzClick(this,'+index+')"></i> '+data;
@@ -30,14 +32,14 @@ $(document).ready(function () {
                     return html;
                 }
             },
-            {"title": "服务器IP", "data": "serverIpAddress"},
-            {"title": "消费方系统名称", "data": "clientAppName"},
-            {"title": "消费方IP地址", "data": "clientIpAddress"},
+            {"title": "服务器IP", "data": "serverIpAddress", "orderable": false},
+            {"title": "消费方系统名称", "data": "clientAppName", "orderable": false},
+            {"title": "消费方IP地址", "data": "clientIpAddress", "orderable": false},
             {"title": "耗时", "data": "useTime"},
-            {"title": "状态", "data": "status"},
+            {"title": "状态", "data": "status", "orderable": false},
             {"title": "时间", "data": "startTime"},//,sClass:"text-center"
             {
-                "title": "详情", "data": "startTime",
+                "title": "详情", "data": "startTime", "orderable": false,
                 "render": function (data, type, full, meta) {
                     json2.push(full.datas);
                     var html = '<i class="fa  icon cp fa-bar-chart-o"  onclick=global_Object.detail(this,'+JSON.stringify(full.datas)+')></i> ';
@@ -53,7 +55,7 @@ $(document).ready(function () {
         "responsive": true,
         "width": "100%"
     });
-    console.log(global_Object)
+    //console.log(global_Object)
     fTable.queryDataInPage("/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
 });
 var global_Object = {
@@ -114,7 +116,7 @@ var global_Object = {
     },
     detail: function (obj,json) {
         $("#xqEdit").modal("show");
-        console.log(json);
+        //console.log(json);
         var html ="";
         for(var key in json){
             html +="<tr><td>"+key+"</td><td>"+json[key]+"</td></tr>";

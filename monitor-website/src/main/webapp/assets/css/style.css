@@ -5454,6 +5454,20 @@ table.table-mail tr td {
 table .sorting{background: url('../img/sort_both.png') no-repeat center right; background-color: #fafafa; cursor: pointer;}
 table .sorting.desc{background: url('../img/sort_desc.png') no-repeat center right; background-color: #fafafa; cursor: pointer;}
 table .sorting.asc{background: url('../img/sort_asc.png') no-repeat center right; background-color: #fafafa; cursor: pointer;}
+table .sorting_desc{background: url('../img/sort_desc.png') no-repeat center right; background-color: #fafafa; cursor: pointer;}
+table .sorting_asc{background: url('../img/sort_asc.png') no-repeat center right; background-color: #fafafa; cursor: pointer;}
+table thead .sorting:after {
+    opacity: 0.2;
+    content: "" !important;
+}
+table thead .sorting_desc:after {
+    opacity: 0.2;
+    content: "" !important;
+}
+table thead .sorting_asc:after {
+    opacity: 0.2;
+    content: "" !important;
+}
 .table-head th.numeric{text-align: left;}
 .table-head td.numeric{text-align: left;}
 .dropdown-menu-right {

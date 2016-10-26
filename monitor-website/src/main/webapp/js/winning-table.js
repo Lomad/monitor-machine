@@ -93,11 +93,16 @@
         var queryOption = {
             serverSide: true,
             ajax: function (data, callback, settings) {
+                console.log(data);
                 var reqParams = {
                     pageSize: data.length,
                     start: data.start,
                     search: data.search.value
                 };
+                if(data.order !=undefined && data.order !=null){
+                    reqParams.ordernum=data.order[0].column;
+                    reqParams.ordervalue=data.order[0].dir;
+                }
                 var params = $.extend(reqParams, reqdatas);
                 $.post(ajaxurl, {datas:JSON.stringify(params)}, function (res) {
                     console.log(res);
