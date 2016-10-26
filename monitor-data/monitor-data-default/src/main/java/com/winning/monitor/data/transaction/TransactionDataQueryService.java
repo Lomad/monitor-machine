@@ -158,6 +158,8 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      */
     @Override
     public TransactionStatisticReport queryHourTransactionTypeReportByServer(String serverAppName, String hour) {
+        // 需要从Mongodb的TransactionHourlyReports中获取
+        // TransactionHourlyReports格式和TransactionRealtimeReports格式一样
         return null;
     }
 
