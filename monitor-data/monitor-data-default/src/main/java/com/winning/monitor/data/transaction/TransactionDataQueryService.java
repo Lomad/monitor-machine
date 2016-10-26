@@ -150,6 +150,54 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     }
 
     /**
+     * 获取指定小时的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
+     *
+     * @param serverAppName 应用服务系统名称
+     * @param hour          指定小时,格式为 yyyy-MM-dd HH:mm:ss
+     * @return 统计数据结果集
+     */
+    @Override
+    public TransactionStatisticReport queryHourTransactionTypeReportByServer(String serverAppName, String hour) {
+        return null;
+    }
+
+    /**
+     * 获取指定日期的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
+     *
+     * @param serverAppName 应用服务系统名称
+     * @param date          指定日期,格式为 yyyy-MM-dd
+     * @return 统计数据结果集
+     */
+    @Override
+    public TransactionStatisticReport queryDayTransactionTypeReportByServer(String serverAppName, String date) {
+        return null;
+    }
+
+    /**
+     * 获取指定周的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
+     *
+     * @param serverAppName 应用服务系统名称
+     * @param week          指定周的第一天日期,格式为 yyyy-MM-dd
+     * @return 统计数据结果集
+     */
+    @Override
+    public TransactionStatisticReport queryWeekTransactionTypeReportByServer(String serverAppName, String week) {
+        return null;
+    }
+
+    /**
+     * 获取指定月的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
+     *
+     * @param serverAppName 应用服务系统名称
+     * @param month         指定月份的第一条日期,格式为 yyyy-MM-dd
+     * @return 统计数据结果集
+     */
+    @Override
+    public TransactionStatisticReport queryMonthTransactionTypeReportByServer(String serverAppName, String month) {
+        return null;
+    }
+
+    /**
      * 获取最近一小时的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
      * @param serverAppName       应用服务系统名称

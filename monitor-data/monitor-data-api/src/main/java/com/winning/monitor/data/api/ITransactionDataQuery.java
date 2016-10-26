@@ -7,13 +7,13 @@ import com.winning.monitor.data.api.transaction.vo.TransactionTypeVO;
 /**
  * Created by nicholasyan on 16/9/14.
  */
+@Deprecated
 public interface ITransactionDataQuery {
 
     TransactionReportVO queryTransactionReport(String domain, String startTime, TransactionReportType type);
 
     TransactionTypeVO queryByTranscationType(String domain, String startTime, String typeName,
                                              TransactionReportType type);
-
 
 
 }
