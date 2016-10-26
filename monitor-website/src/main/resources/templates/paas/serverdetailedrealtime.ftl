@@ -15,7 +15,7 @@
         ${type}
         </#if>
 <#if serverIpAddress =="">
-          ${serverIpAddress}
+         > 所有主机
 <#else>
     > ${serverIpAddress}
 </#if>
@@ -25,7 +25,7 @@
     > ${clientAppName}
 </#if>
         <#if clientIpAddress =="">
-         ${clientIpAddress}
+          > 所有客户端
         <#else>
             > ${clientIpAddress}
         </#if>

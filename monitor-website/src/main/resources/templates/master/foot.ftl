@@ -58,6 +58,9 @@
         //$(".page-sidebar-menu").find("li[data-level='"+$(this).data("level")+"']" ).show().siblings("not:li[data-level='"+$(this).data("level"):gt(0)").hide();
     });
     var pathname = window.location.pathname.replace("#", "");
+    if(pathname=="/paas/serverdetailedrealtime" || pathname=="/paas/serversysrealtime"){
+        pathname="/paas/serverrealtime";
+    }
     var li = $("a[href='" + pathname + "']").parent("li");
     var level =$(li).data("level");
 //    var pli =$(li).parents("li").data("level");

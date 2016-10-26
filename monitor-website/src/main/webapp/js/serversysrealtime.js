@@ -216,7 +216,7 @@ var global_Object = {
         var url = "/paas/serverdetailedrealtime";
         var datas = {
             "transactionTypeName": global_Object.transactionTypeName,
-            "serverIpAddress": global_Object.serverIpAddress == "" ? "所有主机" : global_Object.serverIpAddress,
+            "serverIpAddress": global_Object.serverIpAddress,
             "serverAppName": global_Object.serverAppName,
             "type": global_Object.type,
             "time": global_Object.time,
@@ -232,7 +232,7 @@ var global_Object = {
         var url = "/paas/serverdetailedrealtime";
         var datas = {
             "transactionTypeName": global_Object.transactionTypeName,
-            "serverIpAddress": global_Object.serverIpAddress == "" ? "所有主机" : global_Object.serverIpAddress,
+            "serverIpAddress": global_Object.serverIpAddress,
             "serverAppName": global_Object.serverAppName,
             "type": global_Object.type,
             "time": global_Object.time,
