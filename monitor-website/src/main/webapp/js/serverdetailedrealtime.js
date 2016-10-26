@@ -101,7 +101,7 @@ var global_Object = {
         tableHtml += '</tr></thead><tbody>';
         if (json[index] != null && json[index].length > 0) {
             $.each(json[index],function (i, v) {
-                tableHtml += '<tr><td>'+i+'</td><td>'+ v.transactionName+'</td><td>'+v.useTime+'</td><td>'+v.status+'</td><td>'+v.startTime+'</td><td>'+'<i class="fa  icon cp fa-bar-chart-o"  onclick=global_Object.detail(this,'+JSON.stringify(v.datas)+')></i> '+'</td></tr>';
+                tableHtml += '<tr><td>'+(i+1)+'</td><td>'+ v.transactionName+'</td><td>'+v.useTime+'</td><td>'+v.status+'</td><td>'+v.startTime+'</td><td>'+'<i class="fa  icon cp fa-bar-chart-o"  onclick=global_Object.detail(this,'+JSON.stringify(v.datas)+')></i> '+'</td></tr>';
             });
         }
          $(obj).parents("tr").after(tableHtml);
