@@ -111,7 +111,7 @@ public class MongodbTransactionQueryServiceUT extends
         order.put("time", "ASC");
 
         TransactionMessageList transactionMessageList =
-                transactionDataQuery.queryLastHourTransactionMessageList("test1", "挂号", "", "", "", "", "失败", 0, 100, order);
+                transactionDataQuery.queryLastHourTransactionMessageList("test1", "挂号", "", "", "", "", "成功", 0, 100, order);
 
         Assert.assertNotNull(transactionMessageList);
     }
