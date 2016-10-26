@@ -51,8 +51,8 @@ public class MongoMessageTreeStorage implements MessageTreeStorage {
         query.addCriteria(new Criteria("messageTree.message.timestampInMillis")
                 .gte(startTime).lt(endTime));
 
-        if (arguments != null && arguments.containsKey("transactionType"))
-            query.addCriteria(new Criteria("messageTree.message.type").is(arguments.get("transactionType")));
+        if (arguments != null && arguments.containsKey("transactionTypeName"))
+            query.addCriteria(new Criteria("messageTree.message.type").is(arguments.get("transactionTypeName")));
         if (arguments != null && arguments.containsKey("transactionName"))
             query.addCriteria(new Criteria("messageTree.message.name").is(arguments.get("transactionName")));
         if (arguments != null && arguments.containsKey("serverIpAddress"))
