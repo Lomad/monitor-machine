@@ -93,7 +93,7 @@
         var queryOption = {
             serverSide: true,
             ajax: function (data, callback, settings) {
-                console.log(data);
+                //console.log(data);
                 var reqParams = {
                     pageSize: data.length,
                     start: data.start,
@@ -130,7 +130,12 @@
             //    data: reqdatas
             //}
             ajax: function (data, callback, settings) {
-                $.post(ajaxurl, {datas:JSON.stringify(reqdatas)}, function (res) {
+                var reqParams = {
+                    ordernum:data.order[0].column,
+                    ordervalue: data.order[0].dir
+                };
+                var params = $.extend(reqParams, reqdatas);
+                $.post(ajaxurl, {datas:JSON.stringify(params)}, function (res) {
                     if (!res.success) {
                         swal("发生错误", res.errorMsg, "error");
                         callback({
