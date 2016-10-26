@@ -3,20 +3,24 @@
  */
 
 $(document).ready(function () {
-
+    global_Object.serverIpAddress = $("#serverIpAddresshidden").val();
+    global_Object.type = $("#type").val();
+    global_Object.time = $("#time").val();
+    global_Object.serverAppName = $("#serverAppName").val();
+    global_Object.transactionTypeName = $("#transactionTypeName").val();
     global_Object.initDomEvent();
-    if(global_Object.type=="最近一小时"){
-        global_Object.url="/paas/queryLastHourTransactionTypeReportByClient"
+    if (global_Object.type == "最近一小时") {
+        global_Object.url = "/paas/queryLastHourTransactionTypeReportByClient"
     }
-    else if(global_Object.type=="当天"){
-        global_Object.url="/paas/queryTodayTransactionTypeReportByClient"
+    else if (global_Object.type == "当天") {
+        global_Object.url = "/paas/queryTodayTransactionTypeReportByClient"
     }
-    else if(global_Object.type=="指定小时"){
-        global_Object.url="/paas/queryLastHourTransactionTypeReportByClient"
+    else if (global_Object.type == "指定小时") {
+        global_Object.url = "/paas/queryLastHourTransactionTypeReportByClient"
     }
-    $.post("/paas/getAllServerIpAddress", {serverAppName:global_Object.serverAppName}, function (data) {
+    $.post("/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
 //alert( $("#serverIpAddresshidden").val());
-        if(global_Object.serverIpAddress==""){
+        if (global_Object.serverIpAddress == "") {
             $("#serverIpAddresss").html("所有主机" + ' <i class="fa  fa-caret-down"></i>');
         }
         else {
@@ -34,7 +38,7 @@ $(document).ready(function () {
             $("#serverIpAddresss").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
             global_Object.serverIpAddress = $(this).text();
             $("#serverIpAddresss").html(global_Object.serverIpAddress + ' <i class="fa  fa-caret-down"></i>');
-            if($(this).text() =="所有主机"){
+            if ($(this).text() == "所有主机") {
                 global_Object.serverIpAddress = "";
             }
 
@@ -49,93 +53,91 @@ var global_Object = {
     serverIpAddress: $("#serverIpAddresshidden").val(),
     url: "/paas/queryLastHourTransactionTypeReportByClient",
     totalSize: 0,
-    type:$("#type").val(),
-    time:$("#time").val(),
-    serverAppName:$("#serverAppName").val(),
-    transactionTypeName:$("#transactionTypeName").val(),
+    type: $("#type").val(),
+    time: $("#time").val(),
+    serverAppName: $("#serverAppName").val(),
+    transactionTypeName: $("#transactionTypeName").val(),
     initDomEvent: function () {
 
-        $("#querybtn").on("click",function(){
+        $("#querybtn").on("click", function () {
 
-            global_Object.setTableData("search",this);
+            global_Object.setTableData("search", this);
         });
         $("#fTable .sorting").on("click", function () {
             if ($(this).hasClass("desc")) {
                 $(this).addClass("asc").removeClass("desc");
-                global_Object.setTableData("asc",this);
+                global_Object.setTableData("asc", this);
             }
             else {
                 $(this).addClass("desc").removeClass("asc");
-                global_Object.setTableData("desc",this);
+                global_Object.setTableData("desc", this);
             }
 
         });
     },
     queryTableData: function () {
-        $.post(global_Object.url, {serverAppName: global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress}, function (data) {
+        $.post(global_Object.url, {
+            serverAppName: global_Object.serverAppName,
+            transactionTypeName: global_Object.transactionTypeName,
+            serverIpAddress: global_Object.serverIpAddress
+        }, function (data) {
             console.log(data);
-            global_Object.tableDataOld =data.transactionStatisticDatas;
+            global_Object.tableDataOld = data.transactionStatisticDatas;
             global_Object.tableData = data.transactionStatisticDatas;
             global_Object.totalSize = data.totalSize;
             global_Object.setTable();
         });
     },
-    setTableData:function(type,obj){
-        if(type =="search"){
-            var tableData=[];
-            $.each(global_Object.tableDataOld,function(i,v){
-                if(v.transactionTypeName.indexOf($.trim($("#keyword").val()))>-1){
+    setTableData: function (type, obj) {
+        if (type == "search") {
+            var tableData = [];
+            $.each(global_Object.tableDataOld, function (i, v) {
+                if (v.transactionTypeName.indexOf($.trim($("#keyword").val())) > -1) {
                     tableData.push(v);
                 }
             });
-            global_Object.tableData=tableData;
+            global_Object.tableData = tableData;
             //console.log(global_Object.tableData);
         }
-        else if(type=="asc"){
-            var id= $(obj).data("id");
+        else if (type == "asc") {
+            var id = $(obj).data("id");
             //冒泡排序
             var array = global_Object.tableData;
-            var temp =0;
-            for (var i = 0; i < array.length; i++)
-            {
-                for (var j = 0; j < array.length - i-1; j++)
-                {
-                    if (array[j][id] > array[j + 1][id])
-                    {
+            var temp = 0;
+            for (var i = 0; i < array.length; i++) {
+                for (var j = 0; j < array.length - i - 1; j++) {
+                    if (array[j][id] > array[j + 1][id]) {
                         temp = array[j + 1];
                         array[j + 1] = array[j];
                         array[j] = temp;
                     }
                 }
             }
-            global_Object.tableData=array;
+            global_Object.tableData = array;
             //console.log(global_Object.tableData);
         }
-        else if(type=="desc"){
-            var id= $(obj).data("id");
-            var array =global_Object.tableData;
+        else if (type == "desc") {
+            var id = $(obj).data("id");
+            var array = global_Object.tableData;
             //var array = [3,5,1,6];
-            var temp =0;
-            for (var i = 0; i < array.length; i++)
-            {
-                for (var j = 0; j < array.length - i-1; j++)
-                {
-                    if (array[j][id] < array[j + 1][id])
-                    {
+            var temp = 0;
+            for (var i = 0; i < array.length; i++) {
+                for (var j = 0; j < array.length - i - 1; j++) {
+                    if (array[j][id] < array[j + 1][id]) {
                         temp = array[j + 1];
                         array[j + 1] = array[j];
                         array[j] = temp;
                     }
                 }
             }
-            global_Object.tableData=array;
+            global_Object.tableData = array;
             //console.log(global_Object.tableData);
         }
         global_Object.setTable();
     },
     setTable: function () {
         var alltr = function (data, type) {
-            var tr = '<tr  data-clientappname="'+data.clientAppName+'" data-clientipaddress="'+data.clientIpAddress+'">';
+            var tr = '<tr  data-clientappname="' + data.clientAppName + '" data-clientipaddress="' + data.clientIpAddress + '">';
             if (type == "clientAppName") {
                 tr += '<td><i class="fa  icon cp fa-chevron-down"></i> ' + data.clientAppName + '</td>';
             }
@@ -150,8 +152,8 @@ var global_Object = {
             tr += '<td>' + data.min + 'ms</td>';
             tr += '<td>' + data.max + 'ms</td>';
             tr += '<td>' + data.tps + '</td>';
-            tr += '<td>' + data.failCount + '次</td>';
-            tr += '<td>' + data.failPercent*100 + '%</td>';
+            tr += '<td><a onclick="global_Object.openPostFalse(this)" href="javascript:void(0)">' + data.failCount + '次</a></td>';
+            tr += '<td>' + data.failPercent * 100 + '%</td>';
             tr += '<td>' + data.std + 'ms</td>';
             //tr += '<td><i class="fa  fa-bar-chart-o cp" data-toggle="modal" href="#picEdit"></i></td>';
             return tr;
@@ -194,18 +196,50 @@ var global_Object = {
                 $(this).addClass("fa-chevron-down").removeClass("fa-chevron-up");
             }
         });
-        $("#form").submit({ serverAppName: "123", age: "年龄" });
+        $("#form").submit({serverAppName: "123", age: "年龄"});
     },
-    openPostWindow:function(obj){
-        var url ="/paas/serversysrealtime";
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactionyypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
+    openPostWindow: function (obj) {
+        var url = "/paas/serversysrealtime";
+        var datas = {
+            "transactionTypeName": $(obj).parents("tr").data("transactionyypename"),
+            "serverIpAddress": $(obj).parents("tr").data("serveripaddress") == undefined ? "" : $(obj).parents("tr").data("serveripaddress"),
+            "serverAppName": global_Object.flname,
+            "type": global_Object.type,
+            "time": global_Object.time,
+            "status": ""
+        };
         //console.log(datas);
         //alert($(obj).data("transactionyypename"))
-        JqCommon.openPostWindow(url,datas);
+        JqCommon.openPostWindow(url, datas);
     },
-    openPostTotalCount:function(obj){
-        var url ="/paas/serverdetailedrealtime";
-        var datas={"transactionTypeName":global_Object.transactionTypeName,"serverIpAddress":global_Object.serverIpAddress==""?"所有主机":global_Object.serverIpAddress,"serverAppName":global_Object.serverAppName,"type":global_Object.type,"time":global_Object.time,"clientAppName":$(obj).parents("tr").data("clientappname"),"clientIpAddress":$(obj).parents("tr").data("clientipaddress")==undefined?"":$(obj).parents("tr").data("clientipaddress")};
-        JqCommon.openPostWindow(url,datas);
+    openPostFalse: function (obj) {
+        var url = "/paas/serverdetailedrealtime";
+        var datas = {
+            "transactionTypeName": global_Object.transactionTypeName,
+            "serverIpAddress": global_Object.serverIpAddress == "" ? "所有主机" : global_Object.serverIpAddress,
+            "serverAppName": global_Object.serverAppName,
+            "type": global_Object.type,
+            "time": global_Object.time,
+            "clientAppName": $(obj).parents("tr").data("clientappname"),
+            "clientIpAddress": $(obj).parents("tr").data("clientipaddress") == undefined ? "" : $(obj).parents("tr").data("clientipaddress"),
+            "status":"失败"
+        };
+        //console.log(datas);
+        //alert($(obj).data("transactionyypename"))
+        JqCommon.openPostWindow(url, datas);
+    },
+    openPostTotalCount: function (obj) {
+        var url = "/paas/serverdetailedrealtime";
+        var datas = {
+            "transactionTypeName": global_Object.transactionTypeName,
+            "serverIpAddress": global_Object.serverIpAddress == "" ? "所有主机" : global_Object.serverIpAddress,
+            "serverAppName": global_Object.serverAppName,
+            "type": global_Object.type,
+            "time": global_Object.time,
+            "clientAppName": $(obj).parents("tr").data("clientappname"),
+            "clientIpAddress": $(obj).parents("tr").data("clientipaddress") == undefined ? "" : $(obj).parents("tr").data("clientipaddress"),
+            "status":""
+        };
+        JqCommon.openPostWindow(url, datas);
     }
 }

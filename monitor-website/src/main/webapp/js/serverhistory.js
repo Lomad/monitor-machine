@@ -1,15 +1,8 @@
 /**
- * Created by Admin on 2016/10/21.
+ * Created by Evan on 2016/10/21.
  */
-
 $(document).ready(function () {
-
     global_Object.initDomEvent();
-
-    //var data=[];
-    //for(var i=0;i<20;i++){
-    //    global_Object.tableData.push(json);
-    //}
     $.post("/paas/qeryAllDomain", {}, function (data) {
         $("#flname").html(data[0] + ' <i class="fa  fa-caret-down"></i>');
         global_Object.flname = data[0];
@@ -25,46 +18,45 @@ $(document).ready(function () {
             global_Object.flname = $(this).text();
             global_Object.queryTableData();
         });
-
-
     });
 });
 var global_Object = {
+    time:"",
+    viewId:1,
     tableDataOld: [],
     tableData: [],
     flname: "",
-    url: "/paas/queryTransactionTypeList",
+    url: "/paas/queryTodayTransactionTypeReportByServer",
     totalSize: 0,
-    type:"最近一小时",
-    time:"",
+    type:"昨天",
     initDomEvent: function () {
-        $("#time1").on("click", function () {
-            global_Object.url = "/paas/queryTransactionTypeList";
-            global_Object.type="最近一小时";
-            $(this).addClass("active").siblings().removeClass("active");
-            global_Object.queryTableData();
+        $("#date_picker").datepicker({
+            language: "zh-CN",
+            autoclose: true,//选中之后自动隐藏日期选择框
+            format: "yyyy-mm-dd",//日期格式
+            weekStart:1,
+            showWeekNumbers:true
         });
-        $("#time2").on("click", function () {
-            global_Object.url = "/paas/queryTodayTransactionTypeReportByServer";
-            global_Object.type="当天";
-            $(this).addClass("active").siblings().removeClass("active");
-            global_Object.queryTableData();
+        var date = new Date();
+        var yesterday = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate()-1);
+        $("#date_picker").datepicker('update',yesterday);
+        $("#sel a").on('click',function(){
+            var data =$(this).attr("data");
+            $("#selbtn").html($(this).text()+' <i class="fa  fa-caret-down"></i>');
+            global_Object.selectType(data);
         });
-        $("#time3").on("click", function () {
-            global_Object.url = "/paas/queryTransactionTypeList";
+        $("#date_picker").datepicker().on('hide', function(){
+            var date = $('#datevalue').val();
+            if(global_Object.viewId==2&&date!=""){
+                var newdate = global_Object.getNewDay(date);
+                $('#datevalue').val(newdate);
+            }else if(global_Object.viewId==2&&date==""){
+                var date = new Date();
+                var week = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+                $("#datevalue").val(global_Object.getNewDay(week));
+            }
+        });
 
-            $(this).addClass("active").siblings().removeClass("active");
-            //global_Object.queryTableData();
-        });
-        $("#time3v li").on("click", function () {
-            global_Object.time =$(this).text(); //$(this).text().split('-')[0];
-            global_Object.type="指定小时";
-            $("#time3").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
-            global_Object.queryTableData();
-        });
-        //$("#picEdit").on("show.bs.modal", function () {
-        //    global_Object.queryPic();
-        //});
         $("#querybtn").on("click",function(){
             global_Object.setTableData("search",this);
         });
@@ -79,6 +71,89 @@ var global_Object = {
             }
 
         });
+        //$("#picEdit").on("show.bs.modal",function(){
+        //    global_Object.queryPic();
+        //});
+    },
+    selectType:function(data){
+        if(data == 1){
+            global_Object.viewId = 1;
+            $('#date_picker').datepicker('update','');
+            $('#date_picker').datepicker('destroy');
+            $("#date_picker").datepicker({
+                language: "zh-CN",
+                autoclose: true,//选中之后自动隐藏日期选择框
+                format: "yyyy-mm-dd",//日期格式
+                weekStart:1,
+                showWeekNumbers:true
+            });
+            var date = new Date();
+            var yesterday = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate()-1);
+            $("#date_picker").datepicker('update',yesterday);
+        }else if(data == 2){
+            global_Object.viewId = 2;
+            $('#date_picker').datepicker('update','');
+            $('#date_picker').datepicker('destroy');
+            $("#date_picker").datepicker({
+                language: "zh-CN",
+                autoclose: true,//选中之后自动隐藏日期选择框
+                format: "yyyy/mm/dd",//日期格式
+                weekStart:1,
+                showWeekNumbers:true,
+                calendarWeeks: true,
+                todayHighlight: true
+                //daysOfWeekDisabled:[0,2,3,4,5,6]
+                //beforeShowDay: function(date){
+                //    var day = date.getDay();
+                //    if(day!=1){
+                //        return {
+                //            enabled : false
+                //        };
+                //    }
+                //    return [true,''];
+                //}
+            });
+            var date = new Date();
+            var week = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+            $("#datevalue").val(global_Object.getNewDay(week));
+        }else if(data == 3){
+            global_Object.viewId = 3;
+            $('#date_picker').datepicker('update','');
+            $('#date_picker').datepicker('destroy');
+            $("#date_picker").datepicker({
+                language: "zh-CN",
+                autoclose: true,//选中之后自动隐藏日期选择框
+                format: "yyyy-mm",//日期格式
+                weekStart:1,
+                showWeekNumbers:true,
+                startView: 'year',
+                minViewMode:1
+            });
+            var date = new Date();
+            var month = date.getFullYear()+"-"+(date.getMonth()+1);
+            $("#date_picker").datepicker('update',month);
+        }
+    },
+    getNewDay:function(dateTemp) {
+        var dateTemp = dateTemp.split("/");
+        var nDate = new Date(dateTemp[1] + '/' + dateTemp[2] + '/' + dateTemp[0]); //转换为MM-DD-YYYY格式
+        var week = nDate.getDay();
+        var monday = Math.abs(nDate) - ((week-1) * 24 * 60 * 60 * 1000);
+        var millSeconds = monday + (6 * 24 * 60 * 60 * 1000);
+        function getdate(mills){
+            var rDate = new Date(mills);
+            var year = rDate.getFullYear();
+            var month = rDate.getMonth() + 1;
+            if (month < 10) month = "0" + month;
+            var date = rDate.getDate();
+            var today = new Date();
+            //if(date>today.getDate()) date = today.getDate();
+            if (date < 10) date = "0" + date;
+            var newdate = year + "/" + month + "/" + date;
+            return newdate;
+        }
+        //alert(getdate(monday)+"-"+getdate(millSeconds));
+        return (getdate(monday)+"-"+getdate(millSeconds));
     },
     queryTableData: function () {
         $.post(global_Object.url, {flname: global_Object.flname}, function (data) {
@@ -89,6 +164,7 @@ var global_Object = {
             global_Object.setTable();
         });
     },
+
     setTableData:function(type,obj){
         if(type =="search"){
             var tableData=[];
@@ -102,13 +178,6 @@ var global_Object = {
         }
         else if(type=="asc"){
             var id= $(obj).data("id");
-            //$.each(global_Object.tableData,function(i,v) {
-            //    var a = v[id];
-            //    $.each(tableData,function(i2,v2){
-            //        var b =v2[id];
-            //        if(a)
-            //    });
-            //});
             //冒泡排序
             var array = global_Object.tableData;
             var temp =0;
@@ -125,6 +194,7 @@ var global_Object = {
                 }
             }
             global_Object.tableData=array;
+            //console.log(global_Object.tableData);
         }
         else if(type=="desc"){
             var id= $(obj).data("id");
@@ -144,6 +214,7 @@ var global_Object = {
                 }
             }
             global_Object.tableData=array;
+            //console.log(global_Object.tableData);
         }
         global_Object.setTable();
     },
@@ -156,7 +227,6 @@ var global_Object = {
             else if (type == "serverIpAddress") {
                 tr += '<td><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)" >' + data.serverIpAddress + '</a></td>';
             }
-
             tr += '<td><a onclick="global_Object.openPostTotalCount(this)" href="javascript:void(0)">' + data.totalCount + '次</a></td>';
             tr += '<td><a onclick="global_Object.openPostAvg(this)" href="javascript:void(0)">' + data.avg + 'ms</a></td>';
             tr += '<td>' + data.line99Value + 'ms</td>';
@@ -170,7 +240,6 @@ var global_Object = {
             tr += '<td><i class="fa  fa-bar-chart-o cp" onclick="global_Object.queryPic(this)"></i></td>';
             return tr;
         };
-        //console.log(global_Object.tableData)
         var html = [];
         $.each(global_Object.tableData, function (i, v) {
             html.push(alltr(v, "transactionTypeName"));
@@ -186,7 +255,6 @@ var global_Object = {
             tableHtml += ' <th class="numeric ">吞吐量</th>';
             tableHtml += ' <th class="numeric ">失败次数</th>';
             tableHtml += ' <th class="numeric ">失败率</th>';
-            tableHtml += ' <th class="numeric ">方差</th>';
             tableHtml += ' <th class="numeric ">显示图表</th>';
             tableHtml += '</tr></thead><tbody>';
             if (v.transactionStatisticDataDetails != null && v.transactionStatisticDataDetails.length > 0) {
@@ -210,24 +278,11 @@ var global_Object = {
                 $(this).addClass("fa-chevron-down").removeClass("fa-chevron-up");
             }
         });
-        $("#form").submit({ serverAppName: "123", age: "年龄" });
     },
-
     queryPic: function (obj) {
         $("#echart").css("width", $("#picEdit").width() * 0.6 - 30);
         $("#picEdit").modal("show");
-        var url =""
-        if(global_Object.type=="最近一小时"){
-            url ="/paas/queryLastHourTransactionTypeCallTimesReportByServer";
-        }
-        else if(global_Object.type=="当天"){
-            url ="/paas/queryTodayTransactionTypeCallTimesReportByServer";
-        }
-        else if(global_Object.type=="指定小时"){
-            url ="/paas/queryLastHourTransactionTypeCallTimesReportByServer";
-        }
-//console.log($(obj).data("transactiontypename"))
-        //alert($(obj).data("transactiontypename"));alert(global_Object.flname);alert($(obj).data("serveripaddress"))
+        var url ="/paas/queryTodayTransactionTypeCallTimesReportByServer";
         $.post(url, {serverAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress")}, function (data) {
             var json=[];
             var name =[]
@@ -274,33 +329,15 @@ var global_Object = {
             var myChart = echarts.init(document.getElementById("echart"));
             myChart.setOption(option);
         });
-
     },
     openPostWindow:function(obj){
-        var url ="/paas/serversysrealtime";
-        //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
-        //console.log(datas);
-        //alert($(obj).data("transactionyypename"))
-        JqCommon.openPostWindow(url,datas);
-    },
-    openPostTotalCount:function(obj){
-        var url ="/paas/serverdetailedrealtime";
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":""};
-        JqCommon.openPostWindow(url,datas);
-    },
-    openPostFalse:function(obj){
-        var url ="/paas/serverdetailedrealtime";
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":"失败"};
-        JqCommon.openPostWindow(url,datas);
-    },
-    openPostAvg:function(obj){
-        var url ="/paas/serversteprealtime";
-        //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
-        //console.log(datas);
+        global_Object.type = $("#datevalue").val();
+        console.log(global_Object.type);
+        var url ="/paas/serversyshistory";
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).data("serveripaddress")==undefined?"":$(obj).data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type};
+        console.log(datas);
         //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
     }
-
 }
+

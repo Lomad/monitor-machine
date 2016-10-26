@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
@@ -57,6 +58,46 @@ public class PaasController {
         mv.addObject("time",time);
         return mv;
     }
+    @RequestMapping(value = {"/paas/serversyshistory"})
+    public ModelAndView serversyshistory(String datas) {
+        Map<String, Object> map = null;
+        try {
+            map = this.objectMapper.readValue(datas, Map.class);
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+        ModelAndView mv = new ModelAndView("paas/serversyshistory");
+        String transactionTypeName=map.get("transactionTypeName").toString();
+        String serverIpAddress=map.get("serverIpAddress").toString();
+        String serverAppName=map.get("serverAppName").toString();
+        String type=map.get("type").toString();
+        mv.addObject("transactionTypeName",transactionTypeName);
+        mv.addObject("serverIpAddress",serverIpAddress);
+        mv.addObject("serverAppName",serverAppName);
+        mv.addObject("type",type);
+        return mv;
+    }
+    @RequestMapping(value = {"/paas/serversteprealtime"})
+    public ModelAndView serversteprealtime(String datas) {
+        Map<String, Object> map = null;
+        try {
+            map = this.objectMapper.readValue(datas, Map.class);
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+        ModelAndView mv = new ModelAndView("paas/serversteprealtime");
+        String transactionTypeName=map.get("transactionTypeName").toString();
+        String serverIpAddress=map.get("serverIpAddress").toString();
+        String serverAppName=map.get("serverAppName").toString();
+        String type=map.get("type").toString();
+        String time=map.get("time").toString();
+        mv.addObject("transactionTypeName",transactionTypeName);
+        mv.addObject("serverIpAddress",serverIpAddress);
+        mv.addObject("serverAppName",serverAppName);
+        mv.addObject("type",type);
+        mv.addObject("time",time);
+        return mv;
+    }
     @RequestMapping(value = {"/paas/serverdetailedrealtime"})
     public ModelAndView serverdetailedrealtime(String datas) {
         Map<String, Object> map = null;
@@ -71,11 +112,17 @@ public class PaasController {
         String serverAppName=map.get("serverAppName").toString();
         String type=map.get("type").toString();
         String time=map.get("time").toString();
+        String clientAppName=map.get("clientAppName").toString();
+        String clientIpAddress=map.get("clientIpAddress").toString();
+        String status=map.get("status").toString();
         mv.addObject("transactionTypeName",transactionTypeName);
         mv.addObject("serverIpAddress",serverIpAddress);
         mv.addObject("serverAppName",serverAppName);
         mv.addObject("type",type);
         mv.addObject("time",time);
+        mv.addObject("clientAppName",clientAppName);
+        mv.addObject("clientIpAddress",clientIpAddress);
+        mv.addObject("status",status);
         return mv;
     }
     @RequestMapping(value = {"/paas/clientrealtime"})
@@ -207,16 +254,27 @@ public class PaasController {
 
     /**获取最近一小时内的调用消息明细记录
      *
-     * @param serverAppName
-     * @param transactionTypeName
-     * @param serverIpAddress
      * @return
      */
     @RequestMapping(value = {"/paas/queryLastHourTransactionMessageList"})
-    public @ResponseBody TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
-                                                                                               String transactionTypeName,
-                                                                                               String serverIpAddress){
-        TransactionMessageList report = null; //transactionDataQuery.queryLastHourTransactionMessageList(serverAppName, transactionTypeName, serverIpAddress);
+    public @ResponseBody TransactionMessageList queryLastHourTransactionMessageList(String datas){
+        Map<String, Object> map = null;
+        try {
+            map = this.objectMapper.readValue(datas, Map.class);
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+        String serverAppName=map.get("serverAppName").toString();
+        String transactionTypeName=map.get("transactionTypeName").toString();
+        String transactionName="";//map.get("transactionName").toString();
+        String serverIpAddress=map.get("serverIpAddress").toString();
+        String clientAppName=map.get("clientAppName").toString();
+        String clientIpAddress=map.get("clientIpAddress").toString();
+        String status=map.get("status").toString();
+        int startIndex=Integer.parseInt(map.get("start").toString());
+        int pageSize=Integer.parseInt(map.get("pageSize").toString());
+        LinkedHashMap<String, String> orderBy = null;
+        TransactionMessageList report = transactionDataQuery.queryLastHourTransactionMessageList(serverAppName, transactionTypeName,transactionName, serverIpAddress,clientAppName,clientIpAddress,status,startIndex,pageSize,orderBy);
         return  report;
     }
 }
