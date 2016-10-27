@@ -123,6 +123,35 @@ public class PaasController {
         mv.addObject("status",status);
         return mv;
     }
+
+    @RequestMapping(value = {"/paas/clientdetailedrealtime"})
+    public ModelAndView clientdetailedrealtime(String datas) {
+        Map<String, Object> map = null;
+        try {
+            map = this.objectMapper.readValue(datas, Map.class);
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+        ModelAndView mv = new ModelAndView("paas/clientdetailedrealtime");
+        String transactionTypeName=map.get("transactionTypeName").toString();
+        String serverIpAddress=map.get("serverIpAddress").toString();
+        String serverAppName=map.get("serverAppName").toString();
+        String type=map.get("type").toString();
+        String time=map.get("time").toString();
+        String clientAppName=map.get("clientAppName").toString();
+        String clientIpAddress=map.get("clientIpAddress").toString();
+        String status=map.get("status").toString();
+        mv.addObject("transactionTypeName",transactionTypeName);
+        mv.addObject("serverIpAddress",serverIpAddress);
+        mv.addObject("serverAppName",serverAppName);
+        mv.addObject("type",type);
+        mv.addObject("time",time);
+        mv.addObject("clientAppName",clientAppName);
+        mv.addObject("clientIpAddress",clientIpAddress);
+        mv.addObject("status",status);
+        return mv;
+    }
+
     @RequestMapping(value = {"/paas/clientrealtime"})
     public ModelAndView clientrealtime() {
         return new ModelAndView("paas/clientrealtime");
