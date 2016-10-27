@@ -8,41 +8,60 @@
 <!-- BEGIN PAGE -->
 <div class="row bgf bb1" style="margin-top:-15px;">
     <div class="col-md-12  lh50">
-        <span>
-            ${serverAppName} > ${transactionTypeName} >
-            <#if type == "指定小时">
-            ${time}
-            <#else>
-            ${type}
-            </#if>
-            <#if serverIpAddress =="">
-                > 所有主机
-            <#else>
-                > ${serverIpAddress}
-            </#if>
-            <#if clientAppName =="">
-            ${clientAppName}
-            <#else>
-                > ${clientAppName}
-            </#if>
-            <#if clientIpAddress =="">
-                > 所有客户端
-            <#else>
-                > ${clientIpAddress}
-            </#if>
-         </span>
-         <span class="dropdown-toggle cp pull-right " id="statusvalue" data-toggle="dropdown" id="">
-                 <#if status =="">
-                     请选择状态
-                 <#else>
-                     ${status}
-                 </#if>
-                 <i class="fa  fa-caret-down"></i>
-         </span>
-         <ul class="dropdown-menu mr15 pull-right"  id="statusselect" role="menu" aria-labelledby="dropdownMenu1">
-            <li role="presentation"><a role="menuitem" tabindex="-1">成功</a></li>
-            <li role="presentation"><a role="menuitem" tabindex="-1">失败</a></li>
-         </ul>
+        <div class="col-md-8">
+            <span>
+                ${serverAppName} > ${transactionTypeName} >
+                <#if type == "指定小时">
+                ${time}
+                <#else>
+                ${type}
+                </#if>
+                <#if serverIpAddress =="">
+                    > 所有主机
+                <#else>
+                    > ${serverIpAddress}
+                </#if>
+                <#if clientAppName =="">
+                     ${clientAppName}
+                <#else>
+                    > ${clientAppName}
+                </#if>
+                <#if clientIpAddress =="">
+                    > 所有客户端
+                <#else>
+                    > ${clientIpAddress}
+                </#if>
+             </span>
+         </div>
+         <div class="col-md-2">
+             <span class="dropdown-toggle cp pull-right" id="statusvalue" data-toggle="dropdown" id="">
+                     <#if status =="">
+                         请选择状态
+                     <#else>
+                         ${status}
+                     </#if>
+                     <i class="fa  fa-caret-down"></i>
+             </span>
+             <ul class="dropdown-menu mr15 pull-right"  id="statusselect" role="menu" aria-labelledby="dropdownMenu1">
+                <#--<li role="presentation"><a role="menuitem" tabindex="-1" style="color: #808080">请选择状态</a></li>-->
+                <li role="presentation"><a role="menuitem" tabindex="-1">成功</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1">失败</a></li>
+             </ul>
+         </div>
+        <div class="col-md-2">
+             <span class="dropdown-toggle cp pull-right" id="systemvalue" data-toggle="dropdown" id="">
+                     <#if clientAppName =="">
+                         请选择消费系统
+                     <#else>
+                         ${clientAppName}
+                     </#if>
+                     <i class="fa  fa-caret-down"></i>
+             </span>
+            <ul class="dropdown-menu mr15 pull-right"  id="systemselect" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1">His</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1">Lis</a></li>
+            </ul>
+        </div>
     </div>
 </div>
 
