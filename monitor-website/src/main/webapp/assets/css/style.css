@@ -5658,5 +5658,10 @@ table thead .sorting_asc:after {
     height: 52px;
     padding: 0px
 }
-
+.vam{
+    vertical-align: middle!important;
+}
+.tac{
+    text-align: center;
+}
 /**end  top菜单**/
