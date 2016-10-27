@@ -147,6 +147,7 @@ public class PaasController {
         return mv;
     }
 
+
     @RequestMapping(value = {"/paas/serverdetailedrealtime"})
     public ModelAndView serverdetailedrealtime(String datas) {
         Map<String, Object> map = null;
