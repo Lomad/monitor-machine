@@ -5,9 +5,6 @@ import com.winning.monitor.data.api.ITransactionDataQueryService;
 import com.winning.monitor.data.api.transaction.domain.TransactionCallTimesReport;
 import com.winning.monitor.data.api.transaction.domain.TransactionMessageList;
 import com.winning.monitor.data.api.transaction.domain.TransactionStatisticReport;
-import com.winning.monitor.website.infrastructure.Session;
-import com.winning.monitor.website.model.fifter;
-import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,10 +66,33 @@ public class PaasController {
         String serverIpAddress=map.get("serverIpAddress").toString();
         String serverAppName=map.get("serverAppName").toString();
         String type=map.get("type").toString();
+        String value=map.get("value").toString();
         mv.addObject("transactionTypeName",transactionTypeName);
         mv.addObject("serverIpAddress",serverIpAddress);
         mv.addObject("serverAppName",serverAppName);
         mv.addObject("type",type);
+        mv.addObject("value",value);
+        return mv;
+    }
+    @RequestMapping(value = {"/paas/serverstephistory"})
+    public ModelAndView serverstephistory(String datas) {
+        Map<String, Object> map = null;
+        try {
+            map = this.objectMapper.readValue(datas, Map.class);
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+        ModelAndView mv = new ModelAndView("paas/serverstephistory");
+        String transactionTypeName=map.get("transactionTypeName").toString();
+        String serverIpAddress=map.get("serverIpAddress").toString();
+        String serverAppName=map.get("serverAppName").toString();
+        String type=map.get("type").toString();
+        String value=map.get("value").toString();
+        mv.addObject("transactionTypeName",transactionTypeName);
+        mv.addObject("serverIpAddress",serverIpAddress);
+        mv.addObject("serverAppName",serverAppName);
+        mv.addObject("type",type);
+        mv.addObject("value",value);
         return mv;
     }
     @RequestMapping(value = {"/paas/serversteprealtime"})
@@ -96,6 +116,34 @@ public class PaasController {
         mv.addObject("time",time);
         return mv;
     }
+    @RequestMapping(value = {"/paas/serverdetailedhistory"})
+    public ModelAndView serverdetailedhistory(String datas) {
+        Map<String, Object> map = null;
+        try {
+            map = this.objectMapper.readValue(datas, Map.class);
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+        ModelAndView mv = new ModelAndView("paas/serverdetailedhistory");
+        String transactionTypeName=map.get("transactionTypeName").toString();
+        String serverIpAddress=map.get("serverIpAddress").toString();
+        String serverAppName=map.get("serverAppName").toString();
+        String type=map.get("type").toString();
+        String time=map.get("value").toString();
+        String clientAppName=map.get("clientAppName").toString();
+        String clientIpAddress=map.get("clientIpAddress").toString();
+        String status=map.get("status").toString();
+        mv.addObject("transactionTypeName",transactionTypeName);
+        mv.addObject("serverIpAddress",serverIpAddress);
+        mv.addObject("serverAppName",serverAppName);
+        mv.addObject("type",type);
+        mv.addObject("value",time);
+        mv.addObject("clientAppName",clientAppName);
+        mv.addObject("clientIpAddress",clientIpAddress);
+        mv.addObject("status",status);
+        return mv;
+    }
+
     @RequestMapping(value = {"/paas/serverdetailedrealtime"})
     public ModelAndView serverdetailedrealtime(String datas) {
         Map<String, Object> map = null;
