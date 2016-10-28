@@ -226,7 +226,7 @@ var global_Object = {
     },
     /* ‘平均耗时’ 之跳转锚点 */
     openPostAvg:function(obj){
-        var url ="/paas/serversteprealtime";
+        var url ="/paas/clientsteprealtime";
         //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
         //console.log(datas);
