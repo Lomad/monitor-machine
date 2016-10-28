@@ -53,8 +53,8 @@ $(document).ready(function () {
                 "render":function(data, type, full, meta)
                 {
                     json.push(full.children);
-                    //var html = '<i class="fa  icon cp fa-chevron-down"  onclick="global_Object.bzClick(this,'+index+')"></i> '+data;
-                    var html = '' + data;
+                    var html = '<i class="fa  icon cp fa-chevron-down"  onclick="global_Object.bzClick(this,'+index+')"></i> '+data;
+                    //var html = '' + data;
                     index++;
                     return html;
                 }
@@ -124,5 +124,35 @@ var global_Object = {
             //json.push(data.durations[key]);
         }
         $("#xqTable tbody").html(html);
-    }
+    },
+
+    bzClick:function(obj,index){
+
+        if ($(obj).hasClass("fa-chevron-down")) {
+
+            var tableHtml = '<tr class="" style="display: none"><td colspan="12"><div class="ml15 mr15"> <table class="table table-head  table-condensed flip-content"> <thead class="flip-content ">';
+            tableHtml += '<tr>';
+            tableHtml += '<th class="">序号</th>';
+            tableHtml += '<th class="">服务步骤</th>';
+            tableHtml += ' <th class=" ">耗时</th>';
+            tableHtml += ' <th class=" ">状态</th>';
+            tableHtml += ' <th class=" ">开始时间</th>';
+            tableHtml += ' <th class=" ">详情</th>';
+
+            tableHtml += '</tr></thead><tbody>';
+            if (json[index] != null && json[index].length > 0) {
+                $.each(json[index],function (i, v) {
+                    tableHtml += '<tr><td>'+(i+1)+'</td><td>'+ v.transactionName+'</td><td>'+v.useTime+'</td><td>'+v.status+'</td><td>'+v.startTime+'</td><td>'+'<i class="fa  icon cp fa-exchange"  onclick=global_Object.detail(this,'+JSON.stringify(v.datas)+')></i> '+'</td></tr>';
+                });
+            }
+            $(obj).parents("tr").after(tableHtml);
+            $(obj).parents("tr").next("tr").fadeIn();
+            $(obj).addClass("fa-chevron-up").removeClass("fa-chevron-down");
+        }
+        else{
+            $(obj).parents("tr").next("tr").fadeOut();
+            $(obj).parents("tr").next("tr").remove();
+            $(obj).addClass("fa-chevron-down").removeClass("fa-chevron-up");
+        }
+    },
 }
