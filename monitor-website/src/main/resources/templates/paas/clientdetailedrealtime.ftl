@@ -8,7 +8,7 @@
 <!-- BEGIN PAGE -->
 <div class="row bgf bb1" style="margin-top:-15px;">
     <div class="col-md-12  lh50">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <span>
                 ${serverAppName} > ${transactionTypeName} >
                 <#if type == "指定小时">
@@ -48,7 +48,7 @@
                 <li role="presentation"><a role="menuitem" tabindex="-1">失败</a></li>
              </ul>
          </div>
-        <div class="col-md-2">
+        <#--<div class="col-md-2">
              <span class="dropdown-toggle cp pull-right" id="systemvalue" data-toggle="dropdown" id="">
                      <#if clientAppName =="">
                          请选择消费系统
@@ -61,7 +61,7 @@
                 <li role="presentation"><a role="menuitem" tabindex="-1">His</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1">Lis</a></li>
             </ul>
-        </div>
+        </div>-->
     </div>
 </div>
 
