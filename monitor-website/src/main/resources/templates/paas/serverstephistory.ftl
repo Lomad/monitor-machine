@@ -147,6 +147,7 @@
 <input type="hidden" id="type" value="${type}">
 <input type="hidden" id="serverIpAddresshidden" value="${serverIpAddress}">
 <input type="hidden" id="value" value="${value}">
+<input type="hidden" id="historypagetype" value="${historyPageType}">
 <@foot.foot>
     <#assign contextPath=request.contextPath>
 <script src="${contextPath}/assets/plugins/echarts/echarts-all.js" type="text/javascript"></script>

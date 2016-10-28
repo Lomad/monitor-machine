@@ -88,11 +88,13 @@ public class PaasController {
         String serverAppName=map.get("serverAppName").toString();
         String type=map.get("type").toString();
         String value=map.get("value").toString();
+        String historyPageType=map.get("historyPageType").toString();
         mv.addObject("transactionTypeName",transactionTypeName);
         mv.addObject("serverIpAddress",serverIpAddress);
         mv.addObject("serverAppName",serverAppName);
         mv.addObject("type",type);
         mv.addObject("value",value);
+        mv.addObject("historyPageType",historyPageType);
         return mv;
     }
     @RequestMapping(value = {"/paas/serversteprealtime"})
@@ -157,6 +159,7 @@ public class PaasController {
         String clientAppName=map.get("clientAppName").toString();
         String clientIpAddress=map.get("clientIpAddress").toString();
         String status=map.get("status").toString();
+        String historyPageType=map.get("historyPageType").toString();
         mv.addObject("transactionTypeName",transactionTypeName);
         mv.addObject("serverIpAddress",serverIpAddress);
         mv.addObject("serverAppName",serverAppName);
@@ -165,6 +168,7 @@ public class PaasController {
         mv.addObject("clientAppName",clientAppName);
         mv.addObject("clientIpAddress",clientIpAddress);
         mv.addObject("status",status);
+        mv.addObject("historyPageType",historyPageType);
         return mv;
     }
 
