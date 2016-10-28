@@ -18,26 +18,26 @@ $(document).ready(function () {
     global_Object.time = $("#time").val();
 
     /* 初始化右上角系统选择下拉框 */
-    $.post("/paas/qeryAllDomain", {}, function (data) {
-        /* 动态生成的标签 */
-        var li = [];
-        $.each(data, function (i, v) {
-            //<li role="presentation"><a role="menuitem" tabindex="-1">成功</a></li>
-            var option = '<li role="presentation"><a role="menuitem" tabindex="-1"> ' + v + '</a></li>';
-            li.push(option);
-        });
-        $("#systemselect").html(li.join(""));
-
-        /* 消费系统名称 过滤器: 特别注意：必须在同一个ajax里面注册其事件，意思是标签是动态生成的，其事件也必须注册在动态里面 */
-        $("#systemselect a").on("click", function () {
-            $("#systemvalue").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
-            global_Object.clientAppName = $(this).text();
-            if(global_Object.clientAppName =="请选择消费系统"){
-                global_Object.clientAppName ="";
-            }
-            global_Object.queryTableData();
-        });
-    });
+    //$.post("/paas/qeryAllDomain", {}, function (data) {
+    //    /* 动态生成的标签 */
+    //    var li = [];
+    //    $.each(data, function (i, v) {
+    //        //<li role="presentation"><a role="menuitem" tabindex="-1">成功</a></li>
+    //        var option = '<li role="presentation"><a role="menuitem" tabindex="-1"> ' + v + '</a></li>';
+    //        li.push(option);
+    //    });
+    //    $("#systemselect").html(li.join(""));
+    //
+    //    /* 消费系统名称 过滤器: 特别注意：必须在同一个ajax里面注册其事件，意思是标签是动态生成的，其事件也必须注册在动态里面 */
+    //    $("#systemselect a").on("click", function () {
+    //        $("#systemvalue").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
+    //        global_Object.clientAppName = $(this).text();
+    //        if(global_Object.clientAppName =="请选择消费系统"){
+    //            global_Object.clientAppName ="";
+    //        }
+    //        global_Object.queryTableData();
+    //    });
+    //});
 
     global_Object.initDomEvent();
 
@@ -47,7 +47,7 @@ $(document).ready(function () {
         "ordering": true, //排序功能
         "order": [[ 6, "desc" ]],
         "columns": [
-            {"title": "时间", "data": "startTime"},
+
             {
                 "title": "服务名称", "data": "transactionTypeName", "orderable": false,
                 "render":function(data, type, full, meta)
@@ -64,6 +64,7 @@ $(document).ready(function () {
             {"title": "消费方地址", "data": "clientIpAddress" , "orderable": false},
             {"title": "耗时", "data": "useTime"},
             {"title": "状态", "data": "status","orderable": false},
+            {"title": "时间", "data": "startTime"},
             {
                 "title": "详细参数", "data": "startTime", "orderable": false,
                 "render": function (data, type, full, meta) {

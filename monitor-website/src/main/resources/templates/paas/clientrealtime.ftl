@@ -73,14 +73,14 @@
                 <tr>
                     <th class="tac">服务类型</th>
                     <th>服务名称</th>
-                    <th class="numeric sorting">调用次数</th>
-                    <th class="numeric sorting">平均耗时</th>
+                    <th class="numeric sorting"  data-id="totalCount">调用次数</th>
+                    <th class="numeric sorting"  data-id="avg">平均耗时</th>
                     <th class="numeric">99%</th>
                     <th class="numeric">95%</th>
                     <th class="numeric">最短耗时</th>
                     <th class="numeric">最大耗时</th>
                     <th class="numeric">吞吐量</th>
-                    <th class="numeric sorting">失败次数</th>
+                    <th class="numeric sorting"  data-id="failCount">失败次数</th>
                     <th class="numeric">失败率</th>
                     <th class="numeric ">方差</th>
                     <th class="numeric">显示图表</th>
