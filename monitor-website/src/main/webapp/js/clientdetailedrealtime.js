@@ -47,7 +47,7 @@ $(document).ready(function () {
         "ordering": true, //排序功能
         "order": [[ 6, "desc" ]],
         "columns": [
-            {"title": "时间", "data": "startTime"},
+
             {
                 "title": "服务名称", "data": "transactionTypeName", "orderable": false,
                 "render":function(data, type, full, meta)
@@ -64,6 +64,7 @@ $(document).ready(function () {
             {"title": "消费方地址", "data": "clientIpAddress" , "orderable": false},
             {"title": "耗时", "data": "useTime"},
             {"title": "状态", "data": "status","orderable": false},
+            {"title": "时间", "data": "startTime"},
             {
                 "title": "详细参数", "data": "startTime", "orderable": false,
                 "render": function (data, type, full, meta) {
