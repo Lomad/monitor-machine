@@ -212,7 +212,8 @@ var global_Object = {
             "value": global_Object.value,
             "clientAppName": $(obj).parents("tr").data("clientappname"),
             "clientIpAddress": $(obj).parents("tr").data("clientipaddress") == undefined ? "" : $(obj).parents("tr").data("clientipaddress"),
-            "status":"失败"
+            "status":"失败",
+            historyPageType:"server"
         };
         //console.log(datas);
         //alert($(obj).data("transactionyypename"))
@@ -228,7 +229,8 @@ var global_Object = {
             "value": global_Object.value,
             "clientAppName": $(obj).parents("tr").data("clientappname"),
             "clientIpAddress": $(obj).parents("tr").data("clientipaddress") == undefined ? "" : $(obj).parents("tr").data("clientipaddress"),
-            "status":""
+            "status":"",
+            historyPageType:"server"
         };
         console.log(datas);
         JqCommon.openPostWindow(url, datas);

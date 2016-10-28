@@ -3,7 +3,15 @@
 <#import "common/modal.ftl" as modal/>
 <@head.head>
     <#assign contextPath=request.contextPath>
+<link rel="stylesheet" type="text/css" href="${contextPath}/assets/plugins/bootstrap-datepicker/css/datepicker.css" />
+<style>
+    .datepicker .cw {
+        font-size: 14px;
+        color: #332cc6;
+        font-weight: bold !important;
 
+    }
+</style>
 </@head.head>
 <!-- BEGIN PAGE -->
 <div class="row bgf bb1" style="margin-top: -15px">
@@ -50,14 +58,14 @@
                   <tr>
                       <th class="tac">服务大类名称</th>
                       <th>服务名称</th>
-                      <th class="sorting" data-id="totalCount">调用次数</th>
-                      <th class="sorting" data-id="avg">平均耗时</th>
+                      <th data-id="totalCount">调用次数</th>
+                      <th data-id="avg">平均耗时</th>
                       <th>99%</th>
                       <th>95%</th>
                       <th>最短耗时</th>
                       <th>最大耗时</th>
                       <th>吞吐量</th>
-                      <th class="sorting" data-id="failCount">失败次数</th>
+                      <th data-id="failCount">失败次数</th>
                       <th>失败率</th>
                       <th class="numeric">方差</th>
                       <th class="numeric">显示图表</th>

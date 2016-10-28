@@ -8,7 +8,7 @@
 <!-- BEGIN PAGE -->
 <div class="row bgf bb1" style="margin-top:-15px;">
     <div class="col-md-12  lh50">
-        <span>${serverAppName} > ${transactionTypeName} > ${value}
+        <span>${serverAppName} > ${transactionTypeName}
         <#if serverIpAddress =="">
             > 所有主机
         <#else>
@@ -19,11 +19,14 @@
         <#else>
             > ${clientAppName}
         </#if>
-        <#if clientIpAddress =="">
-            > 所有客户端
-        <#else>
-            > ${clientIpAddress}
-        </#if>
+      <#if user =="server">
+          <#if clientIpAddress =="">
+              > 所有客户端
+          <#else>
+              > ${clientIpAddress}
+          </#if>
+      </#if>
+            > ${value}
          </span>
             <span class="dropdown-toggle cp pull-right " id="statusvalue" data-toggle="dropdown" id="">
                  <#if status =="">
@@ -174,7 +177,9 @@
 <input type="hidden" id="clientIpAddress" value="${clientIpAddress}">
 <input type="hidden" id="serverIpAddress" value="${serverIpAddress}">
 <input type="hidden" id="status" value="${status}">
+<input type="hidden" id="historypagetype" value="${historyPageType}">
 <@foot.foot>
+
     <#assign contextPath=request.contextPath>
 <script src="${contextPath}/js/serverdetailedhistory.js" type="text/javascript"></script>
 </@foot.foot>

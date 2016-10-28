@@ -38,6 +38,7 @@ var global_Object = {
     type:"最近一小时",
     time:"",
     initDomEvent: function () {
+
         $("#time1").on("click", function () {
             global_Object.url = "/paas/queryTransactionTypeList";
             global_Object.type="最近一小时";
@@ -287,6 +288,7 @@ var global_Object = {
     openPostTotalCount:function(obj){
         var url ="/paas/serverdetailedrealtime";
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":""};
+        console.log(datas);
         JqCommon.openPostWindow(url,datas);
     },
     openPostFalse:function(obj){

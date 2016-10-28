@@ -57,12 +57,22 @@
         });
         //$(".page-sidebar-menu").find("li[data-level='"+$(this).data("level")+"']" ).show().siblings("not:li[data-level='"+$(this).data("level"):gt(0)").hide();
     });
+
     var pathname = window.location.pathname.replace("#", "");
     if(pathname=="/paas/serverdetailedrealtime" || pathname=="/paas/serversysrealtime" || pathname=="/paas/serversteprealtime"){
         pathname="/paas/serverrealtime";
     }
+
     if(pathname=="/paas/serverdetailedhistory" || pathname=="/paas/serversyshistory" || pathname=="/paas/serverstephistory"){
-        pathname="/paas/serverhistory";
+        if(document.getElementById("historypagetype")!= null){
+            if($("#historypagetype").val()=="client"){
+                pathname="/paas/clienthistory";
+            }else{
+                pathname="/paas/serverhistory";
+            }
+        }else{
+            pathname="/paas/serverhistory";
+        }
     }
     var li = $("a[href='" + pathname + "']").parent("li");
     var level =$(li).data("level");
