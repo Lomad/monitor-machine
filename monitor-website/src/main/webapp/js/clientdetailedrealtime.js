@@ -18,26 +18,26 @@ $(document).ready(function () {
     global_Object.time = $("#time").val();
 
     /* 初始化右上角系统选择下拉框 */
-    $.post("contextPath/paas/qeryAllDomain", {}, function (data) {
-        /* 动态生成的标签 */
-        var li = [];
-        $.each(data, function (i, v) {
-            //<li role="presentation"><a role="menuitem" tabindex="-1">成功</a></li>
-            var option = '<li role="presentation"><a role="menuitem" tabindex="-1"> ' + v + '</a></li>';
-            li.push(option);
-        });
-        $("#systemselect").html(li.join(""));
-
-        /* 消费系统名称 过滤器: 特别注意：必须在同一个ajax里面注册其事件，意思是标签是动态生成的，其事件也必须注册在动态里面 */
-        $("#systemselect a").on("click", function () {
-            $("#systemvalue").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
-            global_Object.clientAppName = $(this).text();
-            if(global_Object.clientAppName =="请选择消费系统"){
-                global_Object.clientAppName ="";
-            }
-            global_Object.queryTableData();
-        });
-    });
+    //$.post("/paas/qeryAllDomain", {}, function (data) {
+    //    /* 动态生成的标签 */
+    //    var li = [];
+    //    $.each(data, function (i, v) {
+    //        //<li role="presentation"><a role="menuitem" tabindex="-1">成功</a></li>
+    //        var option = '<li role="presentation"><a role="menuitem" tabindex="-1"> ' + v + '</a></li>';
+    //        li.push(option);
+    //    });
+    //    $("#systemselect").html(li.join(""));
+    //
+    //    /* 消费系统名称 过滤器: 特别注意：必须在同一个ajax里面注册其事件，意思是标签是动态生成的，其事件也必须注册在动态里面 */
+    //    $("#systemselect a").on("click", function () {
+    //        $("#systemvalue").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
+    //        global_Object.clientAppName = $(this).text();
+    //        if(global_Object.clientAppName =="请选择消费系统"){
+    //            global_Object.clientAppName ="";
+    //        }
+    //        global_Object.queryTableData();
+    //    });
+    //});
 
     global_Object.initDomEvent();
 
@@ -83,7 +83,7 @@ $(document).ready(function () {
         "width": "100%"
     });
     //console.log(global_Object)
-    fTable.queryDataInPage("contextPath/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
+    fTable.queryDataInPage("/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
 });
 var global_Object = {
     serverAppName:$("serverAppName").val(),
@@ -113,7 +113,7 @@ var global_Object = {
         index2=0;
         json2=[];
 
-        fTable.queryDataInPage("contextPath/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
+        fTable.queryDataInPage("/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
     },
 
     detail: function (obj,json) {
