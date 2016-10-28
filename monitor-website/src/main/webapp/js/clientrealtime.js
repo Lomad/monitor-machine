@@ -284,7 +284,7 @@ var global_Object = {
     },
     /* '失败次数' 之跳转锚点 */
     openPostFalse:function(obj){
-        var url ="/paas/serverdetailedrealtime";
+        var url ="/paas/clientdetailedrealtime";
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":"失败"};
         JqCommon.openPostWindow(url,datas);
     }
