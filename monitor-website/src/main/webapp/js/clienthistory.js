@@ -5,7 +5,7 @@
 
 $(document).ready(function(){
     global_Object.initDomEvent();
-    $.post("/paas/qeryAllDomain",{},function(data){
+    $.post("contextPath/paas/qeryAllDomain",{},function(data){
         $("#flname").html(data[0]+" <i class=\"fa fa-caret-down\"></i>");
         global_Object.flname = data[0];
         global_Object.queryTableData();
@@ -23,13 +23,10 @@ $(document).ready(function(){
 });
 
 var global_Object={
-    type:"day",
-    value:"",
     tableData:[],
-    tableDataOld:[],
     totalSize: 0,
     flname:"",
-    url: "/paas/queryTodayTransactionTypeReportByServer",
+    url: "contextPath/paas/queryTodayTransactionTypeReportByServer",
     initDomEvent:function(){
         $("#date_picker").datepicker({
             language: "zh-CN",
@@ -57,9 +54,7 @@ var global_Object={
                 $("#datevalue").val(global_Object.getNewDay(week));
             }
         });
-        $("#querybtn").on("click",function(){
-            global_Object.setTableData("search",this);
-        });
+
     },
     selectType:function(data){
         global_Object.type = data;
@@ -108,18 +103,6 @@ var global_Object={
             $("#date_picker").datepicker('update',month);
         }
     },
-    setTableData:function(type,obj){
-        if(type =="search") {
-            var tableData = [];
-            $.each(global_Object.tableDataOld, function (i, v) {
-                if (v.transactionTypeName.indexOf($.trim($("#keyword").val())) > -1) {
-                    tableData.push(v);
-                }
-            });
-            global_Object.tableData = tableData;
-        }
-        global_Object.setTable();
-    },
     getNewDay:function(dateTemp) {
         var dateTemp = dateTemp.split("/");
         var nDate = new Date(dateTemp[1] + '/' + dateTemp[2] + '/' + dateTemp[0]); //转换为MM-DD-YYYY格式
@@ -146,7 +129,6 @@ var global_Object={
             //console.log(data);
             global_Object.totalSize = data.totalSize;
             global_Object.tableData = data.transactionStatisticDatas;
-            global_Object.tableDataOld =data.transactionStatisticDatas;
             global_Object.setTable();
         });
     },
@@ -167,7 +149,8 @@ var global_Object={
             tr += '<td>' + data.failCount + '次</td>';
             tr += '<td>' + data.failPercent*100 + '%</td>';
             tr += '<td>' + data.std + 'ms</td>';
-            tr += '<td><i class="fa  fa-bar-chart-o cp" onclick="global_Object.queryPic(this)"></i></td></tr>';
+            tr += '<td><i class="fa  fa-bar-chart-o cp" onclick="global_Object.queryPic(this)"></i></td>';
+            tr += '</tr>';
             return tr;
         }
         var tableHtml = [];
@@ -178,17 +161,16 @@ var global_Object={
             if (StatisticDatas != null &&StatisticDatas.length > 0) {
                 $.each(StatisticDatas, function (i2, v2) {
                     tableHtml.push(alltr(length,i2,v2));
-                    console.log(v2)
                 });
             }
         });
-        //console.log(tableHtml.join(""));
+        console.log(tableHtml.join(""));
         $("#fTable tbody").html(tableHtml.join(""));
     },
     queryPic: function (obj) {
         $("#echart").css("width", $("#picEdit").width() * 0.6 - 30);
         $("#picEdit").modal("show");
-        var url ="/paas/queryTodayTransactionTypeCallTimesReportByServer";
+        var url ="contextPath/paas/queryTodayTransactionTypeCallTimesReportByServer";
         $.post(url, {serverAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress")}, function (data) {
             var json=[];
             var name =[]
@@ -238,16 +220,16 @@ var global_Object={
     },
     openPostAvg:function(obj){
         global_Object.value = $("#datevalue").val();
-        var url ="/paas/serverstephistory";
+        var url ="contextPath/paas/serverstephistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,historyPageType:"client"};
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value};
         //console.log(datas);
         //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
     },
     openPostTotalCount:function(obj){
         global_Object.value = $("#datevalue").val();
-        var url ="/paas/serverdetailedhistory";
+        var url ="contextPath/paas/serverdetailedhistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":"",historyPageType:"client"};
         console.log(datas);

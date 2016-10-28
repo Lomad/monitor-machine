@@ -6,15 +6,15 @@
         global_Object.initDomEvent();
         global_Object.queryTableData();
         if (global_Object.type == "day") {
-            global_Object.url="/paas/queryTodayTransactionTypeReportByClient"
+            global_Object.url=contextPath+"/paas/queryTodayTransactionTypeReportByClient"
         }
         else if (global_Object.type == "week") {
-            global_Object.url="/paas/queryTodayTransactionTypeReportByClient"
+            global_Object.url=contextPath+"/paas/queryTodayTransactionTypeReportByClient"
         }
         else if (global_Object.type == "month") {
-            global_Object.url="/paas/queryTodayTransactionTypeReportByClient"
+            global_Object.url=contextPath+"/paas/queryTodayTransactionTypeReportByClient"
         }
-        $.post("/paas/getAllServerIpAddress", {serverAppName:global_Object.serverAppName}, function (data) {
+        $.post(contextPath+"/paas/getAllServerIpAddress", {serverAppName:global_Object.serverAppName}, function (data) {
             if(global_Object.serverIpAddress==""){
                 $("#serverIpAddresss").html("所有主机" + ' <i class="fa  fa-caret-down"></i>');
             }
@@ -46,7 +46,7 @@ var global_Object = {
     tableDataOld: [],
     tableData: [],
     serverIpAddress: $("#serverIpAddress").val(),
-    url: "/paas/queryTodayTransactionTypeReportByClient",
+    url: contextPath+"/paas/queryTodayTransactionTypeReportByClient",
     totalSize: 0,
     type:$("#type").val(),
     value:$("#value").val(),
@@ -203,7 +203,7 @@ var global_Object = {
         $("#form").submit({ serverAppName: "123", age: "年龄" });
     },
     openPostFalse: function (obj) {
-        var url = "/paas/serverdetailedhistory";
+        var url = contextPath+"/paas/serverdetailedhistory";
         var datas = {
             "transactionTypeName": global_Object.transactionTypeName,
             "serverIpAddress": global_Object.serverIpAddress,
@@ -220,7 +220,7 @@ var global_Object = {
         JqCommon.openPostWindow(url, datas);
     },
     openPostTotalCount: function (obj) {
-        var url = "/paas/serverdetailedhistory";
+        var url = contextPath+"/paas/serverdetailedhistory";
         var datas = {
             "transactionTypeName": global_Object.transactionTypeName,
             "serverIpAddress": global_Object.serverIpAddress,

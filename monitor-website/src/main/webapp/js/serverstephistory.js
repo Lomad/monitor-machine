@@ -6,15 +6,15 @@ $(document).ready(function () {
 
     global_Object.initDomEvent();
     if (global_Object.type == "day") {
-        global_Object.url = "/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
     }
     else if (global_Object.type == "week") {
-        global_Object.url = "/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
     }
     else if (global_Object.type == "month") {
-        global_Object.url = "/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
     }
-    $.post("/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
+    $.post(contextPath+"/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
 //alert( $("#serverIpAddresshidden").val());
         if (global_Object.serverIpAddress == "") {
             $("#serverIpAddresss").html("所有主机" + ' <i class="fa  fa-caret-down"></i>');
@@ -47,7 +47,7 @@ var global_Object = {
     tableDataOld: [],
     tableData: [],
     serverIpAddress: $("#serverIpAddresshidden").val(),
-    url: "/paas/queryLastHourTransactionNameReportByServer",
+    url: contextPath+"/paas/queryLastHourTransactionNameReportByServer",
     totalSize: 0,
     type: $("#type").val(),
     value:$("#value").val(),
