@@ -10,15 +10,15 @@ $(document).ready(function () {
     global_Object.transactionTypeName = $("#transactionTypeName").val();
     global_Object.initDomEvent();
     if (global_Object.type == "最近一小时") {
-        global_Object.url = "/paas/queryLastHourTransactionTypeReportByClient"
+        global_Object.url = contextPath+"/paas/queryLastHourTransactionTypeReportByClient"
     }
     else if (global_Object.type == "当天") {
-        global_Object.url = "/paas/queryTodayTransactionTypeReportByClient"
+        global_Object.url = contextPath+"/paas/queryTodayTransactionTypeReportByClient"
     }
     else if (global_Object.type == "指定小时") {
-        global_Object.url = "/paas/queryLastHourTransactionTypeReportByClient"
+        global_Object.url = contextPath+"/paas/queryLastHourTransactionTypeReportByClient"
     }
-    $.post("/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
+    $.post(contextPath+"/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
 //alert( $("#serverIpAddresshidden").val());
         if (global_Object.serverIpAddress == "") {
             $("#serverIpAddresss").html("所有主机" + ' <i class="fa  fa-caret-down"></i>');
@@ -51,7 +51,7 @@ var global_Object = {
     tableDataOld: [],
     tableData: [],
     serverIpAddress: $("#serverIpAddresshidden").val(),
-    url: "/paas/queryLastHourTransactionTypeReportByClient",
+    url: contextPath+"/paas/queryLastHourTransactionTypeReportByClient",
     totalSize: 0,
     type: $("#type").val(),
     time: $("#time").val(),
@@ -199,7 +199,7 @@ var global_Object = {
         $("#form").submit({serverAppName: "123", age: "年龄"});
     },
     openPostWindow: function (obj) {
-        var url = "/paas/serversysrealtime";
+        var url = contextPath+"/paas/serversysrealtime";
         var datas = {
             "transactionTypeName": $(obj).parents("tr").data("transactionyypename"),
             "serverIpAddress": $(obj).parents("tr").data("serveripaddress") == undefined ? "" : $(obj).parents("tr").data("serveripaddress"),
@@ -213,7 +213,7 @@ var global_Object = {
         JqCommon.openPostWindow(url, datas);
     },
     openPostFalse: function (obj) {
-        var url = "/paas/serverdetailedrealtime";
+        var url = contextPath+"/paas/serverdetailedrealtime";
         var datas = {
             "transactionTypeName": global_Object.transactionTypeName,
             "serverIpAddress": global_Object.serverIpAddress,
@@ -229,7 +229,7 @@ var global_Object = {
         JqCommon.openPostWindow(url, datas);
     },
     openPostTotalCount: function (obj) {
-        var url = "/paas/serverdetailedrealtime";
+        var url = contextPath+"/paas/serverdetailedrealtime";
         var datas = {
             "transactionTypeName": global_Object.transactionTypeName,
             "serverIpAddress": global_Object.serverIpAddress,

@@ -6,15 +6,15 @@ $(document).ready(function () {
 
     global_Object.initDomEvent();
     if (global_Object.type == "最近一小时") {
-        global_Object.url = "/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
     }
     else if (global_Object.type == "当天") {
-        global_Object.url = "/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
     }
     else if (global_Object.type == "指定小时") {
-        global_Object.url = "/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
     }
-    $.post("/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
+    $.post(contextPath+"/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
 //alert( $("#serverIpAddresshidden").val());
         if (global_Object.serverIpAddress == "") {
             $("#serverIpAddresss").html("所有主机" + ' <i class="fa  fa-caret-down"></i>');
@@ -47,7 +47,7 @@ var global_Object = {
     tableDataOld: [],
     tableData: [],
     serverIpAddress: $("#serverIpAddresshidden").val(),
-    url: "/paas/queryLastHourTransactionTypeReportByClient",
+    url: contextPath+"/paas/queryLastHourTransactionTypeReportByClient",
     totalSize: 0,
     type: $("#type").val(),
     time: $("#time").val(),

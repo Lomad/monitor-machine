@@ -18,7 +18,7 @@ $(document).ready(function () {
     global_Object.time = $("#time").val();
 
     /* 初始化右上角系统选择下拉框 */
-    $.post("/paas/qeryAllDomain", {}, function (data) {
+    $.post("contextPath/paas/qeryAllDomain", {}, function (data) {
         /* 动态生成的标签 */
         var li = [];
         $.each(data, function (i, v) {
@@ -83,7 +83,7 @@ $(document).ready(function () {
         "width": "100%"
     });
     //console.log(global_Object)
-    fTable.queryDataInPage("/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
+    fTable.queryDataInPage("contextPath/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
 });
 var global_Object = {
     serverAppName:$("serverAppName").val(),
@@ -113,7 +113,7 @@ var global_Object = {
         index2=0;
         json2=[];
 
-        fTable.queryDataInPage("/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
+        fTable.queryDataInPage("contextPath/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
     },
 
     detail: function (obj,json) {

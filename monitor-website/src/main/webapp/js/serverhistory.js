@@ -3,7 +3,7 @@
  */
 $(document).ready(function () {
     global_Object.initDomEvent();
-    $.post("/paas/qeryAllDomain", {}, function (data) {
+    $.post(contextPath+"/paas/qeryAllDomain", {}, function (data) {
         $("#flname").html(data[0] + ' <i class="fa  fa-caret-down"></i>');
         global_Object.flname = data[0];
         global_Object.queryTableData();
@@ -24,7 +24,7 @@ var global_Object = {
     tableDataOld: [],
     tableData: [],
     flname: "",
-    url: "/paas/queryTodayTransactionTypeReportByServer",
+    url: contextPath+"/paas/queryTodayTransactionTypeReportByServer",
     totalSize: 0,
     type:"day",
     value:"",
@@ -279,7 +279,7 @@ var global_Object = {
     queryPic: function (obj) {
         $("#echart").css("width", $("#picEdit").width() * 0.6 - 30);
         $("#picEdit").modal("show");
-        var url ="/paas/queryTodayTransactionTypeCallTimesReportByServer";
+        var url =contextPath+"/paas/queryTodayTransactionTypeCallTimesReportByServer";
         $.post(url, {serverAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress")}, function (data) {
             var json=[];
             var name =[]
@@ -330,7 +330,7 @@ var global_Object = {
     openPostWindow:function(obj){
         global_Object.value = $("#datevalue").val();
         //console.log(global_Object.type);
-        var url ="/paas/serversyshistory";
+        var url =contextPath+"/paas/serversyshistory";
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value};
         console.log(datas);
         //alert($(obj).data("transactionyypename"))
@@ -338,7 +338,7 @@ var global_Object = {
     },
     openPostAvg:function(obj){
         global_Object.value = $("#datevalue").val();
-        var url ="/paas/serverstephistory";
+        var url =contextPath+"/paas/serverstephistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value};
         //console.log(datas);
@@ -347,7 +347,7 @@ var global_Object = {
     },
     openPostTotalCount:function(obj){
         global_Object.value = $("#datevalue").val();
-        var url ="/paas/serverdetailedhistory";
+        var url =contextPath+"/paas/serverdetailedhistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":""};
         console.log(datas);
@@ -356,7 +356,7 @@ var global_Object = {
     },
     openPostFalse:function(obj){
         global_Object.value = $("#datevalue").val();
-        var url ="/paas/serverdetailedhistory";
+        var url =contextPath+"/paas/serverdetailedhistory";
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"value":global_Object.value,"clientAppName":"","clientIpAddress":"","status":"失败"};
         console.log(datas)
         console.log("----")
