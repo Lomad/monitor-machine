@@ -5,7 +5,7 @@
 
 $(document).ready(function(){
     global_Object.initDomEvent();
-    $.post("contextPath/paas/qeryAllDomain",{},function(data){
+    $.post(contextPath+"/paas/qeryAllDomain",{},function(data){
         $("#flname").html(data[0]+" <i class=\"fa fa-caret-down\"></i>");
         global_Object.flname = data[0];
         global_Object.queryTableData();
@@ -26,7 +26,7 @@ var global_Object={
     tableData:[],
     totalSize: 0,
     flname:"",
-    url: "contextPath/paas/queryTodayTransactionTypeReportByServer",
+    url: contextPath+"/paas/queryTodayTransactionTypeReportByServer",
     initDomEvent:function(){
         $("#date_picker").datepicker({
             language: "zh-CN",
@@ -164,13 +164,12 @@ var global_Object={
                 });
             }
         });
-        console.log(tableHtml.join(""));
         $("#fTable tbody").html(tableHtml.join(""));
     },
     queryPic: function (obj) {
         $("#echart").css("width", $("#picEdit").width() * 0.6 - 30);
         $("#picEdit").modal("show");
-        var url ="contextPath/paas/queryTodayTransactionTypeCallTimesReportByServer";
+        var url =contextPath+"/paas/queryTodayTransactionTypeCallTimesReportByServer";
         $.post(url, {serverAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress")}, function (data) {
             var json=[];
             var name =[]
@@ -220,20 +219,17 @@ var global_Object={
     },
     openPostAvg:function(obj){
         global_Object.value = $("#datevalue").val();
-        var url ="contextPath/paas/serverstephistory";
+        var url =contextPath+"/paas/serverstephistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value};
-        //console.log(datas);
-        //alert($(obj).data("transactionyypename"))
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value,historyPageType:"client"};
         JqCommon.openPostWindow(url,datas);
     },
     openPostTotalCount:function(obj){
         global_Object.value = $("#datevalue").val();
-        var url ="contextPath/paas/serverdetailedhistory";
+        var url =contextPath+"/paas/serverdetailedhistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":"",historyPageType:"client"};
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":"",historyPageType:"client"};
         console.log(datas);
-        //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
     }
 

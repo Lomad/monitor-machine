@@ -12,8 +12,8 @@
         <span>©2016 winninghealth</span>
     </div>
 </div>
-<input value="${contextPath}" id="contextPath">
     <#assign contextPath=request.contextPath>
+<input type="hidden" value="${contextPath}" id="contextPath">
 <!--[if lt IE 9]>
 <script src="${contextPath}/assets/plugins/respond.min.js"></script>
 <script src="${contextPath}/assets/plugins/excanvas.min.js"></script>
@@ -61,19 +61,19 @@
     });
 
     var pathname = window.location.pathname.replace("#", "");
-    if(pathname=="/paas/serverdetailedrealtime" || pathname=="/paas/serversysrealtime" || pathname=="/paas/serversteprealtime"){
-        pathname="/paas/serverrealtime";
+    if(pathname== contextPath+"/paas/serverdetailedrealtime" || pathname==contextPath+"/paas/serversysrealtime" || pathname==contextPath+"/paas/serversteprealtime"){
+        pathname=contextPath+"/paas/serverrealtime";
     }
 
-    if(pathname=="/paas/serverdetailedhistory" || pathname=="/paas/serversyshistory" || pathname=="/paas/serverstephistory"){
+    if(pathname==contextPath+"/paas/serverdetailedhistory" || pathname==contextPath+"/paas/serversyshistory" || pathname==contextPath+"/paas/serverstephistory"){
         if(document.getElementById("historypagetype")!= null){
             if($("#historypagetype").val()=="client"){
-                pathname="/paas/clienthistory";
+                pathname=contextPath+"/paas/clienthistory";
             }else{
-                pathname="/paas/serverhistory";
+                pathname=contextPath+"/paas/serverhistory";
             }
         }else{
-            pathname="/paas/serverhistory";
+            pathname=contextPath+"/paas/serverhistory";
         }
     }
     var li = $("a[href='" + pathname + "']").parent("li");

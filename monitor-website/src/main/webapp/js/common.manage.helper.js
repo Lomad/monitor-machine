@@ -112,7 +112,7 @@ alert(data);
         var tempForm = document.createElement("form");
         tempForm.id = "tempForm1";
         tempForm.method = "post";
-        tempForm.action = contextPath+url;
+        tempForm.action = url;
         //tempForm.target="_blank"; //打开新页面
         var hideInput1 = document.createElement("input");
         hideInput1.type = "hidden";

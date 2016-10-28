@@ -340,7 +340,7 @@ var global_Object = {
         global_Object.value = $("#datevalue").val();
         var url =contextPath+"/paas/serverstephistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value};
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,historyPageType:"server"};
         //console.log(datas);
         //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
@@ -349,7 +349,7 @@ var global_Object = {
         global_Object.value = $("#datevalue").val();
         var url =contextPath+"/paas/serverdetailedhistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":""};
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":"",historyPageType:"server"};
         console.log(datas);
         //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
