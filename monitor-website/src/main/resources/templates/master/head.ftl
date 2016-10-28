@@ -179,12 +179,12 @@
                 <ul class="sub-menu">
 
                     <li data-level="2">
-                        <a href="/paas/serverrealtime"" >
+                        <a href="${contextPath}/paas/serverrealtime"" >
                             服务方监控
                         </a>
                     </li>
                     <li data-level="2">
-                        <a href="/paas/clientrealtime"">
+                        <a href="${contextPath}/paas/clientrealtime"">
 消费方监控
                         </a>
                     </li>
@@ -200,12 +200,12 @@
                 <ul class="sub-menu">
 
                     <li data-level="2">
-                        <a href="/paas/serverhistory" >
+                        <a href="${contextPath}/paas/serverhistory" >
                             服务方监控
                         </a>
                     </li>
                     <li data-level="2">
-                        <a href="/paas/clienthistory">
+                        <a href="${contextPath}/paas/clienthistory">
                             消费方监控
                         </a>
                     </li>
