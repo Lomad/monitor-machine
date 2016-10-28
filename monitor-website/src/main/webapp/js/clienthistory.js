@@ -23,6 +23,8 @@ $(document).ready(function(){
 });
 
 var global_Object={
+    type:"day",
+    value:"",
     tableData:[],
     totalSize: 0,
     flname:"",
@@ -134,9 +136,9 @@ var global_Object={
     },
     setTable:function(){
         var alltr = function(length,i,data){
-            var tr = '';
+            var tr = '<tr data-transactiontypename="'+data.transactionTypeName+'" data-serveripaddress="'+data.serverIpAddress+'">';
             if(i==0){
-                tr+='<tr><td rowspan='+length+' class="vam tac">'+data.transactionTypeName+'</td>';
+                tr+='<td rowspan='+length+' class="vam tac">'+data.transactionTypeName+'</td>';
             }
             tr += '<td>' + data.serverIpAddress + '</td>';
             tr += '<td><a onclick="global_Object.openPostTotalCount(this)" href="javascript:void(0)">' + data.totalCount + '次</a></td>';
@@ -160,10 +162,11 @@ var global_Object={
             if (StatisticDatas != null &&StatisticDatas.length > 0) {
                 $.each(StatisticDatas, function (i2, v2) {
                     tableHtml.push(alltr(length,i2,v2));
+                    console.log(v2)
                 });
             }
         });
-        console.log(tableHtml.join(""));
+        //console.log(tableHtml.join(""));
         $("#fTable tbody").html(tableHtml.join(""));
     },
     queryPic: function (obj) {
