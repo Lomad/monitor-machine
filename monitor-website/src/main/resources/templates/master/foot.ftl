@@ -12,6 +12,7 @@
         <span>©2016 winninghealth</span>
     </div>
 </div>
+<input value="${contextPath}" id="contextPath">
     <#assign contextPath=request.contextPath>
 <!--[if lt IE 9]>
 <script src="${contextPath}/assets/plugins/respond.min.js"></script>
@@ -48,6 +49,7 @@
 <script src="${contextPath}/js/index.js" type="text/javascript"></script>
 <script src="${contextPath}/js/common.manage.helper.js" type="text/javascript"></script>
 <script type="text/javascript">
+    var contextPath=$("#contextPath").val();
     $(".firstMenu").on("click",function(){
         $(this).addClass("active").siblings().removeClass("active");
         var obj =this;
