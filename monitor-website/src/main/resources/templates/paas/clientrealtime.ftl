@@ -66,11 +66,12 @@
                     </span>
             </div>
         </div>
+
         <div class=" pl0 pr0">
             <table id="fTable" class="table table-head  table-condensed flip-content">
                 <thead class="flip-content">
                 <tr>
-                    <th>服务类型</th>
+                    <th class="tac">服务类型</th>
                     <th>服务名称</th>
                     <th class="numeric sorting">调用次数</th>
                     <th class="numeric sorting">平均耗时</th>

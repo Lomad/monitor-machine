@@ -89,14 +89,16 @@ var global_Object = {
          });
     },
     setTable: function (flname) {
-        var alltr = function (data, type) {
+        var alltr = function (length, i, data) {
             var tr = '<tr data-transactiontypename="'+data.transactionTypeName+'" data-serveripaddress="'+data.serverIpAddress+'">';
-            if (type == "transactionTypeName") {
-                tr += '<td>' + flname + '</td>';
-                //tr += '<td><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)">' + data.transactionTypeName + '</a></td>';
-                tr += '<td>' + data.transactionTypeName + '</td>';
+            if(i==0){
+                tr+='<td rowspan='+length+' class="vam tac">'+data.transactionTypeName+'</td>';
             }
-
+            //if (type == "transactionTypeName") {
+            //    tr += '<td>' + flname + '</td>';
+            //    tr += '<td><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)">' + data.transactionTypeName + '</a></td>';
+            //}
+            tr += '<td>' + data.serverAppName + '</td>';
             tr += '<td><a onclick="global_Object.openPostTotalCount(this)" href="javascript:void(0)">' + data.totalCount + '次</a></td>';
             tr += '<td><a onclick="global_Object.openPostAvg(this)" href="javascript:void(0)">' + data.avg + 'ms</a></td>';
             tr += '<td>' + data.line99Value + 'ms</td>';
@@ -108,38 +110,21 @@ var global_Object = {
             tr += '<td>' + data.failPercent*100 + '%</td>';
             tr += '<td>' + data.std + 'ms</td>';
             tr += '<td  style="padding-left: 30px"><i class="fa  fa-bar-chart-o cp" onclick="global_Object.queryPic(this)"></i></td>';
+            tr += '</tr>';
             return tr;
         };
-        //console.log(global_Object.tableData)
+
         var html = [];
         $.each(global_Object.tableData, function (i, v) {
-            html.push(alltr(v, "transactionTypeName"));
-            /* 子表数据 == 删除
-            var tableHtml = '<tr class="" style="display: none"><td colspan="12"><div class="ml15 mr15"> <table class="table table-head  table-condensed flip-content"> <thead class="flip-content ">';
-            tableHtml += '<tr>';
-            tableHtml += '<th class="">服务器地址</th>';
-            tableHtml += ' <th class="numeric ">调用次数</th>';
-            tableHtml += ' <th class="numeric ">平均耗时</th>';
-            tableHtml += ' <th class="numeric ">99%</th>';
-            tableHtml += ' <th class="numeric ">95%</th>';
-            tableHtml += ' <th class="numeric ">最短耗时</th>';
-            tableHtml += ' <th class="numeric ">最长耗时</th>';
-            tableHtml += ' <th class="numeric ">吞吐量</th>';
-            tableHtml += ' <th class="numeric ">失败次数</th>';
-            tableHtml += ' <th class="numeric ">失败率</th>';
-            tableHtml += ' <th class="numeric ">方差</th>';
-            tableHtml += ' <th class="numeric ">显示图表</th>';
-            tableHtml += '</tr></thead><tbody>';
-            if (v.transactionStatisticDataDetails != null && v.transactionStatisticDataDetails.length > 0) {
-                $.each(v.transactionStatisticDataDetails, function (i2, v2) {
-                    tableHtml += alltr(v2, "serverIpAddress");
+            var StatisticDatas = v.transactionStatisticDataDetails;
+            var length =StatisticDatas.length;
+            if (StatisticDatas != null && StatisticDatas.length > 0) {
+                $.each(StatisticDatas, function (i2, v2) {
+                    html.push(alltr(length,i2,v2));
                 });
             }
-            tableHtml += ' </tbody></table></div></td></tr>';
-            html.push(tableHtml);
-            */
         });
-
+        console.log(html);
         $("#fTable tbody").html(html.join(""));
         /* 子表动作 == 删除
         $("#fTable .icon").on("click", function () {
@@ -221,12 +206,13 @@ var global_Object = {
     /* ‘调用次数’之跳转锚点 */
     openPostTotalCount:function(obj){
         var url ="/paas/clientdetailedrealtime";
+        console.log($(obj).parents("tr"));
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":""};
         JqCommon.openPostWindow(url,datas);
     },
     /* ‘平均耗时’ 之跳转锚点 */
     openPostAvg:function(obj){
-        var url ="/paas/serversteprealtime";
+        var url ="/paas/clientsteprealtime";
         //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
         //console.log(datas);
