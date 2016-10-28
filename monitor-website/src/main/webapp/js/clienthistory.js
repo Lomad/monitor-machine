@@ -23,6 +23,7 @@ $(document).ready(function(){
 });
 
 var global_Object={
+    tableDataOld: [],
     tableData:[],
     totalSize: 0,
     flname:"",
@@ -53,6 +54,23 @@ var global_Object={
                 var week = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
                 $("#datevalue").val(global_Object.getNewDay(week));
             }
+        });
+
+        /* 查询框的过滤的功能 */
+        $("#querybtn").on("click",function(){
+            global_Object.setTableData("search",this);
+        });
+        /* 可排序字段的排序功能 */
+        $("#fTable .sorting").on("click", function () {
+            if ($(this).hasClass("desc")) {
+                $(this).addClass("asc").removeClass("desc");
+                global_Object.setTableData("asc",this);
+            }
+            else {
+                $(this).addClass("desc").removeClass("asc");
+                global_Object.setTableData("desc",this);
+            }
+
         });
 
     },
@@ -126,12 +144,67 @@ var global_Object={
     },
     queryTableData:function(){
         $.post(global_Object.url,{flname:global_Object.flname},function(data){
-            //console.log(data);
+            global_Object.tableDataOld =data.transactionStatisticDatas;
             global_Object.totalSize = data.totalSize;
             global_Object.tableData = data.transactionStatisticDatas;
             global_Object.setTable();
         });
     },
+
+    setTableData:function(type,obj){
+        if(type =="search"){
+            var tableData=[];
+            $.each(global_Object.tableDataOld,function(i,v){
+                if(v.transactionTypeName.indexOf($.trim($("#keyword").val()))>-1){
+                    tableData.push(v);
+                }
+            });
+            global_Object.tableData=tableData;
+            //console.log(global_Object.tableData);
+        }
+        else if(type=="asc"){
+            var id= $(obj).data("id");
+            //冒泡排序
+            var array = global_Object.tableData;
+            var temp =0;
+            for (var i = 0; i < array.length; i++)
+            {
+                for (var j = 0; j < array.length - i-1; j++)
+                {
+                    if (array[j][id] > array[j + 1][id])
+                    {
+                        temp = array[j + 1];
+                        array[j + 1] = array[j];
+                        array[j] = temp;
+                    }
+                }
+            }
+            global_Object.tableData=array;
+            //console.log(global_Object.tableData);
+        }
+        else if(type=="desc"){
+            var id= $(obj).data("id");
+            var array =global_Object.tableData;
+            //var array = [3,5,1,6];
+            var temp =0;
+            for (var i = 0; i < array.length; i++)
+            {
+                for (var j = 0; j < array.length - i-1; j++)
+                {
+                    if (array[j][id] < array[j + 1][id])
+                    {
+                        temp = array[j + 1];
+                        array[j + 1] = array[j];
+                        array[j] = temp;
+                    }
+                }
+            }
+            global_Object.tableData=array;
+            //console.log(global_Object.tableData);
+        }
+        global_Object.setTable();
+    },
+
     setTable:function(){
         var alltr = function(length,i,data){
             var tr = '<tr data-transactiontypename="'+data.transactionTypeName+'" data-serveripaddress="'+data.serverIpAddress+'">';
@@ -166,6 +239,7 @@ var global_Object={
         });
         $("#fTable tbody").html(tableHtml.join(""));
     },
+
     queryPic: function (obj) {
         $("#echart").css("width", $("#picEdit").width() * 0.6 - 30);
         $("#picEdit").modal("show");
