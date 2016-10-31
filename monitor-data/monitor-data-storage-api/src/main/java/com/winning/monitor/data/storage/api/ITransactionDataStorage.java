@@ -29,6 +29,9 @@ public interface ITransactionDataStorage {
     List<TransactionReportVO> queryHistoryTransactionReports(String domain, String startTime, String endTime,
                                                              TransactionReportType type);
 
+    List<TransactionReportVO> queryHistoryTransactionReports(String domain, String startTime, String endTime,
+                                                             TransactionReportType type, Map<String, Object> map);
+
     List<TransactionReportVO> queryTransactionReportsByType(String domain, String startTime, String typeName,
                                                             TransactionReportType type);
 
