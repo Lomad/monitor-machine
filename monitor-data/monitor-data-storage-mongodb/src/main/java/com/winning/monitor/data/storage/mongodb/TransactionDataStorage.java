@@ -156,6 +156,32 @@ public class TransactionDataStorage implements ITransactionDataStorage {
         return transactionReports;
     }
 
+
+    @Override
+    public List<TransactionReportVO> queryHistoryTransactionReports(String domain, String startTime, String endTime,TransactionReportType type,Map<String, Object> map) {
+        Query query = new Query();
+        query.addCriteria(new Criteria("domain").is(domain));
+        query.addCriteria(new Criteria("startTime").gte(startTime).lte(endTime));
+        query.addCriteria(new Criteria("type").is(type.getName()));
+        String collectionName = this.getHistoryCollectionName(type);
+
+        if (map != null && map.containsKey("transactionType"))
+            query.addCriteria(new Criteria("machines.transactionClients.transactionTypes.name").is(map.get("transactionType")));
+        if (map != null && map.containsKey("serverIp"))
+            query.addCriteria(new Criteria("machines.ip").is(map.get("serverIp")));
+
+        List<TransactionReportVO> list =
+                this.mongoTemplate.find(query, TransactionReportVO.class, collectionName);
+
+        if (list != null) {
+            for (TransactionReportVO report : list)
+                report.initialReport();
+        }
+
+        return list;
+    }
+
+
     @Override
     public List<TransactionReportVO> queryTransactionReportsByType(String domain, String startTime, String typeName, TransactionReportType type) {
         Query query = new Query();
