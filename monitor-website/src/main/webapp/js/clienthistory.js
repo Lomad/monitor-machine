@@ -28,6 +28,8 @@ var global_Object={
     totalSize: 0,
     flname:"",
     url: contextPath+"/paas/queryTodayTransactionTypeReportByServer",
+    dttype:"",
+    dttime:"",
     initDomEvent:function(){
         $("#date_picker").datepicker({
             language: "zh-CN",
@@ -39,22 +41,50 @@ var global_Object={
         var date = new Date();
         var yesterday = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate()-1);
         $("#date_picker").datepicker('update',yesterday);
+        // 日历类型选择器修改时间的触发锚点: 下传时间类型和时间字符串，并post到不同的URL
         $("#sel a").on('click',function(){
             var data =$(this).attr("data");
             $("#selbtn").html($(this).text()+' <i class="fa  fa-caret-down"></i>');
             global_Object.selectType(data);
+
+            global_Object.dttype = data;
+            global_Object.dttime = $('#datevalue').val();
+            if(global_Object.dttype == "day"){
+                global_Object.url = contextPath + "/paas/queryDayTransactionTypeReportByClient";
+                global_Object.queryTableData();
+            }else if(global_Object.dttype == "week"){
+                global_Object.url = contextPath + "/paas/queryWeekTransactionTypeReportByClient";
+                global_Object.queryTableData();
+            }else if(global_Object.dttype == "month"){
+                global_Object.url = contextPath + "/paas/queryMonthTransactionTypeReportByClient";
+                global_Object.queryTableData();
+            }
+            //alert( global_Object.dttime );
         });
+        // 日历选择器修改时间的触发锚点
         $("#date_picker").datepicker().on('hide', function(){
             var date = $('#datevalue').val();
-            if(global_Object.type=="week"&&date!=""){
+            if(global_Object.type=="week" && date!=""){
                 var newdate = global_Object.getNewDay(date);
                 $('#datevalue').val(newdate);
-            }else if(global_Object.viewId==2&&date==""){
-                var date = new Date();
-                var week = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
-                $("#datevalue").val(global_Object.getNewDay(week));
             }
+            //alert($('#datevalue').val());
+            global_Object.dttime = $('#datevalue').val();
+            if(global_Object.dttype == "day"){
+                global_Object.url = contextPath + "/paas/queryDayTransactionTypeReportByClient";
+                global_Object.queryTableData();
+            }else if(global_Object.dttype == "week"){
+                global_Object.url = contextPath + "/paas/queryWeekTransactionTypeReportByClient";
+                global_Object.queryTableData();
+            }else if(global_Object.dttype == "month"){
+                global_Object.url = contextPath + "/paas/queryMonthTransactionTypeReportByClient";
+                global_Object.queryTableData();
+            }
+            //alert( global_Object.dttime );
         });
+        //$("#date_picker").datepicker().on('changeDate', function(){
+        //    alert("date-picker:"+$('#datevalue').val());
+        //});
 
         /* 查询框的过滤的功能 */
         $("#querybtn").on("click",function(){
@@ -143,14 +173,13 @@ var global_Object={
         return (getdate(monday)+"-"+getdate(millSeconds));
     },
     queryTableData:function(){
-        $.post(global_Object.url,{flname:global_Object.flname},function(data){
+        $.post(global_Object.url,{flname:global_Object.flname,dttype:global_Object.dttype, dttime:global_Object.dttime},function(data){
             global_Object.tableDataOld =data.transactionStatisticDatas;
             global_Object.totalSize = data.totalSize;
             global_Object.tableData = data.transactionStatisticDatas;
             global_Object.setTable();
         });
     },
-
     setTableData:function(type,obj){
         if(type =="search"){
             var tableData=[];
@@ -204,7 +233,6 @@ var global_Object={
         }
         global_Object.setTable();
     },
-
     setTable:function(){
         var alltr = function(length,i,data){
             var tr = '<tr data-transactiontypename="'+data.transactionTypeName+'" data-serveripaddress="'+data.serverIpAddress+'">';
@@ -240,7 +268,6 @@ var global_Object={
         });
         $("#fTable tbody").html(tableHtml.join(""));
     },
-
     queryPic: function (obj) {
         $("#echart").css("width", $("#picEdit").width() * 0.6 - 30);
         $("#picEdit").modal("show");
