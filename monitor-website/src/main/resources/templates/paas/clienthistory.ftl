@@ -32,7 +32,7 @@
             </ul>
         </div>
         <div id="date_picker"  class="input-group input-medium date date-picker" data-date-end-date="+0d">
-            <input id="datevalue" type="text" class="form-control" readonly>
+            <input id="datevalue" type="text" class="form-control" style="border-radius:0;border:0" readonly>
             <span class="input-group-btn">
             <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
             </span>
