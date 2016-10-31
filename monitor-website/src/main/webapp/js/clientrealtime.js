@@ -1,11 +1,11 @@
 /**
- * Created by Admin on 2016/10/21.
+ * Created by InnerPeace on 2016/10/24.
  */
 
 $(document).ready(function () {
 
     global_Object.initDomEvent();
-
+    //var json={"a":"EMPI基础服务","b":100,"c":10,"d":3,"e":15,"f":100,"g":9,"h":"3%",children:[{"a":"192.168.0.1","b":100,"c":10,"d":3,"e":15,"f":100,"g":9,"h":"3%"},{"a":"192.168.0.2","b":100,"c":10,"d":3,"e":15,"f":100,"g":9,"h":"3%"},{"a":"192.168.0.3","b":100,"c":10,"d":3,"e":15,"f":100,"g":9,"h":"3%"}]};
     //var data=[];
     //for(var i=0;i<20;i++){
     //    global_Object.tableData.push(json);
@@ -14,21 +14,23 @@ $(document).ready(function () {
         $("#flname").html(data[0] + ' <i class="fa  fa-caret-down"></i>');
         global_Object.flname = data[0];
         global_Object.queryTableData();
+
         var li = [];
         $.each(data, function (i, v) {
             var option = '<li role="presentation"><a role="menuitem" tabindex="-1">' + v + '</a></li>';
             li.push(option);
         });
         $("#fl").html(li.join(""));
+
         $("#fl a").on("click", function () {
             $("#flname").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
             global_Object.flname = $(this).text();
             global_Object.queryTableData();
         });
-
-
     });
+
 });
+
 var global_Object = {
     tableDataOld: [],
     tableData: [],
@@ -38,7 +40,6 @@ var global_Object = {
     type:"最近一小时",
     time:"",
     initDomEvent: function () {
-
         $("#time1").on("click", function () {
             global_Object.url = contextPath+"/paas/queryTransactionTypeList";
             global_Object.type="最近一小时";
@@ -63,9 +64,6 @@ var global_Object = {
             $("#time3").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
             global_Object.queryTableData();
         });
-        //$("#picEdit").on("show.bs.modal", function () {
-        //    global_Object.queryPic();
-        //});
         $("#querybtn").on("click",function(){
             global_Object.setTableData("search",this);
         });
@@ -81,15 +79,79 @@ var global_Object = {
 
         });
     },
-    queryTableData: function () {
+    queryTableData:function(){
         $.post(global_Object.url, {flname: global_Object.flname}, function (data) {
-            //console.log(data);
-            global_Object.tableDataOld =data.transactionStatisticDatas;
-            global_Object.tableData = data.transactionStatisticDatas;
-            global_Object.totalSize = data.totalSize;
-            global_Object.setTable();
-        });
+         console.log(data);
+         global_Object.tableDataOld =data.transactionStatisticDatas;
+         global_Object.tableData = data.transactionStatisticDatas;
+         global_Object.totalSize = data.totalSize;
+         global_Object.setTable(global_Object.flname);
+         });
     },
+    setTable: function (flname) {
+        var alltr = function (length, i, data) {
+            var tr = '<tr data-transactiontypename="'+data.transactionTypeName+'" data-serveripaddress="'+data.serverIpAddress+'">';
+            if(i==0){
+                tr+='<td rowspan='+length+' class="vam tac">'+data.transactionTypeName+'</td>';
+            }
+            //if (type == "transactionTypeName") {
+            //    tr += '<td>' + flname + '</td>';
+            //    tr += '<td><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)">' + data.transactionTypeName + '</a></td>';
+            //}
+            tr += '<td>' + data.serverAppName + '</td>';
+            tr += '<td><a onclick="global_Object.openPostTotalCount(this)" href="javascript:void(0)">' + data.totalCount + '次</a></td>';
+            tr += '<td><a onclick="global_Object.openPostAvg(this)" href="javascript:void(0)">' + data.avg + 'ms</a></td>';
+            tr += '<td>' + data.line99Value + 'ms</td>';
+            tr += '<td>' + data.line95Value + 'ms</td>';
+            tr += '<td>' + data.min + 'ms</td>';
+            tr += '<td>' + data.max + 'ms</td>';
+            tr += '<td>' + data.tps + '</td>';
+            tr += '<td><a onclick="global_Object.openPostFalse(this)" href="javascript:void(0)">' + data.failCount + '次</a></td>';
+            tr += '<td>' + data.failPercent*100 + '%</td>';
+            tr += '<td>' + data.std + 'ms</td>';
+            tr += '<td  style="padding-left: 30px"><i class="fa  fa-bar-chart-o cp" onclick="global_Object.queryPic(this)"></i></td>';
+            tr += '</tr>';
+            return tr;
+        };
+
+        var html = [];
+        $.each(global_Object.tableData, function (i, v) {
+            var StatisticDatas = v.transactionStatisticDataDetails;
+            var length =StatisticDatas.length;
+            if (StatisticDatas != null && StatisticDatas.length > 0) {
+                $.each(StatisticDatas, function (i2, v2) {
+                    html.push(alltr(length,i2,v2));
+                });
+            }
+        });
+        console.log(html);
+        $("#fTable tbody").html(html.join(""));
+        /* 子表动作 == 删除
+        $("#fTable .icon").on("click", function () {
+            var tr = $(this).parents("tr");
+            if ($(this).hasClass("fa-chevron-down")) {
+                $(tr).next("tr").fadeIn();
+                $(this).addClass("fa-chevron-up").removeClass("fa-chevron-down");
+            }
+            else {
+                $(tr).next("tr").fadeOut();
+                $(this).addClass("fa-chevron-down").removeClass("fa-chevron-up");
+            }
+        });*/
+    },
+
+    /* ‘服务名称’或 ‘服务地址’之跳转锚点
+     openPostWindow:function(obj){
+     var url =contextPath+"/paas/serversysrealtime";
+     //alert($(obj).parents("tr").data("transactiontypename"))
+     var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
+     //console.log(datas);
+     //alert($(obj).data("transactionyypename"))
+     JqCommon.openPostWindow(url,datas);//通用的超链接功能接口
+     },
+     */
+
+    /* 模糊过滤、升序标签、降序标签之函数调用 */
     setTableData:function(type,obj){
         if(type =="search"){
             var tableData=[];
@@ -103,13 +165,6 @@ var global_Object = {
         }
         else if(type=="asc"){
             var id= $(obj).data("id");
-            //$.each(global_Object.tableData,function(i,v) {
-            //    var a = v[id];
-            //    $.each(tableData,function(i2,v2){
-            //        var b =v2[id];
-            //        if(a)
-            //    });
-            //});
             //冒泡排序
             var array = global_Object.tableData;
             var temp =0;
@@ -146,74 +201,25 @@ var global_Object = {
             }
             global_Object.tableData=array;
         }
-        global_Object.setTable();
+        global_Object.setTable(global_Object.flname);
     },
-    setTable: function () {
-        var alltr = function (data, type) {
-            var tr = '<tr data-transactiontypename="'+data.transactionTypeName+'" data-serveripaddress="'+data.serverIpAddress+'">';
-            if (type == "transactionTypeName") {
-                tr += '<td><i class="fa  icon cp fa-chevron-down"></i><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)">' + data.transactionTypeName + '</a></td>';
-            }
-            else if (type == "serverIpAddress") {
-                tr += '<td><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)" >' + data.serverIpAddress + '</a></td>';
-            }
-
-            tr += '<td><a onclick="global_Object.openPostTotalCount(this)" href="javascript:void(0)">' + data.totalCount + '次</a></td>';
-            tr += '<td><a onclick="global_Object.openPostAvg(this)" href="javascript:void(0)">' + data.avg + 'ms</a></td>';
-            tr += '<td>' + data.line99Value + 'ms</td>';
-            tr += '<td>' + data.line95Value + 'ms</td>';
-            tr += '<td>' + data.min + 'ms</td>';
-            tr += '<td>' + data.max + 'ms</td>';
-            tr += '<td>' + data.tps + '</td>';
-            tr += '<td><a onclick="global_Object.openPostFalse(this)" href="javascript:void(0)">' + data.failCount + '次</a></td>';
-            tr += '<td>' + data.failPercent*100 + '%</td>';
-            tr += '<td>' + data.std + 'ms</td>';
-            tr += '<td><i class="fa  fa-bar-chart-o cp" onclick="global_Object.queryPic(this)"></i></td>';
-            return tr;
-        };
-        //console.log(global_Object.tableData)
-        var html = [];
-        $.each(global_Object.tableData, function (i, v) {
-            html.push(alltr(v, "transactionTypeName"));
-            var tableHtml = '<tr class="" style="display: none"><td colspan="12"><div class="ml15 mr15"> <table class="table table-head  table-condensed flip-content"> <thead class="flip-content ">';
-            tableHtml += '<tr>';
-            tableHtml += '<th class="">服务器地址</th>';
-            tableHtml += ' <th class="numeric ">调用次数</th>';
-            tableHtml += ' <th class="numeric ">平均耗时</th>';
-            tableHtml += ' <th class="numeric ">99%</th>';
-            tableHtml += ' <th class="numeric ">95%</th>';
-            tableHtml += ' <th class="numeric ">最短耗时</th>';
-            tableHtml += ' <th class="numeric ">最长耗时</th>';
-            tableHtml += ' <th class="numeric ">吞吐量</th>';
-            tableHtml += ' <th class="numeric ">失败次数</th>';
-            tableHtml += ' <th class="numeric ">失败率</th>';
-            tableHtml += ' <th class="numeric ">方差</th>';
-            tableHtml += ' <th class="numeric ">显示图表</th>';
-            tableHtml += '</tr></thead><tbody>';
-            if (v.transactionStatisticDataDetails != null && v.transactionStatisticDataDetails.length > 0) {
-                $.each(v.transactionStatisticDataDetails, function (i2, v2) {
-                    tableHtml += alltr(v2, "serverIpAddress");
-                });
-            }
-            tableHtml += ' </tbody></table></div></td></tr>';
-            html.push(tableHtml);
-        });
-        //console.log(html);
-        $("#fTable tbody").html(html.join(""));
-        $("#fTable .icon").on("click", function () {
-            var tr = $(this).parents("tr");
-            if ($(this).hasClass("fa-chevron-down")) {
-                $(tr).next("tr").fadeIn();
-                $(this).addClass("fa-chevron-up").removeClass("fa-chevron-down");
-            }
-            else {
-                $(tr).next("tr").fadeOut();
-                $(this).addClass("fa-chevron-down").removeClass("fa-chevron-up");
-            }
-        });
-        $("#form").submit({ serverAppName: "123", age: "年龄" });
+    /* ‘调用次数’之跳转锚点 */
+    openPostTotalCount:function(obj){
+        var url =contextPath+"/paas/clientdetailedrealtime";
+        console.log($(obj).parents("tr"));
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":""};
+        JqCommon.openPostWindow(url,datas);
     },
-
+    /* ‘平均耗时’ 之跳转锚点 */
+    openPostAvg:function(obj){
+        var url =contextPath+"/paas/clientsteprealtime";
+        //alert($(obj).parents("tr").data("transactiontypename"))
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
+        //console.log(datas);
+        //alert($(obj).data("transactionyypename"))
+        JqCommon.openPostWindow(url,datas);
+    },
+    /* '显示图表' 之跳转锚点 */
     queryPic: function (obj) {
         $("#echart").css("width", $("#picEdit").width() * 0.6 - 30);
         $("#picEdit").modal("show");
@@ -227,8 +233,7 @@ var global_Object = {
         else if(global_Object.type=="指定小时"){
             url =contextPath+"/paas/queryLastHourTransactionTypeCallTimesReportByServer";
         }
-//console.log($(obj).data("transactiontypename"))
-        //alert($(obj).data("transactiontypename"));alert(global_Object.flname);alert($(obj).data("serveripaddress"))
+
         $.post(url, {serverAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress")}, function (data) {
             var json=[];
             var name =[]
@@ -277,32 +282,13 @@ var global_Object = {
         });
 
     },
-    openPostWindow:function(obj){
-        var url =contextPath+"/paas/serversysrealtime";
-        //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
-        //console.log(datas);
-        //alert($(obj).data("transactionyypename"))
-        JqCommon.openPostWindow(url,datas);
-    },
-    openPostTotalCount:function(obj){
-        var url =contextPath+"/paas/serverdetailedrealtime";
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":""};
-        console.log(datas);
-        JqCommon.openPostWindow(url,datas);
-    },
+    /* '失败次数' 之跳转锚点 */
     openPostFalse:function(obj){
         var url =contextPath+"/paas/serverdetailedrealtime";
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":"失败"};
         JqCommon.openPostWindow(url,datas);
-    },
-    openPostAvg:function(obj){
-        var url =contextPath+"/paas/serversteprealtime";
-        //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
-        //console.log(datas);
-        //alert($(obj).data("transactionyypename"))
-        JqCommon.openPostWindow(url,datas);
     }
 
 }
+
+

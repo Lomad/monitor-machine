@@ -165,9 +165,10 @@
                 </ul>
             </li>
             <li class="" data-level="2" style="display:none">
-                <a href="/paas/overview">
+                <a href="${contextPath}/paas/overview">
                     <i class="fa fa-desktop fa-lg"></i>
-                    <span class="title">概览</span>
+                    <span class="title">概览
+                    </span>
                 </a>
             </li>
             <li class="" data-level="2" style="display:none">
@@ -179,13 +180,13 @@
                 <ul class="sub-menu">
 
                     <li data-level="2">
-                        <a href="/paas/serverrealtime"" >
+                        <a href="${contextPath}/paas/serverrealtime"" >
                             服务方监控
                         </a>
                     </li>
                     <li data-level="2">
-                        <a href="/paas/clientrealtime"">
-消费方监控
+                        <a href="${contextPath}/paas/clientrealtime"">
+                            消费方监控
                         </a>
                     </li>
 
@@ -200,12 +201,12 @@
                 <ul class="sub-menu">
 
                     <li data-level="2">
-                        <a href="/paas/serverhistory" >
+                        <a href="${contextPath}/paas/serverhistory" >
                             服务方监控
                         </a>
                     </li>
                     <li data-level="2">
-                        <a href="/paas/clienthistory">
+                        <a href="${contextPath}/paas/clienthistory">
                             消费方监控
                         </a>
                     </li>

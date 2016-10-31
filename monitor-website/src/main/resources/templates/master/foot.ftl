@@ -13,6 +13,7 @@
     </div>
 </div>
     <#assign contextPath=request.contextPath>
+<input type="hidden" value="${contextPath}" id="contextPath">
 <!--[if lt IE 9]>
 <script src="${contextPath}/assets/plugins/respond.min.js"></script>
 <script src="${contextPath}/assets/plugins/excanvas.min.js"></script>
@@ -48,6 +49,7 @@
 <script src="${contextPath}/js/index.js" type="text/javascript"></script>
 <script src="${contextPath}/js/common.manage.helper.js" type="text/javascript"></script>
 <script type="text/javascript">
+    var contextPath=$("#contextPath").val();
     $(".firstMenu").on("click",function(){
         $(this).addClass("active").siblings().removeClass("active");
         var obj =this;
@@ -57,9 +59,22 @@
         });
         //$(".page-sidebar-menu").find("li[data-level='"+$(this).data("level")+"']" ).show().siblings("not:li[data-level='"+$(this).data("level"):gt(0)").hide();
     });
+
     var pathname = window.location.pathname.replace("#", "");
-    if(pathname=="/paas/serverdetailedrealtime" || pathname=="/paas/serversysrealtime"){
-        pathname="/paas/serverrealtime";
+    if(pathname== contextPath+"/paas/serverdetailedrealtime" || pathname==contextPath+"/paas/serversysrealtime" || pathname==contextPath+"/paas/serversteprealtime"){
+        pathname=contextPath+"/paas/serverrealtime";
+    }
+
+    if(pathname==contextPath+"/paas/serverdetailedhistory" || pathname==contextPath+"/paas/serversyshistory" || pathname==contextPath+"/paas/serverstephistory"){
+        if(document.getElementById("historypagetype")!= null){
+            if($("#historypagetype").val()=="client"){
+                pathname=contextPath+"/paas/clienthistory";
+            }else{
+                pathname=contextPath+"/paas/serverhistory";
+            }
+        }else{
+            pathname=contextPath+"/paas/serverhistory";
+        }
     }
     var li = $("a[href='" + pathname + "']").parent("li");
     var level =$(li).data("level");
@@ -68,7 +83,7 @@
     $(li).parent("ul").show();
     $(li).parents("li").addClass("open");
     $(li).parents("li").find(".arrow ").addClass("open");
-    console.log( $("#firstMenu>li[data-level='"+level+"']"))
+//    console.log( $("#firstMenu>li[data-level='"+level+"']"))
     $("#firstMenu>li[data-level='"+level+"']").trigger("click");
     jQuery(document).ready(function () {
 //        $(".page-content").height($(".page-sidebar-menu").height())

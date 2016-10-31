@@ -1,34 +1,34 @@
 /**
- * Created by Evan on 2016/10/21.
+ * Created by Evan on 2016/10/27.
  */
-$(document).ready(function () {
+
+
+$(document).ready(function(){
     global_Object.initDomEvent();
-    $.post(contextPath+"/paas/qeryAllDomain", {}, function (data) {
-        $("#flname").html(data[0] + ' <i class="fa  fa-caret-down"></i>');
+    $.post(contextPath+"/paas/qeryAllDomain",{},function(data){
+        $("#flname").html(data[0]+" <i class=\"fa fa-caret-down\"></i>");
         global_Object.flname = data[0];
         global_Object.queryTableData();
-        var li = [];
-        $.each(data, function (i, v) {
-            var option = '<li class="cp" role="presentation"><a role="menuitem" tabindex="-1">' + v + '</a></li>';
-            li.push(option);
+        var html ='';
+        $.each(data,function(i,v){
+         html+='<li class="cp" role="presentation"><a role="menuitem" tabindex="-1">'+v+'</a></li>'
         });
-        $("#fl").html(li.join(""));
-        $("#fl a").on("click", function () {
-            $("#flname").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
-            global_Object.flname = $(this).text();
+        $("#fl").html(html);
+        $("#fl a").on("click",function(){
+            $("#flname").html($(this).text()+" <i class=\"fa fa-caret-down\"></i>");
+            global_Object.flname =$(this).text();
             global_Object.queryTableData();
         });
     });
 });
-var global_Object = {
+
+var global_Object={
     tableDataOld: [],
-    tableData: [],
-    flname: "",
-    url: contextPath+"/paas/queryTodayTransactionTypeReportByServer",
+    tableData:[],
     totalSize: 0,
-    type:"day",
-    value:"",
-    initDomEvent: function () {
+    flname:"",
+    url: contextPath+"/paas/queryTodayTransactionTypeReportByServer",
+    initDomEvent:function(){
         $("#date_picker").datepicker({
             language: "zh-CN",
             autoclose: true,//选中之后自动隐藏日期选择框
@@ -56,9 +56,11 @@ var global_Object = {
             }
         });
 
+        /* 查询框的过滤的功能 */
         $("#querybtn").on("click",function(){
             global_Object.setTableData("search",this);
         });
+        /* 可排序字段的排序功能 */
         $("#fTable .sorting").on("click", function () {
             if ($(this).hasClass("desc")) {
                 $(this).addClass("asc").removeClass("desc");
@@ -70,9 +72,7 @@ var global_Object = {
             }
 
         });
-        //$("#picEdit").on("show.bs.modal",function(){
-        //    global_Object.queryPic();
-        //});
+
     },
     selectType:function(data){
         global_Object.type = data;
@@ -100,16 +100,6 @@ var global_Object = {
                 showWeekNumbers:true,
                 calendarWeeks: true,
                 todayHighlight: true
-                //daysOfWeekDisabled:[0,2,3,4,5,6]
-                //beforeShowDay: function(date){
-                //    var day = date.getDay();
-                //    if(day!=1){
-                //        return {
-                //            enabled : false
-                //        };
-                //    }
-                //    return [true,''];
-                //}
             });
             var date = new Date();
             var week = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
@@ -152,12 +142,11 @@ var global_Object = {
         //alert(getdate(monday)+"-"+getdate(millSeconds));
         return (getdate(monday)+"-"+getdate(millSeconds));
     },
-    queryTableData: function () {
-        $.post(global_Object.url, {flname: global_Object.flname}, function (data) {
-            //console.log(data);
+    queryTableData:function(){
+        $.post(global_Object.url,{flname:global_Object.flname},function(data){
             global_Object.tableDataOld =data.transactionStatisticDatas;
-            global_Object.tableData = data.transactionStatisticDatas;
             global_Object.totalSize = data.totalSize;
+            global_Object.tableData = data.transactionStatisticDatas;
             global_Object.setTable();
         });
     },
@@ -215,15 +204,14 @@ var global_Object = {
         }
         global_Object.setTable();
     },
-    setTable: function () {
-        var alltr = function (data, type) {
+
+    setTable:function(){
+        var alltr = function(length,i,data){
             var tr = '<tr data-transactiontypename="'+data.transactionTypeName+'" data-serveripaddress="'+data.serverIpAddress+'">';
-            if (type == "transactionTypeName") {
-                tr += '<td><i class="fa  icon cp fa-chevron-down"></i><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)">' + data.transactionTypeName + '</a></td>';
+            if(i==0){
+                tr+='<td rowspan='+length+' class="vam tac">'+data.transactionTypeName+'</td>';
             }
-            else if (type == "serverIpAddress") {
-                tr += '<td><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)" >' + data.serverIpAddress + '</a></td>';
-            }
+            tr += '<td>' + data.serverIpAddress + '</td>';
             tr += '<td><a onclick="global_Object.openPostTotalCount(this)" href="javascript:void(0)">' + data.totalCount + '次</a></td>';
             tr += '<td><a onclick="global_Object.openPostAvg(this)" href="javascript:void(0)">' + data.avg + 'ms</a></td>';
             tr += '<td>' + data.line99Value + 'ms</td>';
@@ -231,51 +219,28 @@ var global_Object = {
             tr += '<td>' + data.min + 'ms</td>';
             tr += '<td>' + data.max + 'ms</td>';
             tr += '<td>' + data.tps + '</td>';
+            //tr += '<td>' + data.failCount + '次</td>';
             tr += '<td><a onclick="global_Object.openPostFalse(this)" href="javascript:void(0)">' + data.failCount + '次</a></td>';
             tr += '<td>' + data.failPercent*100 + '%</td>';
             tr += '<td>' + data.std + 'ms</td>';
             tr += '<td><i class="fa  fa-bar-chart-o cp" onclick="global_Object.queryPic(this)"></i></td>';
+            tr += '</tr>';
             return tr;
-        };
-        var html = [];
-        $.each(global_Object.tableData, function (i, v) {
-            html.push(alltr(v, "transactionTypeName"));
-            var tableHtml = '<tr class="" style="display: none"><td colspan="12"><div class="ml15 mr15"> <table class="table table-head  table-condensed flip-content"> <thead class="flip-content ">';
-            tableHtml += '<tr>';
-            tableHtml += '<th class="">服务器地址</th>';
-            tableHtml += ' <th class="numeric ">调用次数</th>';
-            tableHtml += ' <th class="numeric ">平均耗时</th>';
-            tableHtml += ' <th class="numeric ">99%</th>';
-            tableHtml += ' <th class="numeric ">95%</th>';
-            tableHtml += ' <th class="numeric ">最短耗时</th>';
-            tableHtml += ' <th class="numeric ">最长耗时</th>';
-            tableHtml += ' <th class="numeric ">吞吐量</th>';
-            tableHtml += ' <th class="numeric ">失败次数</th>';
-            tableHtml += ' <th class="numeric ">失败率</th>';
-            tableHtml += ' <th class="numeric ">显示图表</th>';
-            tableHtml += '</tr></thead><tbody>';
-            if (v.transactionStatisticDataDetails != null && v.transactionStatisticDataDetails.length > 0) {
-                $.each(v.transactionStatisticDataDetails, function (i2, v2) {
-                    tableHtml += alltr(v2, "serverIpAddress");
+        }
+        var tableHtml = [];
+        $.each(global_Object.tableData,function(i,v){
+            var StatisticDatas = v.transactionStatisticDataDetails;
+            var length =StatisticDatas.length;
+            //console.log(StatisticDatas[0].transactionTypeName)
+            if (StatisticDatas != null &&StatisticDatas.length > 0) {
+                $.each(StatisticDatas, function (i2, v2) {
+                    tableHtml.push(alltr(length,i2,v2));
                 });
             }
-            tableHtml += ' </tbody></table></div></td></tr>';
-            html.push(tableHtml);
         });
-        //console.log(html);
-        $("#fTable tbody").html(html.join(""));
-        $("#fTable .icon").on("click", function () {
-            var tr = $(this).parents("tr");
-            if ($(this).hasClass("fa-chevron-down")) {
-                $(tr).next("tr").fadeIn();
-                $(this).addClass("fa-chevron-up").removeClass("fa-chevron-down");
-            }
-            else {
-                $(tr).next("tr").fadeOut();
-                $(this).addClass("fa-chevron-down").removeClass("fa-chevron-up");
-            }
-        });
+        $("#fTable tbody").html(tableHtml.join(""));
     },
+
     queryPic: function (obj) {
         $("#echart").css("width", $("#picEdit").width() * 0.6 - 30);
         $("#picEdit").modal("show");
@@ -327,38 +292,25 @@ var global_Object = {
             myChart.setOption(option);
         });
     },
-    openPostWindow:function(obj){
-        global_Object.value = $("#datevalue").val();
-        //console.log(global_Object.type);
-        var url =contextPath+"/paas/serversyshistory";
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,historyPageType:"server"};
-        console.log(datas);
-        //alert($(obj).data("transactionyypename"))
-        JqCommon.openPostWindow(url,datas);
-    },
     openPostAvg:function(obj){
         global_Object.value = $("#datevalue").val();
-        var url =contextPath+"/paas/serverstephistory";
+        var url =contextPath+"/paas/clientstephistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,historyPageType:"server"};
-        //console.log(datas);
-        //alert($(obj).data("transactionyypename"))
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value,historyPageType:"client"};
         JqCommon.openPostWindow(url,datas);
     },
     openPostTotalCount:function(obj){
         global_Object.value = $("#datevalue").val();
-        var url =contextPath+"/paas/serverdetailedhistory";
+        var url =contextPath+"/paas/clientdetailedhistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":"",historyPageType:"server"};
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":"",historyPageType:"client"};
         console.log(datas);
-        //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
     },
     openPostFalse:function(obj){
         global_Object.value = $("#datevalue").val();
-        var url =contextPath+"/paas/serverdetailedhistory";
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"value":global_Object.value,"clientAppName":"","clientIpAddress":"","status":"失败",historyPageType:"server"};
+        var url =contextPath+"/paas/clientdetailedhistory";
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),"value":global_Object.value,"clientAppName":"","clientIpAddress":"","status":"失败",historyPageType:"server"};
         JqCommon.openPostWindow(url,datas);
     }
 }
-

@@ -1,17 +1,17 @@
 /**
- * Created by Admin on 2016/10/25.
+ * Created by Evan on 2016/10/25.
  */
 
 $(document).ready(function () {
 
     global_Object.initDomEvent();
-    if (global_Object.type == "最近一小时") {
+    if (global_Object.type == "day") {
         global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
     }
-    else if (global_Object.type == "当天") {
+    else if (global_Object.type == "week") {
         global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
     }
-    else if (global_Object.type == "指定小时") {
+    else if (global_Object.type == "month") {
         global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
     }
     $.post(contextPath+"/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
@@ -47,10 +47,10 @@ var global_Object = {
     tableDataOld: [],
     tableData: [],
     serverIpAddress: $("#serverIpAddresshidden").val(),
-    url: contextPath+"/paas/queryLastHourTransactionTypeReportByClient",
+    url: contextPath+"/paas/queryLastHourTransactionNameReportByServer",
     totalSize: 0,
     type: $("#type").val(),
-    time: $("#time").val(),
+    value:$("#value").val(),
     serverAppName: $("#serverAppName").val(),
     transactionTypeName: $("#transactionTypeName").val(),
     initDomEvent: function () {
@@ -62,7 +62,7 @@ var global_Object = {
             transactionTypeName: global_Object.transactionTypeName,
             serverIpAddress: global_Object.serverIpAddress
         }, function (data) {
-            //console.log(data);
+            console.log(data);
             global_Object.tableDataOld = data.transactionStatisticDatas;
             global_Object.tableData = data.transactionStatisticDatas;
             global_Object.totalSize = data.totalSize;
@@ -110,13 +110,16 @@ var global_Object = {
         $("#form").submit({serverAppName: "123", age: "年龄"});
     },
     setPic: function () {
+        console.log(global_Object.tableData);
         $("#echart").css("width", $("#fTable").width());
         var name=[];
         var json=[];
+
         $.each(global_Object.tableData,function(i,v){
             name.push(v.transactionName);
             json.push({value: v.avg,name: v.transactionName});
         });
+
         var option = {
 
             tooltip : {
@@ -151,3 +154,4 @@ var global_Object = {
         myChart.setOption(option);
     }
 }
+

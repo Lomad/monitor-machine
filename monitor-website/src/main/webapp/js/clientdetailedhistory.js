@@ -1,11 +1,13 @@
 /**
- * Created by Admin on 2016/10/25.
+ * Created by InnerPeace on 2016/10/31.
  */
+
 var fTable;
 var index=0;
 var json=[];
 var index2=0;
 var json2=[];
+
 $(document).ready(function () {
     global_Object.serverAppName=$("#serverAppName").val();
     global_Object.transactionTypeName=$("#transactionTypeName").val();
@@ -14,15 +16,15 @@ $(document).ready(function () {
     global_Object.clientIpAddress=$("#clientIpAddress").val();
     global_Object.status=$("#status").val();
     global_Object.type = $("#type").val();
-    global_Object.time = $("#time").val();
+    global_Object.value = $("#value").val();
     global_Object.initDomEvent();
+
     fTable = $("#fTable").winningTable({
         "pageLength": 10,
         "processing": false,
         "ordering": true, //排序功能
         "order": [[ 6, "desc" ]],
         "columns": [
-
 
             {"title": "服务名称", "data": "transactionTypeName", "orderable": false,
                 "render":function(data, type, full, meta){
@@ -42,7 +44,7 @@ $(document).ready(function () {
                 "title": "详情", "data": "startTime", "orderable": false,
                 "render": function (data, type, full, meta) {
                     json2.push(full.datas);
-                    var html = '<i class="fa  icon cp fa-bar-chart-o"  onclick=global_Object.detail(this,'+JSON.stringify(full.datas)+')></i> ';
+                    var html = '<i class="fa  icon cp fa-exchange"  onclick=global_Object.detail(this,'+JSON.stringify(full.datas)+')></i> ';
                     index2++;
                     return html;
                 }
@@ -55,7 +57,6 @@ $(document).ready(function () {
         "responsive": true,
         "width": "100%"
     });
-    //console.log(global_Object)
     fTable.queryDataInPage(contextPath+"/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
 });
 var global_Object = {
@@ -66,7 +67,7 @@ var global_Object = {
     clientIpAddress:$("clientIpAddress").val(),
     status:$("status").val(),
     type:"",
-    time:"",
+    value:$("value").val(),
     initDomEvent:function(){
         $("#statusselect a").on("click", function () {
             $("#statusvalue").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
@@ -85,26 +86,24 @@ var global_Object = {
         fTable.queryDataInPage(contextPath+"/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
     },
     bzClick:function(obj,index){
-//console.log(json[index]);
+        console.log(json[index]);
         if ($(obj).hasClass("fa-chevron-down")) {
+            var tableHtml = '<tr class="" style="display: none"><td colspan="12"><div class="ml15 mr15"> <table class="table table-head  table-condensed flip-content"> <thead class="flip-content ">';
+            tableHtml += '<tr>';
+            tableHtml += '<th class="">序号</th>';
+            tableHtml += '<th class="">服务步骤</th>';
+            tableHtml += ' <th class=" ">耗时</th>';
+            tableHtml += ' <th class=" ">状态</th>';
+            tableHtml += ' <th class=" ">开始时间</th>';
+            tableHtml += ' <th class=" ">详情</th>';
 
-
-        var tableHtml = '<tr class="" style="display: none"><td colspan="12"><div class="ml15 mr15"> <table class="table table-head  table-condensed flip-content"> <thead class="flip-content ">';
-        tableHtml += '<tr>';
-        tableHtml += '<th class="">序号</th>';
-        tableHtml += '<th class="">服务步骤</th>';
-        tableHtml += ' <th class=" ">耗时</th>';
-        tableHtml += ' <th class=" ">状态</th>';
-        tableHtml += ' <th class=" ">开始时间</th>';
-        tableHtml += ' <th class=" ">详情</th>';
-
-        tableHtml += '</tr></thead><tbody>';
-        if (json[index] != null && json[index].length > 0) {
-            $.each(json[index],function (i, v) {
-                tableHtml += '<tr><td>'+(i+1)+'</td><td>'+ v.transactionName+'</td><td>'+v.useTime+'</td><td>'+v.status+'</td><td>'+v.startTime+'</td><td>'+'<i class="fa  icon cp fa-bar-chart-o"  onclick=global_Object.detail(this,'+JSON.stringify(v.datas)+')></i> '+'</td></tr>';
-            });
-        }
-         $(obj).parents("tr").after(tableHtml);
+            tableHtml += '</tr></thead><tbody>';
+            if (json[index] != null && json[index].length > 0) {
+                $.each(json[index],function (i, v) {
+                    tableHtml += '<tr><td>'+(i+1)+'</td><td>'+ v.transactionName+'</td><td>'+v.useTime+'</td><td>'+v.status+'</td><td>'+v.startTime+'</td><td>'+'<i class="fa  icon cp fa-exchange"  onclick=global_Object.detail(this,'+JSON.stringify(v.datas)+')></i> '+'</td></tr>';
+                });
+            }
+            $(obj).parents("tr").after(tableHtml);
             $(obj).parents("tr").next("tr").fadeIn();
             $(obj).addClass("fa-chevron-up").removeClass("fa-chevron-down");
         }
@@ -116,7 +115,6 @@ var global_Object = {
     },
     detail: function (obj,json) {
         $("#xqEdit").modal("show");
-        //console.log(json);
         var html ="";
         for(var key in json){
             html +="<tr><td>"+key+"</td><td>"+json[key]+"</td></tr>";

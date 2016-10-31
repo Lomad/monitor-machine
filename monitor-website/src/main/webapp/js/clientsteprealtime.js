@@ -1,20 +1,20 @@
 /**
- * Created by Admin on 2016/10/25.
+ * Created by InnerPeace on 2016/10/27.
  */
 
 $(document).ready(function () {
 
     global_Object.initDomEvent();
     if (global_Object.type == "最近一小时") {
-        global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = "/paas/queryLastHourTransactionNameReportByServer"
     }
     else if (global_Object.type == "当天") {
-        global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = "/paas/queryLastHourTransactionNameReportByServer"
     }
     else if (global_Object.type == "指定小时") {
-        global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = "/paas/queryLastHourTransactionNameReportByServer"
     }
-    $.post(contextPath+"/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
+    $.post("/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
 //alert( $("#serverIpAddresshidden").val());
         if (global_Object.serverIpAddress == "") {
             $("#serverIpAddresss").html("所有主机" + ' <i class="fa  fa-caret-down"></i>');
@@ -47,7 +47,7 @@ var global_Object = {
     tableDataOld: [],
     tableData: [],
     serverIpAddress: $("#serverIpAddresshidden").val(),
-    url: contextPath+"/paas/queryLastHourTransactionTypeReportByClient",
+    url: "/paas/queryLastHourTransactionTypeReportByClient",
     totalSize: 0,
     type: $("#type").val(),
     time: $("#time").val(),
@@ -107,7 +107,6 @@ var global_Object = {
                 $(this).addClass("fa-chevron-down").removeClass("fa-chevron-up");
             }
         });
-        $("#form").submit({serverAppName: "123", age: "年龄"});
     },
     setPic: function () {
         $("#echart").css("width", $("#fTable").width());
