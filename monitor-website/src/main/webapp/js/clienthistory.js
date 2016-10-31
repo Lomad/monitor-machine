@@ -219,7 +219,8 @@ var global_Object={
             tr += '<td>' + data.min + 'ms</td>';
             tr += '<td>' + data.max + 'ms</td>';
             tr += '<td>' + data.tps + '</td>';
-            tr += '<td>' + data.failCount + '次</td>';
+            //tr += '<td>' + data.failCount + '次</td>';
+            tr += '<td><a onclick="global_Object.openPostFalse(this)" href="javascript:void(0)">' + data.failCount + '次</a></td>';
             tr += '<td>' + data.failPercent*100 + '%</td>';
             tr += '<td>' + data.std + 'ms</td>';
             tr += '<td><i class="fa  fa-bar-chart-o cp" onclick="global_Object.queryPic(this)"></i></td>';
@@ -293,18 +294,23 @@ var global_Object={
     },
     openPostAvg:function(obj){
         global_Object.value = $("#datevalue").val();
-        var url =contextPath+"/paas/serverstephistory";
+        var url =contextPath+"/paas/clientstephistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value,historyPageType:"client"};
         JqCommon.openPostWindow(url,datas);
     },
     openPostTotalCount:function(obj){
         global_Object.value = $("#datevalue").val();
-        var url =contextPath+"/paas/serverdetailedhistory";
+        var url =contextPath+"/paas/clientdetailedhistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":"",historyPageType:"client"};
         console.log(datas);
         JqCommon.openPostWindow(url,datas);
+    },
+    openPostFalse:function(obj){
+        global_Object.value = $("#datevalue").val();
+        var url =contextPath+"/paas/clientdetailedhistory";
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),"value":global_Object.value,"clientAppName":"","clientIpAddress":"","status":"失败",historyPageType:"server"};
+        JqCommon.openPostWindow(url,datas);
     }
-
 }

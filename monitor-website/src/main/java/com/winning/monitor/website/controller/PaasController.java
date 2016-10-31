@@ -173,6 +173,7 @@ public class PaasController {
     }
 
 
+
     @RequestMapping(value = {"/paas/serverdetailedrealtime"})
     public ModelAndView serverdetailedrealtime(String datas) {
         Map<String, Object> map = null;
@@ -228,7 +229,6 @@ public class PaasController {
         mv.addObject("status",status);
         return mv;
     }
-
     @RequestMapping(value = {"/paas/clientrealtime"})
     public ModelAndView clientrealtime() {
         return new ModelAndView("paas/clientrealtime");
@@ -237,10 +237,64 @@ public class PaasController {
     public ModelAndView serverhistory() {
         return new ModelAndView("paas/serverhistory");
     }
+
     @RequestMapping(value = {"/paas/clienthistory"})
     public ModelAndView clienthistory() {
         return new ModelAndView("paas/clienthistory");
     }
+    @RequestMapping(value = {"/paas/clientdetailedhistory"})
+    public ModelAndView clientdetailedhistory(String datas) {
+        Map<String, Object> map = null;
+        try {
+            map = this.objectMapper.readValue(datas, Map.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ModelAndView mv = new ModelAndView("paas/clientdetailedhistory");
+        String transactionTypeName=map.get("transactionTypeName").toString();
+        String serverIpAddress=map.get("serverIpAddress").toString();
+        String serverAppName=map.get("serverAppName").toString();
+        String type=map.get("type").toString();
+        String time=map.get("value").toString();
+        String clientAppName=map.get("clientAppName").toString();
+        String clientIpAddress=map.get("clientIpAddress").toString();
+        String status=map.get("status").toString();
+        String historyPageType=map.get("historyPageType").toString();
+        mv.addObject("transactionTypeName",transactionTypeName);
+        mv.addObject("serverIpAddress",serverIpAddress);
+        mv.addObject("serverAppName",serverAppName);
+        mv.addObject("type",type);
+        mv.addObject("value",time);
+        mv.addObject("clientAppName",clientAppName);
+        mv.addObject("clientIpAddress",clientIpAddress);
+        mv.addObject("status",status);
+        mv.addObject("historyPageType",historyPageType);
+        return mv;
+    }
+    @RequestMapping(value = {"/paas/clientstephistory"})
+    public ModelAndView clientstephistory(String datas) {
+        Map<String, Object> map = null;
+        try {
+            map = this.objectMapper.readValue(datas, Map.class);
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+        ModelAndView mv = new ModelAndView("paas/clientstephistory");
+        String transactionTypeName=map.get("transactionTypeName").toString();
+        String serverIpAddress=map.get("serverIpAddress").toString();
+        String serverAppName=map.get("serverAppName").toString();
+        String type=map.get("type").toString();
+        String value=map.get("value").toString();
+        String historyPageType=map.get("historyPageType").toString();
+        mv.addObject("transactionTypeName",transactionTypeName);
+        mv.addObject("serverIpAddress",serverIpAddress);
+        mv.addObject("serverAppName",serverAppName);
+        mv.addObject("type",type);
+        mv.addObject("value",value);
+        mv.addObject("historyPageType",historyPageType);
+        return mv;
+    }
+
     @RequestMapping(value = {"/paas/qeryAllDomain"})
     public @ResponseBody
     LinkedHashSet<String>  qeryAllDomain(){
