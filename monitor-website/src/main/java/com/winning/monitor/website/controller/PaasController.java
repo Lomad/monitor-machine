@@ -423,6 +423,24 @@ public class PaasController {
         return  report;
     }
 
+    /***
+     * 获取指定小时的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
+     * @param serverAppName
+     * @param transactionTypeName
+     * @param serverIpAddress
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryHourTransactionTypeReportByClient"})
+    public @ResponseBody TransactionStatisticReport queryHourTransactionTypeReportByClient(String serverAppName,
+                                                                                            String transactionTypeName,
+                                                                                            String serverIpAddress,
+                                                                                            String time){
+        TransactionStatisticReport report =transactionDataQuery.queryHourTransactionTypeReportByClient(serverAppName,time, transactionTypeName, serverIpAddress);
+        return  report;
+    }
+
+
+
     /**
      * 获取最近一小时的TransactionType调用次数的结果集,不进行分页
      * @param serverAppName
@@ -485,6 +503,21 @@ public class PaasController {
         return  report;
     }
 
+    /**
+     * 获取当天的TransactionName服务步骤统计结果不进行分页
+     * @param serverAppName
+     * @param transactionTypeName
+     * @param serverIpAddress
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryTodayTransactionNameReportByServer"})
+    public @ResponseBody TransactionStatisticReport queryTodayTransactionNameReportByServer(String serverAppName,
+                                                                                               String transactionTypeName,
+                                                                                               String serverIpAddress){
+        TransactionStatisticReport report =transactionDataQuery.queryTodayTransactionNameReportByServer(serverAppName, transactionTypeName, serverIpAddress);
+        return  report;
+    }
+
 
     /**
      * 获取指定小时的TransactionName服务步骤统计结果不进行分页
@@ -497,9 +530,11 @@ public class PaasController {
     @RequestMapping(value = {"/paas/queryHourTransactionNameReportByServer"})
     public @ResponseBody TransactionStatisticReport queryHourTransactionNameReportByServer(String serverAppName,
                                                                                                String transactionTypeName,
-                                                                                               String hour,
-                                                                                               String serverIpAddress){
-        TransactionStatisticReport report =transactionDataQuery.queryHourTransactionNameReportByServer(serverAppName, transactionTypeName,hour,serverIpAddress);
+                                                                                               String serverIpAddress,
+                                                                                               String time){
+        System.out.println(serverAppName+"--"+time+"--"+transactionTypeName+"--"+serverIpAddress);
+        System.out.println("------------------------------------");
+        TransactionStatisticReport report =transactionDataQuery.queryHourTransactionNameReportByServer(serverAppName,time,transactionTypeName,serverIpAddress);
         return  report;
     }
 

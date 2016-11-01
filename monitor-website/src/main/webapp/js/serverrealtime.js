@@ -85,7 +85,7 @@ var global_Object = {
         });
     },
     queryTableData: function () {
-        console.log(global_Object.url+"---"+global_Object.flname+"---"+global_Object.time);
+        //console.log(global_Object.url+"---"+global_Object.flname+"---"+global_Object.time);
         $.post(global_Object.url, {flname: global_Object.flname,time:global_Object.time}, function (data) {
             //console.log(data);
             global_Object.tableDataOld =data.transactionStatisticDatas;
