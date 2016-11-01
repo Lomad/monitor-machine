@@ -2,6 +2,7 @@ package com.winning.monitor.agent.collector.sender.io;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winning.monitor.agent.collector.api.entity.CollectData;
 import com.winning.monitor.agent.collector.api.entity.CollectDatas;
@@ -26,6 +27,7 @@ public class CollectDatasMessageCodec {
     public CollectDatasMessageCodec() {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
 
@@ -72,3 +74,4 @@ public class CollectDatasMessageCodec {
         }
     }
 }
+

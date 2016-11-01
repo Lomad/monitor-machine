@@ -58,8 +58,8 @@ public class NettyCollectDataMessageTransport implements ICollectDataMessageTran
     }
 
     @Override
-    public void sendMessage(List<CollectData> collectData) {
-        long current = System.currentTimeMillis();
+    public void sendMessage(List<CollectData> collectDatas) {
+//        long current = System.currentTimeMillis();
 
         ChannelFuture future = nettyChannelManager.channel();
 
@@ -67,14 +67,13 @@ public class NettyCollectDataMessageTransport implements ICollectDataMessageTran
 
             ByteBuf buf = PooledByteBufAllocator.DEFAULT.buffer(10 * 1024); // 10K
 
-            this.collectDataMessageCodec.encode(collectData, buf);
+            this.collectDataMessageCodec.encode(collectDatas, buf);
 
-            int size = buf.readableBytes();
+//            int size = buf.readableBytes();
             Channel channel = future.channel();
             channel.writeAndFlush(buf);
-            current = System.currentTimeMillis() - current;
-
-            logger.debug("发送消息长度:" + size + "bytes,用时" + current + "ms");
+//            current = System.currentTimeMillis() - current;
+//            logger.debug("发送消息长度:" + size + "bytes,用时" + current + "ms");
         }
     }
 

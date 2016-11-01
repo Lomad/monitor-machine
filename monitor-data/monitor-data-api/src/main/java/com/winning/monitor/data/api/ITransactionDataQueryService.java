@@ -113,6 +113,64 @@ public interface ITransactionDataQueryService {
                                                                           String transactionTypeName,
                                                                           String serverIpAddress);
 
+    /**
+     * 获取指定天的TransactionName服务步骤统计结果不进行分页
+     *
+     * @param serverAppName       应用服务系统名称
+     * @param date          指定日期,格式为 yyyy-MM-dd
+     * @param transactionTypeName 服务大类名称
+     * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
+     * @return 统计数据结果集
+     */
+    TransactionStatisticReport queryDayTransactionNameReportByServer(String serverAppName,
+                                                                         String date,
+                                                                         String transactionTypeName,
+                                                                         String serverIpAddress);
+
+    /**
+     * 获取指定周的TransactionName服务步骤统计结果不进行分页
+     *
+     * @param serverAppName       应用服务系统名称
+     * @param week                指定周的第一天日期,格式为 yyyy-MM-dd
+     * @param transactionTypeName 服务大类名称
+     * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
+     * @return 统计数据结果集
+     */
+     TransactionStatisticReport queryWeekTransactionNameReportByServer(String serverAppName,
+                                                                             String week,
+                                                                             String transactionTypeName,
+                                                                             String serverIpAddress);
+
+
+    /**
+     * 获取指定月的TransactionType调用次数的结果集,不进行分页
+     *
+     * @param serverAppName       应用服务系统名称
+     * @param month               指定月份的第一条日期,格式为 yyyy-MM-dd
+     * @param transactionTypeName 服务大类名称
+     * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
+     * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
+     */
+     TransactionCallTimesReport queryMonthTransactionTypeCallTimesReportByServer(String serverAppName,
+                                                                                       String month,
+                                                                                       String transactionTypeName,
+                                                                                       String serverIpAddress);
+
+
+    /**
+     * 获取指定月的TransactionName服务步骤统计结果不进行分页
+     *
+     * @param serverAppName       应用服务系统名称
+     * @param month               指定月份的第一条日期,格式为 yyyy-MM-dd
+     * @param transactionTypeName 服务大类名称
+     * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
+     * @return 统计数据结果集
+     */
+    TransactionStatisticReport queryMonthTransactionNameReportByServer(String serverAppName,
+                                                                              String month,
+                                                                              String transactionTypeName,
+                                                                              String serverIpAddress);
+
 
     /**
      * 获取指定小时的TransactionName服务步骤统计结果不进行分页
@@ -182,6 +240,22 @@ public interface ITransactionDataQueryService {
                                                                                    String serverIpAddress);
 
 
+    /**
+     * 获取最近一小时的TransactionType调用次数的结果集,不进行分页
+     *
+     * @param serverAppName       应用服务系统名称
+     * @param date                指定日期,格式为 yyyy-MM-dd
+     * @param transactionTypeName 服务大类名称
+     * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
+     * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
+     */
+
+     TransactionCallTimesReport queryDayTransactionTypeCallTimesReportByServer(String serverAppName,
+                                                                                     String date,
+                                                                                     String transactionTypeName,
+                                                                                     String serverIpAddress);
+
+
 
     /**
      * 获取当天的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
@@ -194,6 +268,63 @@ public interface ITransactionDataQueryService {
     TransactionStatisticReport queryTodayTransactionTypeReportByClient(String serverAppName,
                                                                        String transactionTypeName,
                                                                        String serverIpAddress);
+
+    /**
+     * 获取指定周的TransactionType调用次数的结果集,不进行分页
+     *
+     * @param serverAppName       应用服务系统名称
+     * @param week                指定周的第一天日期,格式为 yyyy-MM-dd
+     * @param transactionTypeName 服务大类名称
+     * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
+     * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
+     */
+    TransactionCallTimesReport queryWeekTransactionTypeCallTimesReportByServer(String serverAppName,
+                                                                                      String week,
+                                                                                      String transactionTypeName,
+                                                                                      String serverIpAddress);
+
+
+    /**
+     * 获取指定日期的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
+     *
+     * @param serverAppName       应用服务系统名称
+     * @param date                指定日期,格式为 yyyy-MM-dd
+     * @param transactionTypeName 服务大类名称
+     * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
+     * @return 统计数据结果集
+     */
+     TransactionStatisticReport queryDayTransactionTypeReportByClient(String serverAppName,
+                                                                            String date,
+                                                                            String transactionTypeName,
+                                                                            String serverIpAddress);
+
+    /**
+     * 获取指定周的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
+     *
+     * @param serverAppName       应用服务系统名称
+     *  @param week          指定周的第一天日期,格式为 yyyy-MM-dd
+     * @param transactionTypeName 服务大类名称
+     * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
+     * @return 统计数据结果集
+     */
+    TransactionStatisticReport queryWeekTransactionTypeReportByClient(String serverAppName,
+                                                                             String week,
+                                                                             String transactionTypeName,
+                                                                             String serverIpAddress);
+
+    /**
+     * 获取指定周的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
+     *
+     * @param serverAppName       应用服务系统名称
+     * @param month         指定月份的第一条日期,格式为 yyyy-MM-dd
+     * @param transactionTypeName 服务大类名称
+     * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
+     * @return 统计数据结果集
+     */
+     TransactionStatisticReport queryMonthTransactionTypeReportByClient(String serverAppName,
+                                                                              String month,
+                                                                              String transactionTypeName,
+                                                                              String serverIpAddress);
 
 
     /**
@@ -303,6 +434,87 @@ TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
                                                                int startIndex,
                                                                int pageSize,
                                                                LinkedHashMap<String, String> orderBy);
+
+    /**
+     * 获取指定日期内的调用消息明细记录
+     *
+     * @param serverAppName       应用服务系统名称,非空
+     * @param date                指定日期,格式为 yyyy-MM-dd
+     * @param transactionTypeName 服务大类名称,非空
+     * @param transactionName     服务名称,可选
+     * @param serverIpAddress     服务端系统IP地址,可选,不填表示所有服务端主机
+     * @param clientAppName       客户端系统名称,可选,不填表示所有客户端系统
+     * @param clientIpAddress     客户端系统IP地址,可选,不填表示所有客户端主机
+     * @param status              过滤消息状态,可选,可填成功或失败,不填表示所有状态记录
+     * @param startIndex          分页起始位置,非空
+     * @param pageSize            分页每页的条数,非空
+     * @param orderBy             排序参数, key表示需要排序的字段,value表示排序顺序,DESC或ASC,且要按照顺序,不填则不进行排序
+     * @return 详细调用Transaction的明细清单
+     */
+    TransactionMessageList queryDayTransactionMessageList(String serverAppName,
+                                                          String date,
+                                                          String transactionTypeName,
+                                                          String transactionName,
+                                                          String serverIpAddress,
+                                                          String clientAppName,
+                                                          String clientIpAddress,
+                                                          String status,
+                                                          int startIndex, int pageSize,
+                                                          LinkedHashMap<String, String> orderBy);
+
+    /**
+     * 获取指定周内的调用消息明细记录
+     *
+     * @param serverAppName       应用服务系统名称,非空
+     * @param week                指定周的第一天日期,格式为 yyyy-MM-dd
+     * @param transactionTypeName 服务大类名称,非空
+     * @param transactionName     服务名称,可选
+     * @param serverIpAddress     服务端系统IP地址,可选,不填表示所有服务端主机
+     * @param clientAppName       客户端系统名称,可选,不填表示所有客户端系统
+     * @param clientIpAddress     客户端系统IP地址,可选,不填表示所有客户端主机
+     * @param status              过滤消息状态,可选,可填成功或失败,不填表示所有状态记录
+     * @param startIndex          分页起始位置,非空
+     * @param pageSize            分页每页的条数,非空
+     * @param orderBy             排序参数, key表示需要排序的字段,value表示排序顺序,DESC或ASC,且要按照顺序,不填则不进行排序
+     * @return 详细调用Transaction的明细清单
+     */
+   TransactionMessageList queryWeekTransactionMessageList(String serverAppName,
+                                                                  String week,
+                                                                  String transactionTypeName,
+                                                                  String transactionName,
+                                                                  String serverIpAddress,
+                                                                  String clientAppName,
+                                                                  String clientIpAddress,
+                                                                  String status,
+                                                                  int startIndex, int pageSize,
+                                                                  LinkedHashMap<String, String> orderBy);
+
+    /**
+     * 获取指定月内的调用消息明细记录
+     *
+     * @param serverAppName       应用服务系统名称,非空
+     * @param month               指定月份的第一条日期,格式为 yyyy-MM-dd
+     * @param transactionTypeName 服务大类名称,非空
+     * @param transactionName     服务名称,可选
+     * @param serverIpAddress     服务端系统IP地址,可选,不填表示所有服务端主机
+     * @param clientAppName       客户端系统名称,可选,不填表示所有客户端系统
+     * @param clientIpAddress     客户端系统IP地址,可选,不填表示所有客户端主机
+     * @param status              过滤消息状态,可选,可填成功或失败,不填表示所有状态记录
+     * @param startIndex          分页起始位置,非空
+     * @param pageSize            分页每页的条数,非空
+     * @param orderBy             排序参数, key表示需要排序的字段,value表示排序顺序,DESC或ASC,且要按照顺序,不填则不进行排序
+     * @return 详细调用Transaction的明细清单
+     */
+     TransactionMessageList queryMonthTransactionMessageList(String serverAppName,
+                                                                   String month,
+                                                                   String transactionTypeName,
+                                                                   String transactionName,
+                                                                   String serverIpAddress,
+                                                                   String clientAppName,
+                                                                   String clientIpAddress,
+                                                                   String status,
+                                                                   int startIndex, int pageSize,
+                                                                   LinkedHashMap<String, String> orderBy);
 
 
 }
