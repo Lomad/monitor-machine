@@ -27,6 +27,25 @@ public class MongoTaskDao implements ITaskDao {
     }
 
     @Override
+    public void upsert(Task task) throws TaskStoreException {
+
+        Query query = new Query();
+        query.addCriteria(new Criteria("reportDomain").is(task.getReportDomain()));
+        query.addCriteria(new Criteria("reportName").is(task.getReportName()));
+        query.addCriteria(new Criteria("reportPeriod").is(task.getReportPeriod()));
+        query.addCriteria(new Criteria("taskType").is(task.getTaskType()));
+
+        List<Task> existsTasks = this.mongoTemplate.find(query, Task.class);
+
+        if (existsTasks == null || existsTasks.size() == 0) {
+            this.insert(task);
+        } else {
+            this.mongoTemplate.remove(query, COLLECTION_NAME);
+            this.insert(task);
+        }
+    }
+
+    @Override
     public Task findByStatusConsumer(int statusDoing, String consumer) throws TaskStoreException {
         Query query = new Query();
         if (StringUtils.hasText(consumer))

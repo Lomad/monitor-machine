@@ -14,6 +14,8 @@ public interface ITaskDao {
 
     void insert(Task task) throws TaskStoreException;
 
+    void upsert(Task task) throws TaskStoreException;
+
     Task findByStatusConsumer(int statusDoing, String ip) throws TaskStoreException;
 
     int updateDoingToDone(Task doing) throws TaskStoreException;

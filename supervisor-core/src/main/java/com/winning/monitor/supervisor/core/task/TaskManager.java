@@ -5,6 +5,7 @@ import com.winning.monitor.supervisor.core.task.exception.TaskStoreException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -22,7 +23,7 @@ public class TaskManager {
     private static final long ONE_HOUR = 60 * 60 * 1000L;
     private static final long ONE_DAY = 24 * ONE_HOUR;
     private static final int STATUS_TODO = 1;
-
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Autowired
     private ITaskDao taskDao;
 
@@ -49,7 +50,11 @@ public class TaskManager {
         task.setReportPeriod(period);
         task.setStatus(STATUS_TODO);
         task.setTaskType(reportType);
-        taskDao.insert(task);
+
+        task.setBgsj(simpleDateFormat.format(period));
+        task.setCjsj(simpleDateFormat.format(task.getCreationDate()));
+
+        taskDao.upsert(task);
     }
 
     public boolean createTask(Date period, String domain, String name, TaskCreationPolicy prolicy) {
@@ -65,23 +70,43 @@ public class TaskManager {
             cal.add(Calendar.HOUR_OF_DAY, -hour);
             Date currentDay = cal.getTime();
 
+            //收集并生成当天内的数据
             if (prolicy.shouldCreateDailyTask()) {
-                createDailyTask(new Date(currentDay.getTime() - ONE_DAY), domain, name);
+                createDailyTask(new Date(currentDay.getTime()), domain, name);
+//                if (cal.get(Calendar.HOUR_OF_DAY) % 4 == 0) {
+//                    createDailyTask(new Date(currentDay.getTime() - ONE_DAY), domain, name);
+//                    createDailyTask(new Date(currentDay.getTime() - ONE_DAY * 2), domain, name);
+//                    createDailyTask(new Date(currentDay.getTime() - ONE_DAY * 3), domain, name);
+//                }
             }
 
+            //收集本周以及上周
             if (prolicy.shouldCreateWeeklyTask()) {
                 int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-                if (dayOfWeek == 7) {
-                    createWeeklyTask(new Date(currentDay.getTime() - 7 * ONE_DAY), domain, name);
-                }
+                //每周一生成上周所有
+//                if (dayOfWeek == 1) {
+                createWeeklyTask(new Date(currentDay.getTime() - (dayOfWeek - 2) * ONE_DAY), domain, name);
+//                }
+//                createWeeklyTask(new Date(currentDay.getTime() - (dayOfWeek - 1 + 7) * ONE_DAY), domain, name);
+
+//                if (dayOfWeek == 7) {
+//                  createWeeklyTask(new Date(currentDay.getTime() - 7 * ONE_DAY), domain, name);
+//                }
             }
+            //收集本月以及上月
             if (prolicy.shouldCreateMonthTask()) {
                 int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-
+                createMonthlyTask(new Date(currentDay.getTime() - (dayOfMonth - 1) * ONE_DAY), domain, name);
                 if (dayOfMonth == 1) {
                     cal.add(Calendar.MONTH, -1);
                     createMonthlyTask(cal.getTime(), domain, name);
                 }
+//                createMonthlyTask(new Date(currentDay.getTime() - (dayOfMonth - 1) * ONE_DAY), domain, name);
+
+//                if (dayOfMonth == 1) {
+//                    cal.add(Calendar.MONTH, -1);
+//                    createMonthlyTask(cal.getTime(), domain, name);
+//                }
             }
             return true;
         } catch (TaskStoreException e) {

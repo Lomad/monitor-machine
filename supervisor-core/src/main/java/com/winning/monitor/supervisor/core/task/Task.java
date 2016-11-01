@@ -37,6 +37,9 @@ public class Task {
 
     private int endLimit;
 
+    private String bgsj;
+    private String cjsj;
+
     public String getId() {
         return id;
     }
@@ -163,6 +166,22 @@ public class Task {
 
     public void setEndLimit(int endLimit) {
         this.endLimit = endLimit;
+    }
+
+    public String getBgsj() {
+        return bgsj;
+    }
+
+    public void setBgsj(String bgsj) {
+        this.bgsj = bgsj;
+    }
+
+    public String getCjsj() {
+        return cjsj;
+    }
+
+    public void setCjsj(String cjsj) {
+        this.cjsj = cjsj;
     }
 
     @Override
