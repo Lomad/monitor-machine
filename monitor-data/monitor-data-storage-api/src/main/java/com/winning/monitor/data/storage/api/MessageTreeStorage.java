@@ -13,7 +13,7 @@ public interface MessageTreeStorage {
 
     void storeTransaction(MessageTree tree);
 
-    MessageTreeList queryMessageTree(String domain,
+    MessageTreeList queryMessageTree(String group,String domain,
                                      long startTime, long endTime,
                                      Map<String, Object> arguments,
                                      int startIndex, int pageSize,

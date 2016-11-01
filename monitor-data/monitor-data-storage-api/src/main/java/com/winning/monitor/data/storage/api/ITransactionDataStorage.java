@@ -14,30 +14,30 @@ import java.util.Map;
 public interface ITransactionDataStorage {
 
 
-    LinkedHashSet<String> findAllTransactionDomains();
+    LinkedHashSet<String> findAllTransactionDomains(String group);
 
-    LinkedHashSet<String> findAllServerIpAddress(String domain);
+    LinkedHashSet<String> findAllServerIpAddress(String group, String domain);
 
-    List<TransactionReportVO> queryRealtimeTransactionReports(String domain, String startTime);
+    List<TransactionReportVO> queryRealtimeTransactionReports(String group, String domain, String startTime);
 
-    List<TransactionReportVO> queryRealtimeTransactionReports(String domain, String startTime, String endTime);
+    List<TransactionReportVO> queryRealtimeTransactionReports(String group, String domain, String startTime, String endTime);
 
-    List<TransactionReportVO> queryRealtimeTransactionReports(Map<String, Object> map);
+    List<TransactionReportVO> queryRealtimeTransactionReports(String group, Map<String, Object> map);
 
-    List<TransactionReportVO> queryRealtimeTransactionReports(String domain, String startTime, String endTime, Map<String, Object> map);
+    List<TransactionReportVO> queryRealtimeTransactionReports(String group,String domain, String startTime, String endTime, Map<String, Object> map);
 
-    List<TransactionReportVO> queryHistoryTransactionReports(String domain, String startTime, String endTime,
+    List<TransactionReportVO> queryHistoryTransactionReports(String group, String domain, String startTime, String endTime,
                                                              TransactionReportType type);
 
-    List<TransactionReportVO> queryHistoryTransactionReports(String domain, String startTime, String endTime,
+    List<TransactionReportVO> queryHistoryTransactionReports(String group, String domain, String startTime, String endTime,
                                                              TransactionReportType type, Map<String, Object> map);
 
-    List<TransactionReportVO> queryTransactionReportsByType(String domain, String startTime, String typeName,
+    List<TransactionReportVO> queryTransactionReportsByType(String group, String domain, String startTime, String typeName,
                                                             TransactionReportType type);
 
-    void storeRealtimeTransactionReport(TransactionReportVO transactionReportVO) throws StorageException;
+    void storeRealtimeTransactionReport(String group, TransactionReportVO transactionReportVO) throws StorageException;
 
-    void storeHistoryTransactionReport(TransactionReportVO transactionReportVO);
+    void storeHistoryTransactionReport(String group, TransactionReportVO transactionReportVO);
 
 
 }

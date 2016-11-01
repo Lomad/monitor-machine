@@ -41,16 +41,19 @@ public class TransactionDataStorage implements ITransactionDataStorage {
 
 
     @Override
-    public LinkedHashSet<String> findAllTransactionDomains() {
+    public LinkedHashSet<String> findAllTransactionDomains(String group) {
+        Query query = new Query();
+        query.addCriteria(new Criteria("group").is(group));
         List<String> domains = this.mongoTemplate.getCollection(REALTIME_COLLECTION_NAME).distinct("domain");
         Collections.sort(domains);
         return new LinkedHashSet<>(domains);
     }
 
     @Override
-    public LinkedHashSet<String> findAllServerIpAddress(String domain) {
-        Query query = new Query();
-        query.addCriteria(new Criteria("domain").is(domain));
+    public LinkedHashSet<String> findAllServerIpAddress(String group, String domain) {
+        Criteria criteria = Criteria.where("domain").is(domain)
+                           .and("group").is(group);
+        Query query = new Query(criteria);
         List<String> ips = this.mongoTemplate.getCollection(REALTIME_COLLECTION_NAME)
                 .distinct("machines.ip", query.getQueryObject());
         Collections.sort(ips);
@@ -58,12 +61,12 @@ public class TransactionDataStorage implements ITransactionDataStorage {
     }
 
     @Override
-    public List<TransactionReportVO> queryRealtimeTransactionReports(String domain, String startTime) {
+    public List<TransactionReportVO> queryRealtimeTransactionReports(String group, String domain, String startTime) {
         Query query = new Query();
         query.addCriteria(new Criteria("domain").is(domain));
         query.addCriteria(new Criteria("startTime").is(startTime));
         query.addCriteria(new Criteria("type").is(TransactionReportType.REALTIME.getName()));
-
+        query.addCriteria(new Criteria("group").is(group));
         List<TransactionReportVO> list =
                 this.mongoTemplate.find(query, TransactionReportVO.class, REALTIME_COLLECTION_NAME);
 
@@ -76,7 +79,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
     }
 
     @Override
-    public List<TransactionReportVO> queryRealtimeTransactionReports(Map<String, Object> map) {
+    public List<TransactionReportVO> queryRealtimeTransactionReports(String group, Map<String, Object> map) {
         Query query = new Query();
         query.addCriteria(new Criteria("type").is(TransactionReportType.REALTIME.getName()));
         if (map != null && map.containsKey("domain"))
@@ -87,6 +90,8 @@ public class TransactionDataStorage implements ITransactionDataStorage {
             query.addCriteria(new Criteria("machines.transactionClients.transactionTypes.name").is(map.get("transactionType")));
         if (map != null && map.containsKey("serverIp"))
             query.addCriteria(new Criteria("machines.ip").is(map.get("serverIp")));
+        if (map != null && map.containsKey("group"))
+            query.addCriteria(new Criteria("group").is(map.get("group")));
 
         List<TransactionReportVO> list =
                 this.mongoTemplate.find(query, TransactionReportVO.class, REALTIME_COLLECTION_NAME);
@@ -100,11 +105,12 @@ public class TransactionDataStorage implements ITransactionDataStorage {
     }
 
     @Override
-    public List<TransactionReportVO> queryRealtimeTransactionReports(String domain, String startTime, String endTime, Map<String, Object> map) {
+    public List<TransactionReportVO> queryRealtimeTransactionReports(String group, String domain, String startTime, String endTime, Map<String, Object> map) {
         Query query = new Query();
         query.addCriteria(new Criteria("domain").is(domain));
         query.addCriteria(new Criteria("startTime").gte(startTime).lte(endTime));
         query.addCriteria(new Criteria("type").is(TransactionReportType.REALTIME.getName()));
+        query.addCriteria(new Criteria("group").is(group));
 
         if (map != null && map.containsKey("transactionType"))
             query.addCriteria(new Criteria("machines.transactionClients.transactionTypes.name").is(map.get("transactionType")));
@@ -124,10 +130,11 @@ public class TransactionDataStorage implements ITransactionDataStorage {
 
 
     @Override
-    public List<TransactionReportVO> queryRealtimeTransactionReports(String domain, String startTime, String endTime) {
+    public List<TransactionReportVO> queryRealtimeTransactionReports(String group, String domain, String startTime, String endTime) {
         Criteria criteria = Criteria.where("domain").is(domain)
                 .and("type").is(TransactionReportType.REALTIME.getName())
-                .and("startTime").gte(startTime).lte(endTime);
+                .and("startTime").gte(startTime).lte(endTime)
+                .and("group").is(group);
         Query query = new Query(criteria);
 
         List<TransactionReportPO> list =
@@ -140,10 +147,11 @@ public class TransactionDataStorage implements ITransactionDataStorage {
 
 
     @Override
-    public List<TransactionReportVO> queryHistoryTransactionReports(String domain, String startTime, String endTime, TransactionReportType type) {
+    public List<TransactionReportVO> queryHistoryTransactionReports(String group, String domain, String startTime, String endTime, TransactionReportType type) {
         Criteria criteria = Criteria.where("domain").is(domain)
                 .and("type").is(type.getName())
-                .and("startTime").gte(startTime).lt(endTime);
+                .and("startTime").gte(startTime).lt(endTime)
+                .and("group").is(group);
         Query query = new Query(criteria);
 
         String collectionName = this.getHistoryCollectionName(type);
@@ -158,11 +166,12 @@ public class TransactionDataStorage implements ITransactionDataStorage {
 
 
     @Override
-    public List<TransactionReportVO> queryHistoryTransactionReports(String domain, String startTime, String endTime,TransactionReportType type,Map<String, Object> map) {
+    public List<TransactionReportVO> queryHistoryTransactionReports(String group, String domain, String startTime, String endTime,TransactionReportType type,Map<String, Object> map) {
         Query query = new Query();
         query.addCriteria(new Criteria("domain").is(domain));
         query.addCriteria(new Criteria("startTime").gte(startTime).lte(endTime));
         query.addCriteria(new Criteria("type").is(type.getName()));
+        query.addCriteria(new Criteria("group").is(group));
         String collectionName = this.getHistoryCollectionName(type);
 
         if (map != null && map.containsKey("transactionType"))
@@ -183,7 +192,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
 
 
     @Override
-    public List<TransactionReportVO> queryTransactionReportsByType(String domain, String startTime, String typeName, TransactionReportType type) {
+    public List<TransactionReportVO> queryTransactionReportsByType(String group, String domain, String startTime, String typeName, TransactionReportType type) {
         Query query = new Query();
         query.fields().include("machines.transactionTypes.transactionNames");
         query.addCriteria(new Criteria("domain").is(domain));
@@ -205,12 +214,13 @@ public class TransactionDataStorage implements ITransactionDataStorage {
 
 
     @Override
-    public void storeRealtimeTransactionReport(TransactionReportVO transactionReport) throws StorageException {
+    public void storeRealtimeTransactionReport(String group, TransactionReportVO transactionReport) throws StorageException {
         try {
             TransactionReportPO transactionReportPO = new TransactionReportPO(transactionReport);
 
             Query query = new Query();
             query.addCriteria(new Criteria("_id").is(transactionReport.getId()));
+            query.addCriteria(new Criteria("group").is(group));
 
             boolean existsReport = this.mongoTemplate.exists(query, TransactionReportPO.class, REALTIME_COLLECTION_NAME);
 
@@ -231,7 +241,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
     }
 
     @Override
-    public void storeHistoryTransactionReport(TransactionReportVO transactionReport) {
+    public void storeHistoryTransactionReport(String group, TransactionReportVO transactionReport) {
         try {
             TransactionReportPO transactionReportPO = new TransactionReportPO(transactionReport);
 
@@ -240,6 +250,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
             query.addCriteria(new Criteria("startTime").is(transactionReport.getStartTime()));
             query.addCriteria(new Criteria("endTime").is(transactionReport.getEndTime()));
             query.addCriteria(new Criteria("type").is(transactionReport.getType().getName()));
+            query.addCriteria(new Criteria("group").is(group));
 
             String collectionName = this.getHistoryCollectionName(transactionReport.getType());
 
