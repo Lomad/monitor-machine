@@ -15,6 +15,15 @@ $(document).ready(function () {
     global_Object.status=$("#status").val();
     global_Object.type = $("#type").val();
     global_Object.time = $("#time").val();
+    if (global_Object.type == "最近一小时") {
+        global_Object.url = contextPath+"/paas/queryLastHourTransactionMessageList"
+    }
+    else if (global_Object.type == "当天") {
+        global_Object.url = contextPath+"/paas/queryTodayTransactionMessageList"
+    }
+    else if (global_Object.type == "指定小时") {
+        global_Object.url = contextPath+"/paas/queryHourTransactionMessageList"
+    }
     global_Object.initDomEvent();
     fTable = $("#fTable").winningTable({
         "pageLength": 10,
@@ -55,8 +64,10 @@ $(document).ready(function () {
         "responsive": true,
         "width": "100%"
     });
-    //console.log(global_Object)
-    fTable.queryDataInPage(contextPath+"/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
+    var data = {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status,time:global_Object.time};
+    fTable.queryDataInPage(global_Object.url,data);
+    console.log(data);
+    console.log(global_Object.url);
 });
 var global_Object = {
     serverAppName:$("serverAppName").val(),
@@ -67,6 +78,7 @@ var global_Object = {
     status:$("status").val(),
     type:"",
     time:"",
+    url:contextPath+"/paas/queryLastHourTransactionMessageList",
     initDomEvent:function(){
         $("#statusselect a").on("click", function () {
             $("#statusvalue").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
@@ -82,7 +94,7 @@ var global_Object = {
         json=[];
         index2=0;
         json2=[];
-        fTable.queryDataInPage(contextPath+"/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
+        fTable.queryDataInPage(global_Object.url, {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status,hour:global_Object.hour});
     },
     bzClick:function(obj,index){
 //console.log(json[index]);

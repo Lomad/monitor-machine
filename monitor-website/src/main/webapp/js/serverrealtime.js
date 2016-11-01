@@ -40,25 +40,28 @@ var global_Object = {
     initDomEvent: function () {
 
         $("#time1").on("click", function () {
+            global_Object.time="";
             global_Object.url = contextPath+"/paas/queryTransactionTypeList";
             global_Object.type="最近一小时";
             $(this).addClass("active").siblings().removeClass("active");
             global_Object.queryTableData();
         });
         $("#time2").on("click", function () {
+            global_Object.time="";
             global_Object.url = contextPath+"/paas/queryTodayTransactionTypeReportByServer";
             global_Object.type="当天";
             $(this).addClass("active").siblings().removeClass("active");
             global_Object.queryTableData();
         });
         $("#time3").on("click", function () {
-            global_Object.url = contextPath+"/paas/queryTransactionTypeList";
+            global_Object.url = contextPath+"/paas/queryHourTransactionTypeReportByServer";
 
             $(this).addClass("active").siblings().removeClass("active");
             //global_Object.queryTableData();
         });
         $("#time3v li").on("click", function () {
-            global_Object.time =$(this).text(); //$(this).text().split('-')[0];
+            //global_Object.time =$(this).text(); //$(this).text().split('-')[0];
+            global_Object.time=global_Object.getNowFormatDate()+" "+$(this).text().split('-')[0]+":00";
             global_Object.type="指定小时";
             $("#time3").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
             global_Object.queryTableData();
@@ -82,7 +85,8 @@ var global_Object = {
         });
     },
     queryTableData: function () {
-        $.post(global_Object.url, {flname: global_Object.flname}, function (data) {
+        //console.log(global_Object.url+"---"+global_Object.flname+"---"+global_Object.time);
+        $.post(global_Object.url, {flname: global_Object.flname,time:global_Object.time}, function (data) {
             //console.log(data);
             global_Object.tableDataOld =data.transactionStatisticDatas;
             global_Object.tableData = data.transactionStatisticDatas;
@@ -225,11 +229,12 @@ var global_Object = {
             url =contextPath+"/paas/queryTodayTransactionTypeCallTimesReportByServer";
         }
         else if(global_Object.type=="指定小时"){
-            url =contextPath+"/paas/queryLastHourTransactionTypeCallTimesReportByServer";
+            url =contextPath+"/paas/queryHourTransactionTypeCallTimesReportByServer";
         }
 //console.log($(obj).data("transactiontypename"))
-        //alert($(obj).data("transactiontypename"));alert(global_Object.flname);alert($(obj).data("serveripaddress"))
-        $.post(url, {serverAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress")}, function (data) {
+//        alert($(obj).data("transactiontypename"));alert(global_Object.flname);alert($(obj).data("serveripaddress"));alert(global_Object.time)
+        console.log($(obj).data("transactiontypename")+"--"+global_Object.flname+"--"+$(obj).data("serveripaddress")+"--"+global_Object.hour)
+        $.post(url, {serverAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress"),hour:global_Object.time}, function (data) {
             var json=[];
             var name =[]
             for(var key in data.durations){
@@ -277,6 +282,21 @@ var global_Object = {
         });
 
     },
+    getNowFormatDate:function(){
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    },
     openPostWindow:function(obj){
         var url =contextPath+"/paas/serversysrealtime";
         //alert($(obj).parents("tr").data("transactiontypename"))
@@ -288,7 +308,8 @@ var global_Object = {
     openPostTotalCount:function(obj){
         var url =contextPath+"/paas/serverdetailedrealtime";
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":""};
-        console.log(datas);
+        //console.log(datas);
+        //console.log("-------------"+global_Object.hour);
         JqCommon.openPostWindow(url,datas);
     },
     openPostFalse:function(obj){

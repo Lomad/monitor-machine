@@ -9,10 +9,10 @@ $(document).ready(function () {
         global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
     }
     else if (global_Object.type == "当天") {
-        global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = contextPath+"/paas/queryTodayTransactionNameReportByServer"
     }
     else if (global_Object.type == "指定小时") {
-        global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = contextPath+"/paas/queryHourTransactionNameReportByServer"
     }
     $.post(contextPath+"/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
 //alert( $("#serverIpAddresshidden").val());
@@ -57,11 +57,15 @@ var global_Object = {
 
     },
     queryTableData: function () {
-        $.post(global_Object.url, {
+        var datas = {
             serverAppName: global_Object.serverAppName,
             transactionTypeName: global_Object.transactionTypeName,
-            serverIpAddress: global_Object.serverIpAddress
-        }, function (data) {
+            serverIpAddress: global_Object.serverIpAddress,
+            time:global_Object.time
+        };
+        console.log(datas);
+        console.log(global_Object.url);
+        $.post(global_Object.url,datas, function (data) {
             //console.log(data);
             global_Object.tableDataOld = data.transactionStatisticDatas;
             global_Object.tableData = data.transactionStatisticDatas;
@@ -117,6 +121,7 @@ var global_Object = {
             name.push(v.transactionName);
             json.push({value: v.avg,name: v.transactionName});
         });
+        console.log(json);
         var option = {
 
             tooltip : {
