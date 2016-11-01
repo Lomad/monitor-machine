@@ -50,7 +50,9 @@ public class TransactionAnalyzer
     @Override
     protected void process(MessageTree tree) {
         String domain = tree.getDomain();
-        TransactionReport report = reportReportManager.getHourlyReport(getStartTime(), domain, true);
+        String group = tree.getGroup();
+
+        TransactionReport report = reportReportManager.getHourlyReport(getStartTime(), group, domain, true);
         LogMessage message = tree.getMessage();
 
         report.addIp(tree.getIpAddress());

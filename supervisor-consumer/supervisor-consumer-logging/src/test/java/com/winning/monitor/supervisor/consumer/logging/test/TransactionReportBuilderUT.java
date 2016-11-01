@@ -61,7 +61,7 @@ public class TransactionReportBuilderUT extends
 
     @Test
     public void testCreateTask() throws ParseException {
-        Date period = sdf.parse("2016-11-01 10:00:00");
+        Date period = sdf.parse("2016-11-01 12:00:00");
         taskManager.createTask(period, "test1",
                 TransactionReportBuilder.TASK_BUILDER_NAME, TaskManager.TaskProlicy.ALL);
     }

@@ -38,6 +38,8 @@ public class TransactionMessage {
     //记录值
     private Map<String, String> datas = new LinkedHashMap<>();
 
+    private String group;
+
     public List<TransactionMessage> getChildren() {
         return children;
     }
@@ -144,5 +146,13 @@ public class TransactionMessage {
 
     public void addTransactionMessage(TransactionMessage transactionMessage) {
         this.children.add(transactionMessage);
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }

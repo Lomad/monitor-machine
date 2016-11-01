@@ -20,6 +20,7 @@ public class TransactionReportPO {
     @Id
     private String id;
     private String domain;
+    private String group;
     private int idx;
     private Set<String> ips;
     private String type;
@@ -37,6 +38,7 @@ public class TransactionReportPO {
     public TransactionReportPO(TransactionReportVO transactionReportVO) {
         this.id = transactionReportVO.getId();
         this.domain = transactionReportVO.getDomain();
+        this.group = transactionReportVO.getGroup();
         this.idx = transactionReportVO.getIndex();
         this.ips = transactionReportVO.getIps();
         this.type = transactionReportVO.getType().getName();
@@ -155,5 +157,13 @@ public class TransactionReportPO {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }

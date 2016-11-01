@@ -19,6 +19,10 @@ public interface MessageTree extends Message {
 
     public void setDomain(String domain);
 
+    public String getGroup();
+
+    public void setGroup(String group);
+
     public String getHostName();
 
     public void setHostName(String hostName);

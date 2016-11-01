@@ -11,11 +11,13 @@ public class TransactionReport {
 
     private String m_domain;
 
+    private String group;
+
     private java.util.Date m_startTime;
 
     private java.util.Date m_endTime;
 
-    private Set<String> m_domainNames = new LinkedHashSet<String>();
+//    private Set<String> m_domainNames = new LinkedHashSet<String>();
 
     private Map<String, Machine> m_machines = new LinkedHashMap<String, Machine>();
 
@@ -24,15 +26,11 @@ public class TransactionReport {
     public TransactionReport() {
     }
 
-    public TransactionReport(String domain) {
+    public TransactionReport(String group, String domain) {
         m_domain = domain;
+        this.group = group;
     }
 
-
-    public TransactionReport addDomain(String domain) {
-        m_domainNames.add(domain);
-        return this;
-    }
 
     public TransactionReport addIp(String ip) {
         m_ips.add(ip);
@@ -89,9 +87,9 @@ public class TransactionReport {
         return this;
     }
 
-    public Set<String> getDomainNames() {
-        return m_domainNames;
-    }
+//    public Set<String> getDomainNames() {
+//        return m_domainNames;
+//    }
 
     public java.util.Date getEndTime() {
         return m_endTime;
@@ -140,4 +138,11 @@ public class TransactionReport {
         return m_machines.remove(ip);
     }
 
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
 }

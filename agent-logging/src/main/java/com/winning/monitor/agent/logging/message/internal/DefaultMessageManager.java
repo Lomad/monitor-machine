@@ -121,9 +121,9 @@ public class DefaultMessageManager implements MessageManager {
             return ctx;
         } else {
             if (m_domain != null) {
-                ctx = new Context(m_domain.getId(), m_domain.getHostName(), m_domain.getIp());
+                ctx = new Context(m_domain.getGroup(), m_domain.getId(), m_domain.getHostName(), m_domain.getIp());
             } else {
-                ctx = new Context("Unknown", m_domain.getHostName(), "");
+                ctx = new Context("Unknown", "Unknown", m_domain.getHostName(), "");
             }
 
             m_context.set(ctx);
@@ -235,9 +235,9 @@ public class DefaultMessageManager implements MessageManager {
         Context ctx;
 
         if (m_domain != null) {
-            ctx = new Context(m_domain.getId(), m_domain.getHostName(), m_domain.getIp());
+            ctx = new Context(m_domain.getGroup(), m_domain.getId(), m_domain.getHostName(), m_domain.getIp());
         } else {
-            ctx = new Context("Unknown", m_domain.getHostName(), "");
+            ctx = new Context("Unknown", "Unknown", m_domain.getHostName(), "");
         }
 
         m_context.set(ctx);
@@ -284,7 +284,7 @@ public class DefaultMessageManager implements MessageManager {
 
         private Set<Throwable> m_knownExceptions;
 
-        public Context(String domain, String hostName, String ipAddress) {
+        public Context(String group, String domain, String hostName, String ipAddress) {
             m_tree = new DefaultMessageTree();
             m_stack = new Stack<Transaction>();
 
@@ -295,6 +295,7 @@ public class DefaultMessageManager implements MessageManager {
             m_tree.setThreadId(String.valueOf(thread.getId()));
             m_tree.setThreadName(thread.getName());
 
+            m_tree.setGroup(group);
             m_tree.setDomain(domain);
             m_tree.setHostName(hostName);
             m_tree.setIpAddress(ipAddress);

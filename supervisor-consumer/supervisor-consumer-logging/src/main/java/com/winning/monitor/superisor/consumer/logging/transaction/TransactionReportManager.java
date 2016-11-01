@@ -34,8 +34,8 @@ public class TransactionReportManager extends AbstractReportManager<TransactionR
     private TaskManager taskManager;
 
     @Override
-    protected TransactionReport makeReport(String domain, long startTime, long duration) {
-        TransactionReport report = new TransactionReport(domain);
+    protected TransactionReport makeReport(String group, String domain, long startTime, long duration) {
+        TransactionReport report = new TransactionReport(group, domain);
         report.setId(UUID.randomUUID().toString());
         report.setStartTime(new Date(startTime));
         report.setEndTime(new Date(startTime + duration - 1));
@@ -75,7 +75,7 @@ public class TransactionReportManager extends AbstractReportManager<TransactionR
     public void storeHourlyReports(long startTime, StoragePolicy storagePolicy, int index) {
         Map<String, TransactionReport> reports = m_reports.get(startTime);
         if (reports == null) {
-            logger.info("当前时间{}报表不存在!", new Date(startTime));
+            logger.info("当前时间{}报表不存在!当前存在数据为{}", new Date(startTime), reports.keySet());
             return;
         }
 
