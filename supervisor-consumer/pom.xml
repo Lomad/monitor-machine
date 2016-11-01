@@ -14,8 +14,6 @@
     <modules>
         <module>supervisor-consumer-api</module>
         <module>supervisor-consumer-logging</module>
-        <module>supervisor-consumer-collector</module>
-        <module>supervisor-consumer-collector-system</module>
     </modules>
 
 

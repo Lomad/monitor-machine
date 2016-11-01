@@ -41,7 +41,7 @@ public class PeriodManager implements Runnable {
             return;
 
         this.thread = new Thread(this);
-        this.thread.setDaemon(false);
+        this.thread.setDaemon(true);
         this.thread.start();
     }
 

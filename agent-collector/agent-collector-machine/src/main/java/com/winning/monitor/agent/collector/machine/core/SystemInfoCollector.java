@@ -15,7 +15,7 @@ public class SystemInfoCollector implements IDataCollector {
 
     @Override
     public CollectData collect() {
-        CollectData collectData = new CollectData("SystemInfo");
+        CollectData collectData = new CollectData();
         this.collectCpu(collectData);
         this.collectMem(collectData);
         this.collectOS(collectData);

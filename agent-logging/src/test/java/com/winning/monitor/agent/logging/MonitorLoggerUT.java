@@ -102,6 +102,6 @@ public class MonitorLoggerUT {
             parentTransaction.success();
             Thread.sleep(1000);
         }
-
     }
+
 }

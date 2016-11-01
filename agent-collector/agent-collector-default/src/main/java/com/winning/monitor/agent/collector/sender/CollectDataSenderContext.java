@@ -30,8 +30,6 @@ public class CollectDataSenderContext {
         SenderConfig senderConfig = this.senderConfigFactory.getSenderConfig();
         this.collectDataMessageTransport = new
                 NettyCollectDataMessageTransport(senderConfig.getServers(), dataEntityStorage);
-        this.collectDataMessageTransport.initialize();
-
 //        this.collectDataMessageTransport =
 //        this.messageTransport = this.messageTransportFactory.createMessageTransport(senderConfig);
 //        this.collectDataMessageTransport
