@@ -7,6 +7,8 @@ import com.winning.monitor.data.storage.api.ITransactionDataStorage;
 import com.winning.monitor.superisor.consumer.api.report.AbstractReportManager;
 import com.winning.monitor.superisor.consumer.logging.transaction.entity.TransactionReport;
 import com.winning.monitor.supervisor.core.task.TaskManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -21,9 +23,10 @@ import java.util.UUID;
 public class TransactionReportManager extends AbstractReportManager<TransactionReport>
         implements Runnable {
 
+    private final Logger logger = LoggerFactory.getLogger(TransactionReportManager.class);
+
     private Thread thread;
     private volatile boolean active = true;
-
     @Autowired
     private ITransactionDataStorage transactionDataStorage;
 
@@ -90,7 +93,7 @@ public class TransactionReportManager extends AbstractReportManager<TransactionR
                     taskManager.createTask(new Date(startTime), transactionReport.getDomain(),
                             TransactionReportBuilder.TASK_BUILDER_NAME, TaskManager.TaskProlicy.ALL);
                 } catch (Exception e) {
-
+                    logger.error("生成报表任务时发生错误", e);
                 }
             }
         }

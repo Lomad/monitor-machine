@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.locks.LockSupport;
 
@@ -39,15 +40,14 @@ public class TaskConsumer implements Runnable {
     }
 
     public boolean checkTime() {
-        return true;
-//        Calendar cal = Calendar.getInstance();
-//        int minute = cal.get(Calendar.MINUTE);
-//        //当前时间分钟数如果大于15,则返回true
-//        if (minute > 15) {
-//            return true;
-//        } else {
-//            return false;
-//        }
+        Calendar cal = Calendar.getInstance();
+        int minute = cal.get(Calendar.MINUTE);
+        //当前时间分钟数如果大于3,则返回true
+        if (minute > 3) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @PostConstruct
