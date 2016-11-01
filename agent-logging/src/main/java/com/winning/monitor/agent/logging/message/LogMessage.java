@@ -14,7 +14,7 @@ public interface LogMessage {
      *
      * @param keyValuePairs key-value pairs like 'a=1&b=2&...'
      */
-    public void addData(String keyValuePairs);
+//    public void addData(String keyValuePairs);
 
     /**
      * add one key-value pair to the message.

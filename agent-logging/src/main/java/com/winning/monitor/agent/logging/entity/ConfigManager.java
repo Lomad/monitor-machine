@@ -35,27 +35,33 @@ public class ConfigManager {
         this.domain.setIp(NetworkInterfaceManager.INSTANCE.getLocalHostAddress());
         this.domain.setHostName(NetworkInterfaceManager.INSTANCE.getLocalHostName());
 
-        if (this.initDomainName(domain, "META-INF/winning/properties/application.properties", "application.name"))
+        if (this.initDomainName(domain, "META-INF/winning/properties/application.properties", "application.name", "application.group"))
             return;
 
-        if (this.initDomainName(domain, "META-INF/app.properties", "app.name"))
+        if (this.initDomainName(domain, "META-INF/app.properties", "app.name", "app.group"))
             return;
     }
 
-    private boolean initDomainName(Domain domain, String propertiesFile, String keyName) {
+    private boolean initDomainName(Domain domain, String propertiesFile, String appNameKey, String groupNameKey) {
         Properties properties =
                 ConfigUtils.loadProperties(propertiesFile, false, false);
 
         if (properties == null || properties.keySet().size() == 0)
             return false;
 
-        String name = properties.getProperty(keyName);
-        if (name != null || !"".equals(name)) {
-            domain.setId(name);
-            return true;
+        String name = properties.getProperty(appNameKey);
+        if (name == null || "".equals(name)) {
+            return false;
+        }
+        String group = properties.getProperty(groupNameKey);
+        if (group == null || "".equals(group)) {
+            return false;
         }
 
-        return false;
+        domain.setId(name);
+        domain.setGroup(group);
+
+        return true;
     }
 
 

@@ -6,6 +6,7 @@ import com.winning.monitor.agent.logging.message.internal.AbstractLogMessage;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -149,5 +150,10 @@ public class DefaultTransaction extends AbstractLogMessage implements Transactio
         this.durationStart = durationStart;
     }
 
-
+    public void putDatas(LinkedHashMap<String, Object> datas) {
+        if (datas != null)
+            super.data = datas;
+        else
+            datas = new LinkedHashMap<>();
+    }
 }

@@ -2,6 +2,8 @@ package com.winning.monitor.supervisor.core.task;
 
 import com.winning.monitor.agent.config.utils.NetworkInterfaceManager;
 import com.winning.monitor.supervisor.core.task.exception.TaskStoreException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,9 @@ public class TaskManager {
     private static final long ONE_HOUR = 60 * 60 * 1000L;
     private static final long ONE_DAY = 24 * ONE_HOUR;
     private static final int STATUS_TODO = 1;
+    private static final Logger logger = LoggerFactory.getLogger(TaskManager.class);
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     @Autowired
     private ITaskDao taskDao;
 
@@ -40,6 +44,7 @@ public class TaskManager {
     }
 
     protected void createTask(Date period, String domain, String name, int reportType) throws TaskStoreException {
+
         Task task = new Task();
 
         task.setId(UUID.randomUUID().toString());

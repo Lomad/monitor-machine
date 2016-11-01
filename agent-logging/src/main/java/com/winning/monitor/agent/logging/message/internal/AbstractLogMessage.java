@@ -3,20 +3,18 @@ package com.winning.monitor.agent.logging.message.internal;
 import com.winning.monitor.agent.logging.message.LogMessage;
 import com.winning.monitor.agent.logging.utils.MilliSecondTimer;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * Created by nicholasyan on 16/9/8.
  */
 public abstract class AbstractLogMessage implements LogMessage {
+    protected LinkedHashMap<String, Object> data = new LinkedHashMap<>();
     private String type;
-
     private String name;
-
     private String status = "unset";
-
     private long timestampInMillis;
-
-    private CharSequence data;
-
     private boolean completed;
 
     public AbstractLogMessage(String type, String name) {
@@ -25,46 +23,50 @@ public abstract class AbstractLogMessage implements LogMessage {
         this.timestampInMillis = MilliSecondTimer.currentTimeMillis();
     }
 
-    @Override
-    public void addData(String keyValuePairs) {
-        if (this.data == null) {
-            this.data = keyValuePairs;
-        } else if (this.data instanceof StringBuilder) {
-            ((StringBuilder) this.data).append('&').append(keyValuePairs);
-        } else {
-            StringBuilder sb = new StringBuilder(this.data.length() + keyValuePairs.length() + 16);
-
-            sb.append(this.data).append('&');
-            sb.append(keyValuePairs);
-            this.data = sb;
-        }
-    }
+//    @Override
+//    public void addData(String keyValuePairs) {
+//        if (this.data == null) {
+//            this.data = keyValuePairs;
+//        } else if (this.data instanceof StringBuilder) {
+//            ((StringBuilder) this.data).append('&').append(keyValuePairs);
+//        } else {
+//            StringBuilder sb = new StringBuilder(this.data.length() + keyValuePairs.length() + 16);
+//
+//            sb.append(this.data).append('&');
+//            sb.append(keyValuePairs);
+//            this.data = sb;
+//        }
+//    }
 
     @Override
     public void addData(String key, Object value) {
-        if (this.data instanceof StringBuilder) {
-            ((StringBuilder) this.data).append('&').append(key).append('=').append(value);
-        } else {
-            String str = String.valueOf(value);
-            int old = this.data == null ? 0 : this.data.length();
-            StringBuilder sb = new StringBuilder(old + key.length() + str.length() + 16);
-
-            if (this.data != null) {
-                sb.append(this.data).append('&');
-            }
-
-            sb.append(key).append('=').append(str);
-            this.data = sb;
-        }
+        this.data.put(key, value);
+//        if (this.data instanceof StringBuilder) {
+//            ((StringBuilder) this.data).append('&').append(key).append('=').append(value);
+//        } else {
+//            String str = String.valueOf(value);
+//            int old = this.data == null ? 0 : this.data.length();
+//            StringBuilder sb = new StringBuilder(old + key.length() + str.length() + 16);
+//
+//            if (this.data != null) {
+//                sb.append(this.data).append('&');
+//            }
+//
+//            sb.append(key).append('=').append(str);
+//            this.data = sb;
+//        }
     }
 
     @Override
-    public CharSequence getData() {
-        if (this.data == null) {
-            return "";
-        } else {
-            return this.data;
-        }
+    public Map<String, Object> getData() {
+        return this.data;
+//        if (this.data == null) {
+//            return "";
+//        } else {
+//            return this.data.t
+//
+//            //return this.data;
+//        }
     }
 
     @Override

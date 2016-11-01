@@ -10,6 +10,7 @@ public class MessageTreePO {
     private String time;
     private String ipAddress;
     private String domain;
+    private String group;
     private String messageId;
 
     private MessageTree messageTree;
@@ -23,6 +24,7 @@ public class MessageTreePO {
         this.domain = messageTree.getDomain();
         this.ipAddress = messageTree.getIpAddress();
         this.messageId = messageTree.getMessageId();
+        this.group = messageTree.getGroup();
     }
 
 
@@ -56,5 +58,21 @@ public class MessageTreePO {
 
     public void setMessageTree(MessageTree messageTree) {
         this.messageTree = messageTree;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }

@@ -7,6 +7,8 @@ public class Domain {
 
     private String id;
 
+    private String group;
+
     private String ip;
 
     private String hostName;
@@ -33,5 +35,13 @@ public class Domain {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }
