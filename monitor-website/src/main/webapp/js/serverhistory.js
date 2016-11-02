@@ -24,10 +24,11 @@ var global_Object = {
     tableDataOld: [],
     tableData: [],
     flname: "",
-    url: contextPath+"/paas/queryTodayTransactionTypeReportByServer",
+    url: contextPath+"/paas/queryDayTransactionTypeReportByServer",
     totalSize: 0,
     type:"day",
     value:"",
+    formatdate:"",
     initDomEvent: function () {
         $("#date_picker").datepicker({
             language: "zh-CN",
@@ -38,6 +39,7 @@ var global_Object = {
         });
         var date = new Date();
         var yesterday = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate()-1);
+        global_Object.formatdate = yesterday;
         $("#date_picker").datepicker('update',yesterday);
         $("#sel a").on('click',function(){
             var data =$(this).attr("data");
@@ -153,7 +155,8 @@ var global_Object = {
         return (getdate(monday)+"-"+getdate(millSeconds));
     },
     queryTableData: function () {
-        $.post(global_Object.url, {flname: global_Object.flname}, function (data) {
+
+        $.post(global_Object.url, {flname: global_Object.flname,date:global_Object.formatdate}, function (data) {
             //console.log(data);
             global_Object.tableDataOld =data.transactionStatisticDatas;
             global_Object.tableData = data.transactionStatisticDatas;

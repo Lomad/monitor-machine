@@ -354,29 +354,7 @@ public class PaasController {
         return  report;
     }
 
-    /**
-     * 获取指定周的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
-     * @param flname
-     * @param week
-     * @return
-     */
-    @RequestMapping(value = {"/paas/queryWeekTransactionTypeReportByServer"})
-    public @ResponseBody TransactionStatisticReport queryWeekTransactionTypeReportByServer(String flname,String week){
-        TransactionStatisticReport report = transactionDataQuery.queryWeekTransactionTypeReportByServer(flname, week);
-        return  report;
-    }
 
-    /**
-     * 获取指定月的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
-     * @param flname
-     * @param month
-     * @return
-     */
-    @RequestMapping(value = {"/paas/queryMonthTransactionTypeReportByServer"})
-    public @ResponseBody TransactionStatisticReport queryMonthTransactionTypeReportByServer(String flname,String month){
-        TransactionStatisticReport report = transactionDataQuery.queryMonthTransactionTypeReportByServer(flname, month);
-        return  report;
-    }
 
     /**
      * 获取当天的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
@@ -422,6 +400,24 @@ public class PaasController {
         TransactionStatisticReport report =transactionDataQuery.queryTodayTransactionTypeReportByClient(serverAppName, transactionTypeName, serverIpAddress);
         return  report;
     }
+
+    /***
+     * 获取指定小时的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
+     * @param serverAppName
+     * @param transactionTypeName
+     * @param serverIpAddress
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryHourTransactionTypeReportByClient"})
+    public @ResponseBody TransactionStatisticReport queryHourTransactionTypeReportByClient(String serverAppName,
+                                                                                            String transactionTypeName,
+                                                                                            String serverIpAddress,
+                                                                                            String time){
+        TransactionStatisticReport report =transactionDataQuery.queryHourTransactionTypeReportByClient(serverAppName,time, transactionTypeName, serverIpAddress);
+        return  report;
+    }
+
+
 
     /**
      * 获取最近一小时的TransactionType调用次数的结果集,不进行分页
@@ -485,6 +481,21 @@ public class PaasController {
         return  report;
     }
 
+    /**
+     * 获取当天的TransactionName服务步骤统计结果不进行分页
+     * @param serverAppName
+     * @param transactionTypeName
+     * @param serverIpAddress
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryTodayTransactionNameReportByServer"})
+    public @ResponseBody TransactionStatisticReport queryTodayTransactionNameReportByServer(String serverAppName,
+                                                                                               String transactionTypeName,
+                                                                                               String serverIpAddress){
+        TransactionStatisticReport report =transactionDataQuery.queryTodayTransactionNameReportByServer(serverAppName, transactionTypeName, serverIpAddress);
+        return  report;
+    }
+
 
     /**
      * 获取指定小时的TransactionName服务步骤统计结果不进行分页
@@ -497,9 +508,11 @@ public class PaasController {
     @RequestMapping(value = {"/paas/queryHourTransactionNameReportByServer"})
     public @ResponseBody TransactionStatisticReport queryHourTransactionNameReportByServer(String serverAppName,
                                                                                                String transactionTypeName,
-                                                                                               String hour,
-                                                                                               String serverIpAddress){
-        TransactionStatisticReport report =transactionDataQuery.queryHourTransactionNameReportByServer(serverAppName, transactionTypeName,hour,serverIpAddress);
+                                                                                               String serverIpAddress,
+                                                                                               String time){
+//        System.out.println(serverAppName+"--"+time+"--"+transactionTypeName+"--"+serverIpAddress);
+//        System.out.println("------------------------------------");
+        TransactionStatisticReport report =transactionDataQuery.queryHourTransactionNameReportByServer(serverAppName,time,transactionTypeName,serverIpAddress);
         return  report;
     }
 
@@ -610,9 +623,304 @@ public class PaasController {
             orderValue="ASC";
         }
         orderBy.put(linkkey[orderNum],orderValue);
+        System.out.println(serverAppName+"--"+time+"--"+transactionTypeName+"--"+transactionName+"--"+ serverIpAddress+"--"+clientAppName+"--"+clientIpAddress+"--"+status+"--"+startIndex+"--"+pageSize+"--"+orderBy);
         TransactionMessageList report = transactionDataQuery.queryHourTransactionMessageList(serverAppName,time,transactionTypeName,transactionName, serverIpAddress,clientAppName,clientIpAddress,status,startIndex,pageSize,orderBy);
         return  report;
     }
+
+    //day
+    /**
+     * 获取指定日期的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
+     * @param flname
+     * @param date  指定日期,格式为 yyyy-MM-dd
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryDayTransactionTypeReportByServer"})
+    @ResponseBody
+    public TransactionStatisticReport queryDayTransactionTypeReportByServer(String flname,String date){
+        TransactionStatisticReport report = transactionDataQuery.queryDayTransactionTypeReportByServer(flname,date);
+        return report;
+    }
+
+    /**
+     * 获取指定日期的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
+     * @param flname
+     * @param date
+     * @param transactionTypeName
+     * @param serverIpAddress
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryDayTransactionTypeReportByClient"})
+    @ResponseBody
+    public TransactionStatisticReport queryDayTransactionTypeReportByClient(String flname,String date,String transactionTypeName,String serverIpAddress){
+        TransactionStatisticReport report = transactionDataQuery.queryDayTransactionTypeReportByClient(flname,date,transactionTypeName,serverIpAddress);
+        return report;
+    }
+
+    /**
+     * 获取指定日期的TransactionType调用次数的结果集,不进行分页
+     * @param flname
+     * @param date
+     * @param transactionTypeName
+     * @param serverIpAddress
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryDayTransactionTypeCallTimesReportByServer"})
+    @ResponseBody
+    public TransactionCallTimesReport queryDayTransactionTypeCallTimesReportByServer(String flname,String date,String transactionTypeName,String serverIpAddress){
+        TransactionCallTimesReport report = transactionDataQuery.queryDayTransactionTypeCallTimesReportByServer(flname,date,transactionTypeName,serverIpAddress);
+        return report;
+    }
+
+    /**
+     * 获取指定天的TransactionName服务步骤统计结果不进行分页
+     * @param flname
+     * @param date
+     * @param transactionTypeName
+     * @param serverIpAddress
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryDayTransactionNameReportByServer"})
+    @ResponseBody
+    public TransactionStatisticReport queryDayTransactionNameReportByServer(String flname,String date,String transactionTypeName,String serverIpAddress){
+        TransactionStatisticReport report = transactionDataQuery.queryDayTransactionNameReportByServer(flname,date,transactionTypeName,serverIpAddress);
+        return report;
+    }
+
+    /**
+     * 获取指定日期内的调用消息明细记录
+     * @param datas
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryDayTransactionMessageList"})
+    @ResponseBody
+    public TransactionMessageList queryDayTransactionMessageList(String datas){
+        Map<String, Object> map = null;
+        try {
+            map = this.objectMapper.readValue(datas, Map.class);
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+        String serverAppName=map.get("serverAppName").toString();
+        String transactionTypeName=map.get("transactionTypeName").toString();
+        String transactionName="";//map.get("transactionName").toString();
+        String serverIpAddress=map.get("serverIpAddress").toString();
+        String clientAppName=map.get("clientAppName").toString();
+        String clientIpAddress=map.get("clientIpAddress").toString();
+        String status=map.get("status").toString();
+        String date=map.get("date").toString();
+        int orderNum =Integer.parseInt(map.get("ordernum").toString());
+        String orderValue =map.get("ordervalue").toString();
+        int startIndex=Integer.parseInt(map.get("start").toString());
+        int pageSize=Integer.parseInt(map.get("pageSize").toString());
+        String[] linkkey={"transactionTypeName","serverIpAddress","clientAppName","clientIpAddress","duration","status","time"};
+        LinkedHashMap<String, String> orderBy = new LinkedHashMap<String, String>();
+        if(orderValue.equals("desc")){
+            orderValue="DESC";
+        }
+        else if(orderValue.equals("asc")){
+            orderValue="ASC";
+        }
+        orderBy.put(linkkey[orderNum],orderValue);
+        TransactionMessageList report = transactionDataQuery.queryDayTransactionMessageList(serverAppName,date,transactionTypeName,transactionName,serverIpAddress,clientAppName,clientIpAddress,status,startIndex,pageSize,orderBy);
+        return report;
+    }
+    //week
+    /**
+     * 获取指定周的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
+     * @param flname
+     * @param date  指定周的第一天日期,格式为 yyyy-MM-dd
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryWeekTransactionTypeReportByServer"})
+    @ResponseBody
+    public TransactionStatisticReport queryWeekTransactionTypeReportByServer(String flname,String date){
+        TransactionStatisticReport report = transactionDataQuery.queryWeekTransactionTypeReportByServer(flname,date);
+        return report;
+    }
+
+    /**
+     * 获取指定周的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
+     * @param flname
+     * @param date
+     * @param transactionTypeName
+     * @param serverIpAddress
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryWeekTransactionTypeReportByClient"})
+    @ResponseBody
+    public TransactionStatisticReport queryWeekTransactionTypeReportByClient(String flname,String date,String transactionTypeName,String serverIpAddress){
+        TransactionStatisticReport report = transactionDataQuery.queryWeekTransactionTypeReportByClient(flname, date, transactionTypeName, serverIpAddress);
+        return report;
+    }
+
+    /**
+     * 获取指定周的TransactionType调用次数的结果集,不进行分页
+     * @param flname
+     * @param date
+     * @param transactionTypeName
+     * @param serverIpAddress
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryWeekTransactionTypeCallTimesReportByServer"})
+    @ResponseBody
+    public TransactionCallTimesReport queryWeekTransactionTypeCallTimesReportByServer(String flname,String date,String transactionTypeName,String serverIpAddress){
+        TransactionCallTimesReport report = transactionDataQuery.queryWeekTransactionTypeCallTimesReportByServer(flname, date, transactionTypeName, serverIpAddress);
+        return report;
+    }
+
+    /**
+     * 获取指定周的TransactionName服务步骤统计结果不进行分页
+     * @param flname
+     * @param date
+     * @param transactionTypeName
+     * @param serverIpAddress
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryWeekTransactionNameReportByServer"})
+    @ResponseBody
+    public TransactionStatisticReport queryWeekTransactionNameReportByServer(String flname,String date,String transactionTypeName,String serverIpAddress){
+        TransactionStatisticReport report = transactionDataQuery.queryWeekTransactionNameReportByServer(flname, date, transactionTypeName, serverIpAddress);
+        return report;
+    }
+
+    /**
+     * 获取指定周内的调用消息明细记录
+     * @param datas
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryWeekTransactionMessageList"})
+    @ResponseBody
+    public TransactionMessageList queryWeekTransactionMessageList(String datas){
+        Map<String, Object> map = null;
+        try {
+            map = this.objectMapper.readValue(datas, Map.class);
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+        String serverAppName=map.get("serverAppName").toString();
+        String transactionTypeName=map.get("transactionTypeName").toString();
+        String transactionName="";//map.get("transactionName").toString();
+        String serverIpAddress=map.get("serverIpAddress").toString();
+        String clientAppName=map.get("clientAppName").toString();
+        String clientIpAddress=map.get("clientIpAddress").toString();
+        String status=map.get("status").toString();
+        String date=map.get("date").toString();
+        int orderNum =Integer.parseInt(map.get("ordernum").toString());
+        String orderValue =map.get("ordervalue").toString();
+        int startIndex=Integer.parseInt(map.get("start").toString());
+        int pageSize=Integer.parseInt(map.get("pageSize").toString());
+        String[] linkkey={"transactionTypeName","serverIpAddress","clientAppName","clientIpAddress","duration","status","time"};
+        LinkedHashMap<String, String> orderBy = new LinkedHashMap<String, String>();
+        if(orderValue.equals("desc")){
+            orderValue="DESC";
+        }
+        else if(orderValue.equals("asc")){
+            orderValue="ASC";
+        }
+        orderBy.put(linkkey[orderNum],orderValue);
+        TransactionMessageList report = transactionDataQuery.queryWeekTransactionMessageList(serverAppName, date, transactionTypeName, transactionName, serverIpAddress, clientAppName, clientIpAddress, status, startIndex, pageSize, orderBy);
+        return report;
+    }
+
+    //month
+
+    /**
+     * 获取指定月的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
+     * @param flname
+     * @param month 指定月份的第一条日期,格式为 yyyy-MM-dd
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryMonthTransactionTypeReportByServer"})
+    public @ResponseBody TransactionStatisticReport queryMonthTransactionTypeReportByServer(String flname,String month){
+        TransactionStatisticReport report = transactionDataQuery.queryMonthTransactionTypeReportByServer(flname, month);
+        return  report;
+    }
+
+    /**
+     * 获取指定月的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
+     * @param flname
+     * @param date
+     * @param transactionTypeName
+     * @param serverIpAddress
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryMonthTransactionTypeReportByClient"})
+    @ResponseBody
+    public TransactionStatisticReport queryMonthTransactionTypeReportByClient(String flname,String date,String transactionTypeName,String serverIpAddress){
+        TransactionStatisticReport report = transactionDataQuery.queryMonthTransactionTypeReportByClient(flname, date, transactionTypeName, serverIpAddress);
+        return report;
+    }
+
+    /**
+     * 获取指定月的TransactionType调用次数的结果集,不进行分页
+     * @param flname
+     * @param date
+     * @param transactionTypeName
+     * @param serverIpAddress
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryMonthTransactionTypeCallTimesReportByServer"})
+    @ResponseBody
+    public TransactionCallTimesReport queryMonthTransactionTypeCallTimesReportByServer(String flname,String date,String transactionTypeName,String serverIpAddress){
+        TransactionCallTimesReport report = transactionDataQuery.queryMonthTransactionTypeCallTimesReportByServer(flname, date, transactionTypeName, serverIpAddress);
+        return report;
+    }
+
+    /**
+     * 获取指定月的TransactionName服务步骤统计结果不进行分页
+     * @param flname
+     * @param date
+     * @param transactionTypeName
+     * @param serverIpAddress
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryMonthTransactionNameReportByServer"})
+    @ResponseBody
+    public TransactionStatisticReport queryMonthTransactionNameReportByServer(String flname,String date,String transactionTypeName,String serverIpAddress){
+        TransactionStatisticReport report = transactionDataQuery.queryMonthTransactionNameReportByServer(flname, date, transactionTypeName, serverIpAddress);
+        return report;
+    }
+
+    /**
+     * 获取指定月内的调用消息明细记录
+     * @param datas
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryMonthTransactionMessageList"})
+    @ResponseBody
+    public TransactionMessageList queryMonthTransactionMessageList(String datas){
+        Map<String, Object> map = null;
+        try {
+            map = this.objectMapper.readValue(datas, Map.class);
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+        String serverAppName=map.get("serverAppName").toString();
+        String transactionTypeName=map.get("transactionTypeName").toString();
+        String transactionName="";//map.get("transactionName").toString();
+        String serverIpAddress=map.get("serverIpAddress").toString();
+        String clientAppName=map.get("clientAppName").toString();
+        String clientIpAddress=map.get("clientIpAddress").toString();
+        String status=map.get("status").toString();
+        String date=map.get("date").toString();
+        int orderNum =Integer.parseInt(map.get("ordernum").toString());
+        String orderValue =map.get("ordervalue").toString();
+        int startIndex=Integer.parseInt(map.get("start").toString());
+        int pageSize=Integer.parseInt(map.get("pageSize").toString());
+        String[] linkkey={"transactionTypeName","serverIpAddress","clientAppName","clientIpAddress","duration","status","time"};
+        LinkedHashMap<String, String> orderBy = new LinkedHashMap<String, String>();
+        if(orderValue.equals("desc")){
+            orderValue="DESC";
+        }
+        else if(orderValue.equals("asc")){
+            orderValue="ASC";
+        }
+        orderBy.put(linkkey[orderNum],orderValue);
+        TransactionMessageList report = transactionDataQuery.queryMonthTransactionMessageList(serverAppName, date, transactionTypeName, transactionName, serverIpAddress, clientAppName, clientIpAddress, status, startIndex, pageSize, orderBy);
+        return report;
+    }
+
 
 }
 

@@ -9,6 +9,7 @@ public class DefaultMessageTree implements MessageTree {
 
     private Caller caller;
     private String domain;
+    private String group;
     private String hostName;
     private String ipAddress;
     private LogMessage message;
@@ -26,6 +27,7 @@ public class DefaultMessageTree implements MessageTree {
         MessageTree tree = new DefaultMessageTree();
 
         tree.setDomain(domain);
+        tree.setGroup(group);
         tree.setHostName(hostName);
         tree.setIpAddress(ipAddress);
         tree.setMessageId(messageId);
@@ -68,6 +70,16 @@ public class DefaultMessageTree implements MessageTree {
     @Override
     public void setDomain(String domain) {
         this.domain = domain;
+    }
+
+    @Override
+    public String getGroup() {
+        return group;
+    }
+
+    @Override
+    public void setGroup(String group) {
+        this.group = group;
     }
 
     @Override

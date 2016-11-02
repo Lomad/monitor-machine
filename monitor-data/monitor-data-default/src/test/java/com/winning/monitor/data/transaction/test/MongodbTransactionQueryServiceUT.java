@@ -67,7 +67,7 @@ public class MongodbTransactionQueryServiceUT extends
 
     @Test
     public void testQueryHourTransactionTypeReportByServer() {
-        TransactionStatisticReport report = transactionDataQuery.queryHourTransactionTypeReportByServer("test1","2016-11-01 10:00:00") ;
+        TransactionStatisticReport report = transactionDataQuery.queryHourTransactionTypeReportByServer("test1","2016-10-20 14:00:00") ;
         Assert.assertNotNull(report);
     }
 

@@ -15,7 +15,6 @@ $(document).ready(function () {
     global_Object.status=$("#status").val();
     global_Object.type = $("#type").val();
     global_Object.time = $("#time").val();
-    alert(global_Object.time);
     if (global_Object.type == "最近一小时") {
         global_Object.url = contextPath+"/paas/queryLastHourTransactionMessageList"
     }
@@ -65,12 +64,10 @@ $(document).ready(function () {
         "responsive": true,
         "width": "100%"
     });
-    //console.log(global_Object)
     var data = {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status,time:global_Object.time};
     fTable.queryDataInPage(global_Object.url,data);
-    console.log("------"+global_Object.url);
     console.log(data);
-    console.log("------");
+    console.log(global_Object.url);
 });
 var global_Object = {
     serverAppName:$("serverAppName").val(),

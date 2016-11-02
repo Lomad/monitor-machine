@@ -54,8 +54,10 @@ public abstract class AbstractReportManager<T> implements ReportManager<T> {
     }
 
     @Override
-    public T getHourlyReport(long startTime, String domain, boolean createIfNotExist) {
+    public T getHourlyReport(long startTime, String group, String domain, boolean createIfNotExist) {
         Map<String, T> reports = m_reports.get(startTime);
+
+        String reportid = group + "." + domain;
 
         if (reports == null && createIfNotExist) {
             synchronized (m_reports) {
@@ -72,23 +74,23 @@ public abstract class AbstractReportManager<T> implements ReportManager<T> {
             reports = new LinkedHashMap<String, T>();
         }
 
-        T report = reports.get(domain);
+        T report = reports.get(reportid);
 
         if (report == null && createIfNotExist) {
             synchronized (reports) {
-                report = this.makeReport(domain, startTime, HOUR);
-                reports.put(domain, report);
+                report = this.makeReport(group, domain, startTime, HOUR);
+                reports.put(reportid, report);
             }
         }
 
         if (report == null) {
-            report = this.makeReport(domain, startTime, HOUR);
+            report = this.makeReport(group, domain, startTime, HOUR);
         }
 
         return report;
     }
 
-    protected abstract T makeReport(String domain, long startTime, long duration);
+    protected abstract T makeReport(String group, String domain, long startTime, long duration);
 
     @Override
     public Map<String, T> getHourlyReports(long startTime) {

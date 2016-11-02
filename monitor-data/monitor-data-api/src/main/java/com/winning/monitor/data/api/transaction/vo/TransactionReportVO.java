@@ -9,6 +9,7 @@ public class TransactionReportVO {
 
     private String id;
     private String domain;
+    private String group;
     private Set<String> domainNames = new LinkedHashSet<String>();
     private Set<String> ips = new LinkedHashSet<String>();
     private String startTime;
@@ -126,6 +127,14 @@ public class TransactionReportVO {
                 }
             }
         }
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 
     public String getIp() {

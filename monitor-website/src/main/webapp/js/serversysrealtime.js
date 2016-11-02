@@ -16,7 +16,7 @@ $(document).ready(function () {
         global_Object.url = contextPath+"/paas/queryTodayTransactionTypeReportByClient"
     }
     else if (global_Object.type == "指定小时") {
-        global_Object.url = contextPath+"/paas/queryLastHourTransactionTypeReportByClient"
+        global_Object.url = contextPath+"/paas/queryHourTransactionTypeReportByClient"
     }
     $.post(contextPath+"/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
 //alert( $("#serverIpAddresshidden").val());
@@ -79,9 +79,10 @@ var global_Object = {
         $.post(global_Object.url, {
             serverAppName: global_Object.serverAppName,
             transactionTypeName: global_Object.transactionTypeName,
-            serverIpAddress: global_Object.serverIpAddress
+            serverIpAddress: global_Object.serverIpAddress,
+            time:global_Object.time
         }, function (data) {
-            console.log(data);
+            //console.log(data);
             global_Object.tableDataOld = data.transactionStatisticDatas;
             global_Object.tableData = data.transactionStatisticDatas;
             global_Object.totalSize = data.totalSize;

@@ -11,7 +11,7 @@ public interface ReportManager<T> {
 
     Set<String> getDomains(long startTime);
 
-    T getHourlyReport(long startTime, String domain, boolean createIfNotExist);
+    T getHourlyReport(long startTime, String group, String domain, boolean createIfNotExist);
 
     Map<String, T> getHourlyReports(long startTime);
 

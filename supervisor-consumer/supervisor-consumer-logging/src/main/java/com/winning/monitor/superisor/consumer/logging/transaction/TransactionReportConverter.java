@@ -23,21 +23,22 @@ public class TransactionReportConverter {
     public static DateFormat simpleDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static TransactionReportVO toTransactionReportVO(TransactionReport transactionReport) {
-        TransactionReportVO TransactionReportVO = new TransactionReportVO();
-        TransactionReportVO.setId(transactionReport.getId());
-        TransactionReportVO.setDomain(transactionReport.getDomain());
+        TransactionReportVO transactionReportVO = new TransactionReportVO();
+        transactionReportVO.setId(transactionReport.getId());
+        transactionReportVO.setDomain(transactionReport.getDomain());
+        transactionReportVO.setGroup(transactionReport.getGroup());
         Set<String> ips = new LinkedHashSet<>(transactionReport.getIps());
-        TransactionReportVO.setIps(ips);
-        TransactionReportVO.setStartTime(simpleDateTimeFormat.format(transactionReport.getStartTime()));
-        TransactionReportVO.setEndTime(simpleDateTimeFormat.format(transactionReport.getEndTime()));
+        transactionReportVO.setIps(ips);
+        transactionReportVO.setStartTime(simpleDateTimeFormat.format(transactionReport.getStartTime()));
+        transactionReportVO.setEndTime(simpleDateTimeFormat.format(transactionReport.getEndTime()));
 
         List<TransactionMachineVO> machineList = new ArrayList<>();
         for (Machine machine : transactionReport.getMachines().values()) {
             TransactionMachineVO machineDTO = toTransactionMachineVO(machine);
             machineList.add(machineDTO);
         }
-        TransactionReportVO.setMachines(machineList);
-        return TransactionReportVO;
+        transactionReportVO.setMachines(machineList);
+        return transactionReportVO;
     }
 
     public static TransactionMachineVO toTransactionMachineVO(Machine machine) {
