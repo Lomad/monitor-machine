@@ -16,6 +16,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取所有的应用服务系统名称
      *
+     * @param group               系统类别
      * @return
      */
     LinkedHashSet<String> getAllServerAppNames(String group);
@@ -24,6 +25,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取所有的应用服务系统对应的IP地址
      *
+     * @param group               系统类别
      * @return
      */
     LinkedHashSet<String> getAllServerIpAddress(String group, String domain);
@@ -31,6 +33,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取最近一小时的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @return 统计数据结果集
      */
@@ -40,6 +43,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取当天的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @return 统计数据结果集
      */
@@ -49,6 +53,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定小时的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @param hour          指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @return 统计数据结果集
@@ -60,6 +65,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定日期的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @param date          指定日期,格式为 yyyy-MM-dd
      * @return 统计数据结果集
@@ -72,6 +78,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定周的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @param week          指定周的第一天日期,格式为 yyyy-MM-dd
      * @return 统计数据结果集
@@ -84,6 +91,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定月的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @param month         指定月份的第一条日期,格式为 yyyy-MM-dd
      * @return 统计数据结果集
@@ -96,6 +104,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取最近一小时的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
@@ -109,6 +118,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取当天的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
@@ -122,6 +132,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定天的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param date          指定日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -137,6 +148,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定周的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param week                指定周的第一天日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -153,6 +165,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定月的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param month               指定月份的第一条日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -169,6 +182,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定月的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param month               指定月份的第一条日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -185,6 +199,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定小时的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param hour                指定小时,格式为 yyyy-MM-dd HH:mm:ss
@@ -201,6 +216,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取最近一小时的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
@@ -214,6 +230,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定小时的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param hour          指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @param transactionTypeName 服务大类名称
@@ -229,6 +246,7 @@ public interface ITransactionDataQueryService {
        /**
      * 获取最近一小时的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
@@ -242,6 +260,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取最近一小时的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param hour                指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @param transactionTypeName 服务大类名称
@@ -258,6 +277,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取最近一小时的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param date                指定日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -276,6 +296,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取当天的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
@@ -289,6 +310,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定周的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param week                指定周的第一天日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -305,6 +327,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定日期的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param date                指定日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -320,8 +343,9 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定周的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
-     *  @param week          指定周的第一天日期,格式为 yyyy-MM-dd
+     * @param week          指定周的第一天日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
@@ -335,6 +359,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定周的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param month         指定月份的第一条日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -351,6 +376,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取最近一小时的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
@@ -365,6 +391,7 @@ public interface ITransactionDataQueryService {
     /**
  * 获取最近一小时内的调用消息明细记录
  *
+ * @param group               系统类别
  * @param serverAppName       应用服务系统名称,非空
  * @param transactionTypeName 服务大类名称,非空
  * @param transactionName     服务名称,可选
@@ -396,6 +423,7 @@ TransactionMessageList queryLastHourTransactionMessageList(String group,
     /**
      * 获取指定小时内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param hour                指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @param transactionTypeName 服务大类名称,非空
@@ -432,6 +460,7 @@ TransactionMessageList queryLastHourTransactionMessageList(String group,
     /**
      * 获取当天内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param transactionTypeName 服务大类名称,非空
      * @param transactionName     服务名称,可选
@@ -463,6 +492,7 @@ TransactionMessageList queryLastHourTransactionMessageList(String group,
     /**
      * 获取指定日期内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param date                指定日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称,非空
@@ -491,6 +521,7 @@ TransactionMessageList queryLastHourTransactionMessageList(String group,
     /**
      * 获取指定周内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param week                指定周的第一天日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称,非空
@@ -519,6 +550,7 @@ TransactionMessageList queryLastHourTransactionMessageList(String group,
     /**
      * 获取指定月内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param month               指定月份的第一条日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称,非空

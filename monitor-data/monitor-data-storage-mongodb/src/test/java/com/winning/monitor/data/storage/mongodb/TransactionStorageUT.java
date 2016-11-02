@@ -50,7 +50,7 @@ public class TransactionStorageUT extends
     public void testQueryTransactionReports() {
         List<TransactionReportVO> list =
                 transactionDataStorage.queryRealtimeTransactionReports
-                        ("microservice", "2016-09-18 13:00:00");
+                        ("","microservice", "2016-09-18 13:00:00");
 
         Assert.assertNotNull(list);
     }
@@ -70,7 +70,7 @@ public class TransactionStorageUT extends
     }
 
     @Test
-    public void testQueryRealtimeTransactionReports() {
+    public void testQueryRealtimeTransactionReports(String group) {
         Map<String, Object> map = new HashMap<>();
         map.put("domain", "test1");
         map.put("startTime", "2016-10-24 20:00:00");
@@ -78,7 +78,7 @@ public class TransactionStorageUT extends
 
         List<TransactionReportVO> list =
                 transactionDataStorage.queryRealtimeTransactionReports
-                        (map);
+                        (group, map);
 
         Assert.assertNotNull(list);
     }
@@ -86,7 +86,7 @@ public class TransactionStorageUT extends
     @Test
     public void testQueryIps() {
         Set<String> list =
-                transactionDataStorage.findAllServerIpAddress("test1");
+                transactionDataStorage.findAllServerIpAddress("BI", "test1");
 
         Assert.assertNotNull(list);
     }
@@ -100,7 +100,7 @@ public class TransactionStorageUT extends
         order.put("time", "ASC");
 
         MessageTreeList list =
-                messageTreeStorage.queryMessageTree("test2", start.getTime(), end.getTime(),
+                messageTreeStorage.queryMessageTree("BI", "test2", start.getTime(), end.getTime(),
                         null, 0, 1, order);
 
         System.out.println();
@@ -110,7 +110,7 @@ public class TransactionStorageUT extends
 
         for (int i = 1; i < list.getTotalSize(); i++) {
             list =
-                    messageTreeStorage.queryMessageTree("test2", start.getTime(), end.getTime(),
+                    messageTreeStorage.queryMessageTree("BI","test2", start.getTime(), end.getTime(),
                             null, i, 1, order);
             System.out.println(i + ":" + list.getMessageTrees().get(0).getMessage().getTimestamp());
         }

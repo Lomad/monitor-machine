@@ -214,13 +214,13 @@ public class TransactionDataStorage implements ITransactionDataStorage {
 
 
     @Override
-    public void storeRealtimeTransactionReport(String group, TransactionReportVO transactionReport) throws StorageException {
+    public void storeRealtimeTransactionReport(TransactionReportVO transactionReport) throws StorageException {
         try {
             TransactionReportPO transactionReportPO = new TransactionReportPO(transactionReport);
 
             Query query = new Query();
             query.addCriteria(new Criteria("_id").is(transactionReport.getId()));
-            query.addCriteria(new Criteria("group").is(group));
+
 
             boolean existsReport = this.mongoTemplate.exists(query, TransactionReportPO.class, REALTIME_COLLECTION_NAME);
 
@@ -241,7 +241,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
     }
 
     @Override
-    public void storeHistoryTransactionReport(String group, TransactionReportVO transactionReport) {
+    public void storeHistoryTransactionReport(TransactionReportVO transactionReport) {
         try {
             TransactionReportPO transactionReportPO = new TransactionReportPO(transactionReport);
 
@@ -250,7 +250,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
             query.addCriteria(new Criteria("startTime").is(transactionReport.getStartTime()));
             query.addCriteria(new Criteria("endTime").is(transactionReport.getEndTime()));
             query.addCriteria(new Criteria("type").is(transactionReport.getType().getName()));
-            query.addCriteria(new Criteria("group").is(group));
+
 
             String collectionName = this.getHistoryCollectionName(transactionReport.getType());
 
