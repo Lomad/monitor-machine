@@ -90,15 +90,15 @@ var global_Object = {
     },
     setTable: function (flname) {
         var alltr = function (length, i, data) {
-            var tr = '<tr data-transactiontypename="'+data.transactionTypeName+'" data-serveripaddress="'+data.serverIpAddress+'">';
+            var tr = '<tr data-transactiontypename="'+data.transactionTypeName+'" data-serveripaddress="'+data.serverIpAddress + '" data-serverappname="'+data.serverAppName +'">';
             if(i==0){
-                tr+='<td rowspan='+length+' class="vam tac">'+data.transactionTypeName+'</td>';
+                tr+='<td rowspan='+length+' class="vam tac">'+data.serverAppName+'</td>';
             }
             //if (type == "transactionTypeName") {
             //    tr += '<td>' + flname + '</td>';
             //    tr += '<td><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)">' + data.transactionTypeName + '</a></td>';
             //}
-            tr += '<td>' + data.serverAppName + '</td>';
+            tr += '<td>' + data.transactionTypeName + '</td>';
             tr += '<td><a onclick="global_Object.openPostTotalCount(this)" href="javascript:void(0)">' + data.totalCount + '次</a></td>';
             tr += '<td><a onclick="global_Object.openPostAvg(this)" href="javascript:void(0)">' + data.avg + 'ms</a></td>';
             tr += '<td>' + data.line99Value + 'ms</td>';
@@ -207,14 +207,14 @@ var global_Object = {
     openPostTotalCount:function(obj){
         var url =contextPath+"/paas/clientdetailedrealtime";
         console.log($(obj).parents("tr"));
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":""};
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":$(obj).parents("tr").data("serverappname")==undefined?"":$(obj).parents("tr").data("serverappname"),"type":global_Object.type,"time":global_Object.time,"clientAppName":global_Object.flname,"clientIpAddress":"","status":""};
         JqCommon.openPostWindow(url,datas);
     },
     /* ‘平均耗时’ 之跳转锚点 */
     openPostAvg:function(obj){
         var url =contextPath+"/paas/clientsteprealtime";
         //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":$(obj).parents("tr").data("serverappname")==undefined?"":$(obj).parents("tr").data("serverappname"),"type":global_Object.type,"time":global_Object.time,"clientAppName":global_Object.flname};
         //console.log(datas);
         //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
@@ -234,7 +234,7 @@ var global_Object = {
             url =contextPath+"/paas/queryLastHourTransactionTypeCallTimesReportByServer";
         }
 
-        $.post(url, {serverAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress")}, function (data) {
+        $.post(url, {"serverAppName":$(obj).parents("tr").data("serverappname")==undefined?"":$(obj).parents("tr").data("serverappname"),transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress")}, function (data) {
             var json=[];
             var name =[]
             for(var key in data.durations){
@@ -284,8 +284,8 @@ var global_Object = {
     },
     /* '失败次数' 之跳转锚点 */
     openPostFalse:function(obj){
-        var url =contextPath+"/paas/serverdetailedrealtime";
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":"失败"};
+        var url =contextPath+"/paas/clientdetailedrealtime";
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":$(obj).parents("tr").data("serverappname")==undefined?"":$(obj).parents("tr").data("serverappname"),"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":global_Object.flname,"status":"失败"};
         JqCommon.openPostWindow(url,datas);
     }
 

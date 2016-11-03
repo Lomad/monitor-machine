@@ -39,6 +39,16 @@ $(document).ready(function () {
     //    });
     //});
 
+    if (global_Object.type == "最近一小时") {
+        global_Object.url = contextPath+"/paas/queryLastHourTransactionMessageList"
+    }
+    else if (global_Object.type == "当天") {
+        global_Object.url = contextPath+"/paas/queryTodayTransactionMessageList"
+    }
+    else if (global_Object.type == "指定小时") {
+        global_Object.url = contextPath+"/paas/queryHourTransactionMessageList"
+    }
+
     global_Object.initDomEvent();
 
     fTable = $("#fTable").winningTable({
@@ -82,8 +92,16 @@ $(document).ready(function () {
         "responsive": true,
         "width": "100%"
     });
-    //console.log(global_Object)
-    fTable.queryDataInPage("/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
+    var data = { serverAppName:global_Object.serverAppName,
+        serverIpAddress:global_Object.serverIpAddress,
+        transactionTypeName:global_Object.transactionTypeName,
+        clientAppName:global_Object.clientAppName,
+        clientIpAddress:global_Object.clientIpAddress,
+        time:global_Object.time,
+        status:global_Object.status };
+    fTable.queryDataInPage(global_Object.url,data);
+
+    console.log(data);   console.log(global_Object);
 });
 var global_Object = {
     serverAppName:$("serverAppName").val(),
@@ -94,6 +112,7 @@ var global_Object = {
     status:$("status").val(),
     type:"",
     time:"",
+    url:"/paas/queryLastHourTransactionMessageList",
     initDomEvent:function(){
 
         /* 消费数据状态 过滤器 */
@@ -112,8 +131,16 @@ var global_Object = {
         json=[];
         index2=0;
         json2=[];
-
-        fTable.queryDataInPage("/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
+        var reqobj = {
+            serverAppName:global_Object.serverAppName,
+            serverIpAddress:global_Object.serverIpAddress,
+            transactionTypeName:global_Object.transactionTypeName,
+            clientAppName:global_Object.clientAppName,
+            clientIpAddress:global_Object.clientIpAddress,
+            time:global_Object.time,
+            status:global_Object.status
+        };
+        fTable.queryDataInPage(global_Object.url, reqobj);
     },
 
     detail: function (obj,json) {
@@ -155,5 +182,5 @@ var global_Object = {
             $(obj).parents("tr").next("tr").remove();
             $(obj).addClass("fa-chevron-down").removeClass("fa-chevron-up");
         }
-    },
+    }
 }
