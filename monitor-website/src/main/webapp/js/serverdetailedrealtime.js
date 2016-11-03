@@ -94,7 +94,9 @@ var global_Object = {
         json=[];
         index2=0;
         json2=[];
-        fTable.queryDataInPage(global_Object.url, {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status,hour:global_Object.hour});
+        var datas = {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status,hour:global_Object.hour};
+        console.log(datas);
+        fTable.queryDataInPage(global_Object.url, datas);
     },
     bzClick:function(obj,index){
 //console.log(json[index]);
