@@ -6,13 +6,13 @@
         global_Object.initDomEvent();
         global_Object.queryTableData();
         if (global_Object.type == "day") {
-            global_Object.url=contextPath+"/paas/queryTodayTransactionTypeReportByClient"
+            global_Object.url=contextPath+"/paas/queryDayTransactionTypeReportByClient"
         }
         else if (global_Object.type == "week") {
-            global_Object.url=contextPath+"/paas/queryTodayTransactionTypeReportByClient"
+            global_Object.url=contextPath+"/paas/queryWeekTransactionTypeReportByClient"
         }
         else if (global_Object.type == "month") {
-            global_Object.url=contextPath+"/paas/queryTodayTransactionTypeReportByClient"
+            global_Object.url=contextPath+"/paas/queryMonthTransactionTypeReportByClient"
         }
         $.post(contextPath+"/paas/getAllServerIpAddress", {serverAppName:global_Object.serverAppName}, function (data) {
             if(global_Object.serverIpAddress==""){
@@ -46,10 +46,11 @@ var global_Object = {
     tableDataOld: [],
     tableData: [],
     serverIpAddress: $("#serverIpAddress").val(),
-    url: contextPath+"/paas/queryTodayTransactionTypeReportByClient",
+    url: contextPath+"/paas/queryDayTransactionTypeReportByClient",
     totalSize: 0,
     type:$("#type").val(),
     value:$("#value").val(),
+    dateValue:$("#dateValue").val(),
     serverAppName:$("#serverAppName").val(),
     transactionTypeName:$("#transactionTypeName").val(),
     initDomEvent: function () {
@@ -75,9 +76,14 @@ var global_Object = {
         });
     },
     queryTableData: function () {
-        $.post(global_Object.url, {serverAppName: global_Object.serverAppName,
+        var datas ={flname: global_Object.serverAppName,
+            date:global_Object.dateValue,
             transactionTypeName:global_Object.transactionTypeName,
-            serverIpAddress:global_Object.serverIpAddresss},
+            serverIpAddress:global_Object.serverIpAddress};
+
+        console.log(datas);
+
+        $.post(global_Object.url,datas,
             function (data) {
             //console.log(data);
             global_Object.tableDataOld =data.transactionStatisticDatas;
@@ -210,6 +216,7 @@ var global_Object = {
             "serverAppName": global_Object.serverAppName,
             "type": global_Object.type,
             "value": global_Object.value,
+            "dateValue":global_Object.dateValue,
             "clientAppName": $(obj).parents("tr").data("clientappname"),
             "clientIpAddress": $(obj).parents("tr").data("clientipaddress") == undefined ? "" : $(obj).parents("tr").data("clientipaddress"),
             "status":"失败",
@@ -227,6 +234,7 @@ var global_Object = {
             "serverAppName": global_Object.serverAppName,
             "type": global_Object.type,
             "value": global_Object.value,
+            "dateValue":global_Object.dateValue,
             "clientAppName": $(obj).parents("tr").data("clientappname"),
             "clientIpAddress": $(obj).parents("tr").data("clientipaddress") == undefined ? "" : $(obj).parents("tr").data("clientipaddress"),
             "status":"",

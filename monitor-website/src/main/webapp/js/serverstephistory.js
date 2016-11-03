@@ -6,13 +6,13 @@ $(document).ready(function () {
 
     global_Object.initDomEvent();
     if (global_Object.type == "day") {
-        global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = contextPath+"/paas/queryDayTransactionNameReportByServer"
     }
     else if (global_Object.type == "week") {
-        global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = contextPath+"/paas/queryWeekTransactionNameReportByServer"
     }
     else if (global_Object.type == "month") {
-        global_Object.url = contextPath+"/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = contextPath+"/paas/queryMonthTransactionNameReportByServer"
     }
     $.post(contextPath+"/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
 //alert( $("#serverIpAddresshidden").val());
@@ -47,21 +47,27 @@ var global_Object = {
     tableDataOld: [],
     tableData: [],
     serverIpAddress: $("#serverIpAddresshidden").val(),
-    url: contextPath+"/paas/queryLastHourTransactionNameReportByServer",
+    url: contextPath+"/paas/queryHourTransactionNameReportByServer",
     totalSize: 0,
     type: $("#type").val(),
     value:$("#value").val(),
+    dateValue:$("#dateValue").val(),
     serverAppName: $("#serverAppName").val(),
     transactionTypeName: $("#transactionTypeName").val(),
     initDomEvent: function () {
 
     },
     queryTableData: function () {
-        $.post(global_Object.url, {
-            serverAppName: global_Object.serverAppName,
+        var datas = {
+            flname: global_Object.serverAppName,
             transactionTypeName: global_Object.transactionTypeName,
-            serverIpAddress: global_Object.serverIpAddress
-        }, function (data) {
+            serverIpAddress: global_Object.serverIpAddress,
+            date:global_Object.dateValue
+        };
+        console.log(global_Object.url);
+        console.log(datas);
+        $.post(global_Object.url,datas,function (data) {
+
             console.log(data);
             global_Object.tableDataOld = data.transactionStatisticDatas;
             global_Object.tableData = data.transactionStatisticDatas;

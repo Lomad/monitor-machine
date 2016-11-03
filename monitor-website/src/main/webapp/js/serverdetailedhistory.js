@@ -17,6 +17,16 @@ $(document).ready(function () {
     global_Object.status=$("#status").val();
     global_Object.type = $("#type").val();
     global_Object.value = $("#value").val();
+    global_Object.dateValue = $("#dateValue").val();
+    if (global_Object.type == "day") {
+        global_Object.url = contextPath+"/paas/queryDayTransactionMessageList"
+    }
+    else if (global_Object.type == "week") {
+        global_Object.url = contextPath+"/paas/queryWeekTransactionMessageList"
+    }
+    else if (global_Object.type == "month") {
+        global_Object.url = contextPath+"/paas/queryMonthTransactionMessageList"
+    }
     global_Object.initDomEvent();
 
     fTable = $("#fTable").winningTable({
@@ -58,8 +68,11 @@ $(document).ready(function () {
         "responsive": true,
         "width": "100%"
     });
-    //console.log(global_Object)
-    fTable.queryDataInPage(contextPath+"/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
+    var datas = {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status,date:global_Object.dateValue};
+    console.log("------------------------------")
+    console.log(datas)
+    console.log(global_Object.url)
+    fTable.queryDataInPage(global_Object.url,datas);
 });
 var global_Object = {
     serverAppName:$("serverAppName").val(),
@@ -68,8 +81,10 @@ var global_Object = {
     clientAppName:$("clientAppName").val(),
     clientIpAddress:$("clientIpAddress").val(),
     status:$("status").val(),
-    type:"",
+    type:$("#type").val(),
     value:$("value").val(),
+    dateValue:$("#dateValue").val(),
+    url:contextPath+"/paas/queryDayTransactionMessageList",
     initDomEvent:function(){
         $("#statusselect a").on("click", function () {
             $("#statusvalue").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
@@ -85,7 +100,9 @@ var global_Object = {
         json=[];
         index2=0;
         json2=[];
-        fTable.queryDataInPage(contextPath+"/paas/queryLastHourTransactionMessageList", {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status});
+        var datas = {date:global_Object.dateValue,serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status};
+        console.log(datas);
+        fTable.queryDataInPage(global_Object.url,datas);
     },
     bzClick:function(obj,index){
         console.log(json[index]);

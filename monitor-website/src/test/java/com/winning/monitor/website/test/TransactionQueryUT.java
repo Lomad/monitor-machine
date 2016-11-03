@@ -18,16 +18,16 @@ public class TransactionQueryUT  extends
 
     @Autowired
     private ITransactionDataQueryService transactionDataQuery;
-
+    private String GroupId = "BI";
     @Test
     public void testQueryAllDomain(){
-        LinkedHashSet<String> set = transactionDataQuery.getAllServerAppNames();
+        LinkedHashSet<String> set = transactionDataQuery.getAllServerAppNames(GroupId);
         Assert.assertNotNull(set);
     }
 
     @Test
     public void testQuery(){
-        TransactionStatisticReport report = transactionDataQuery.queryLastHourTransactionTypeReportByServer("test1");
+        TransactionStatisticReport report = transactionDataQuery.queryLastHourTransactionTypeReportByServer(GroupId,"test1");
         Assert.assertNotNull(report);
     }
 
