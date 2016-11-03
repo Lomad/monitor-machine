@@ -63,7 +63,7 @@
                 <thead class="flip-content">
                 <tr>
 
-                    <th class="" >服务名称</th>
+                    <th class="">服务名称</th>
                     <th class="">服务器IP</th>
                     <th class="">消费方系统名称</th>
                     <th class="">消费方IP地址</th>
@@ -177,6 +177,7 @@
 <input type="hidden" id="clientIpAddress" value="${clientIpAddress}">
 <input type="hidden" id="serverIpAddress" value="${serverIpAddress}">
 <input type="hidden" id="status" value="${status}">
+<input type="hidden" id="dateValue" value="${dateValue}">
 <input type="hidden" id="historypagetype" value="${historyPageType}">
 <@foot.foot>
 

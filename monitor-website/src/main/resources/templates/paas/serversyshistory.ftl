@@ -135,6 +135,7 @@
 <input type="hidden" id="serverAppName" value="${serverAppName}">
 <input type="hidden" id="type" value="${type}">
 <input type="hidden" id="value" value="${value}">
+<input type="hidden" id="dateValue" value="${dateValue}">
 <input type="hidden" id="serverIpAddress" value="${serverIpAddress}">
 <!-- END PAGE -->
 <@foot.foot>

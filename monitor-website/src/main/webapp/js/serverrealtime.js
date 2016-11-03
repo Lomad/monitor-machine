@@ -53,13 +53,10 @@ var global_Object = {
             $(this).addClass("active").siblings().removeClass("active");
             global_Object.queryTableData();
         });
-        $("#time3").on("click", function () {
-            global_Object.url = contextPath+"/paas/queryHourTransactionTypeReportByServer";
 
-            $(this).addClass("active").siblings().removeClass("active");
-            //global_Object.queryTableData();
-        });
         $("#time3v li").on("click", function () {
+            global_Object.url = contextPath+"/paas/queryHourTransactionTypeReportByServer";
+            $("#time3").addClass("active").siblings().removeClass("active");
             //global_Object.time =$(this).text(); //$(this).text().split('-')[0];
             global_Object.time=global_Object.getNowFormatDate()+" "+$(this).text().split('-')[0]+":00";
             global_Object.type="指定小时";
@@ -308,8 +305,8 @@ var global_Object = {
     openPostTotalCount:function(obj){
         var url =contextPath+"/paas/serverdetailedrealtime";
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":""};
-        //console.log(datas);
-        //console.log("-------------"+global_Object.hour);
+        console.log(datas);
+        console.log("-------------=="+global_Object.time);
         JqCommon.openPostWindow(url,datas);
     },
     openPostFalse:function(obj){
