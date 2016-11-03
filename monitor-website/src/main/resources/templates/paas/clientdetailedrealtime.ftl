@@ -16,11 +16,11 @@
                 <#else>
                 ${type}
                 </#if>
-                <#if serverIpAddress =="">
+                <#--<#if serverIpAddress =="">
                     > 所有主机
                 <#else>
                     > ${serverIpAddress}
-                </#if>
+                </#if>-->
                 <#if clientAppName =="">
                      ${clientAppName}
                 <#else>
