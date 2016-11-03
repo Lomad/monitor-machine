@@ -319,10 +319,24 @@ var global_Object = {
     queryPic: function (obj) {
         $("#echart").css("width", $("#picEdit").width() * 0.6 - 30);
         $("#picEdit").modal("show");
-        var url =contextPath+"/paas/queryTodayTransactionTypeCallTimesReportByServer";
-        $.post(url, {serverAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress")}, function (data) {
+        var url =""
+        alert(global_Object.type);
+        if(global_Object.type=="day"){
+            url =contextPath+"/paas/queryDayTransactionTypeCallTimesReportByServer";
+        }
+        else if(global_Object.type=="week"){
+            url =contextPath+"/paas/queryWeekTransactionTypeCallTimesReportByClient";
+        }
+        else if(global_Object.type=="month"){
+            url =contextPath+"/paas/queryMonthTransactionTypeCallTimesReportByClient";
+        }
+        alert(url)
+        var datas = {flname: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress"),date:global_Object.formatdate};
+        console.log(datas);
+        $.post(url,datas, function (data) {
             var json=[];
             var name =[]
+            console.log(data);
             for(var key in data.durations){
                 name.push(key);
                 json.push(data.durations[key]);

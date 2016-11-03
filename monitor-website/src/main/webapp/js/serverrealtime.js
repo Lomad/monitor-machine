@@ -16,7 +16,7 @@ $(document).ready(function () {
         global_Object.queryTableData();
         var li = [];
         $.each(data, function (i, v) {
-            var option = '<li role="presentation"><a role="menuitem" tabindex="-1">' + v + '</a></li>';
+            var option = '<li class="cp" role="presentation"><a role="menuitem" tabindex="-1">' + v + '</a></li>';
             li.push(option);
         });
         $("#fl").html(li.join(""));
