@@ -20,7 +20,6 @@ import com.winning.monitor.data.transaction.builder.TransactionStatisticDataMerg
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -48,36 +47,39 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取所有的应用服务系统名称
      *
+     * @param group               系统类别
      * @return
      */
     @Override
-    public LinkedHashSet<String> getAllServerAppNames() {
-        return transactionDataStorage.findAllTransactionDomains();
+    public LinkedHashSet<String> getAllServerAppNames(String group) {
+        return transactionDataStorage.findAllTransactionDomains(group);
     }
 
     /**
      * 获取所有的应用服务系统对应的IP地址
      *
+     * @param group               系统类别
      * @param domain
      * @return
      */
     @Override
-    public LinkedHashSet<String> getAllServerIpAddress(String domain) {
-        return transactionDataStorage.findAllServerIpAddress(domain);
+    public LinkedHashSet<String> getAllServerIpAddress(String group, String domain) {
+        return transactionDataStorage.findAllServerIpAddress(group, domain);
     }
 
     /**
      * 获取最近一小时的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryLastHourTransactionTypeReportByServer(String serverAppName) {
+    public TransactionStatisticReport queryLastHourTransactionTypeReportByServer(String group, String serverAppName) {
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryRealtimeTransactionReports(serverAppName, this.getCurrentHour());
+                this.transactionDataStorage.queryRealtimeTransactionReports(group, serverAppName, this.getCurrentHour());
 
         TransactionStatisticDataMerger merger = new TransactionStatisticDataMerger(serverAppName,
                 TransactionStatisticDataMerger.TransactionLevel.TransactionType,
@@ -93,13 +95,15 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取最近一小时的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryLastHourTransactionNameReportByServer(String serverAppName,
+    public TransactionStatisticReport queryLastHourTransactionNameReportByServer(String group,
+                                                                                 String serverAppName,
                                                                                  String transactionTypeName,
                                                                                  String serverIpAddress) {
         Map<String, Object> map = new HashMap<>();
@@ -110,7 +114,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取指定时间的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryRealtimeTransactionReports(serverAppName, this.getCurrentHour(),
+                this.transactionDataStorage.queryRealtimeTransactionReports(group, serverAppName, this.getCurrentHour(),
                         this.getCurrentHour(), map);
 
         TransactionNameServerStatisticDataMerger merger = new TransactionNameServerStatisticDataMerger(serverAppName,
@@ -126,6 +130,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定小时的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param hour                指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @param transactionTypeName 服务大类名称
@@ -133,10 +138,11 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryHourTransactionNameReportByServer(String serverAppName,
-                                                                             String hour,
-                                                                             String transactionTypeName,
-                                                                             String serverIpAddress) {
+    public TransactionStatisticReport queryHourTransactionNameReportByServer(String group,
+                                                                             String serverAppName,
+                                                                                 String hour,
+                                                                                 String transactionTypeName,
+                                                                                 String serverIpAddress) {
         Map<String, Object> map = new HashMap<>();
         map.put("transactionType", transactionTypeName);
 
@@ -144,13 +150,14 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
             map.put("serverIp", serverIpAddress);
 
 
-        String startTime = hour.replace(hour.substring(14, 19), "00:00");
-        String endTime = hour.replace(hour.substring(14, 19), "59:59");
+        String startTime = hour.replace(hour.substring(14,19),"00:00");
+        String endTime = hour.replace(hour.substring(14,19),"59:59");
 
         //获取指定时间的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime,
-                        endTime, TransactionReportType.HOURLY, map);
+                this.transactionDataStorage.queryHistoryTransactionReports(group,
+                        serverAppName, startTime,
+                        endTime, TransactionReportType.HOURLY,map);
 
         TransactionNameServerStatisticDataMerger merger = new TransactionNameServerStatisticDataMerger(serverAppName,
                 serverIpAddress, transactionTypeName);
@@ -166,15 +173,17 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取当天的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryTodayTransactionNameReportByServer(String serverAppName,
-                                                                              String transactionTypeName,
-                                                                              String serverIpAddress) {
+    public TransactionStatisticReport queryTodayTransactionNameReportByServer(String group,
+                                                                              String serverAppName,
+                                                                                 String transactionTypeName,
+                                                                                 String serverIpAddress) {
         Map<String, Object> map = new HashMap<>();
         map.put("transactionType", transactionTypeName);
 
@@ -183,7 +192,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取指定时间的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryRealtimeTransactionReports(serverAppName, this.getToday(),
+                this.transactionDataStorage.queryRealtimeTransactionReports(group, serverAppName, this.getToday(),
                         this.getCurrentHour(), map);
 
         TransactionNameServerStatisticDataMerger merger = new TransactionNameServerStatisticDataMerger(serverAppName,
@@ -199,6 +208,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定天的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param date                指定日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -206,12 +216,13 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryDayTransactionNameReportByServer(String serverAppName,
-                                                                            String date,
-                                                                            String transactionTypeName,
-                                                                            String serverIpAddress) {
-        String startTime = date + " " + "00:00:00";
-        String endTime = date + " " + "23:59:59";
+    public TransactionStatisticReport queryDayTransactionNameReportByServer(String group,
+                                                                            String serverAppName,
+                                                                                 String date,
+                                                                                 String transactionTypeName,
+                                                                                 String serverIpAddress) {
+        String startTime = date  +  " " + "00:00:00";
+        String endTime = date  +  " " + "23:59:59";
 
         Map<String, Object> map = new HashMap<>();
         map.put("transactionType", transactionTypeName);
@@ -221,7 +232,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取指定时间的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime,
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName,startTime ,endTime,
                         TransactionReportType.DAILY, map);
 
         TransactionNameServerStatisticDataMerger merger = new TransactionNameServerStatisticDataMerger(serverAppName,
@@ -238,6 +249,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定周的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param week                指定周的第一天日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -245,15 +257,16 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryWeekTransactionNameReportByServer(String serverAppName,
-                                                                             String week,
-                                                                             String transactionTypeName,
-                                                                             String serverIpAddress) {
+    public TransactionStatisticReport queryWeekTransactionNameReportByServer(String group,
+                                                                             String serverAppName,
+                                                                            String week,
+                                                                            String transactionTypeName,
+                                                                            String serverIpAddress) {
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, Integer.parseInt(week.substring(0, 4)));
-        cal.set(Calendar.MONTH, Integer.parseInt(week.substring(5, 7)) - 1);
-        cal.set(Calendar.DATE, Integer.parseInt(week.substring(8, 10)));
-        cal.add(Calendar.DATE, 6);
+        cal.set(Calendar.YEAR,Integer.parseInt(week.substring(0,4)));
+        cal.set(Calendar.MONTH,Integer.parseInt(week.substring(5,7))-1);
+        cal.set(Calendar.DATE,Integer.parseInt(week.substring(8,10)));
+        cal.add(Calendar.DATE,6);
 
         String startTime = week + " 00:00:00";
         String endTime = simp.format(cal.getTime()) + " 23:59:59";
@@ -266,7 +279,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取指定时间的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime,
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName,startTime ,endTime,
                         TransactionReportType.WEEKLY, map);
 
         TransactionNameServerStatisticDataMerger merger = new TransactionNameServerStatisticDataMerger(serverAppName,
@@ -282,6 +295,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定月的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param month               指定月份的第一条日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -289,13 +303,14 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryMonthTransactionNameReportByServer(String serverAppName,
-                                                                              String month,
-                                                                              String transactionTypeName,
-                                                                              String serverIpAddress) {
+    public TransactionStatisticReport queryMonthTransactionNameReportByServer(String group,
+                                                                              String serverAppName,
+                                                                             String month,
+                                                                             String transactionTypeName,
+                                                                             String serverIpAddress) {
         Calendar calendar = Calendar.getInstance();
-        int year = Integer.parseInt(month.substring(0, 4));
-        int mon = Integer.parseInt(month.substring(5, 7)) - 1;
+        int year=Integer.parseInt(month.substring(0,4));
+        int mon =Integer.parseInt(month.substring(5,7))-1;
         calendar.set(year, mon, 1);
         calendar.roll(Calendar.DATE, -1);
 
@@ -310,7 +325,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取指定时间的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime,
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName,startTime ,endTime,
                         TransactionReportType.MONTHLY, map);
 
         TransactionNameServerStatisticDataMerger merger = new TransactionNameServerStatisticDataMerger(serverAppName,
@@ -327,15 +342,17 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取当天的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryTodayTransactionTypeReportByServer(String serverAppName) {
+    public TransactionStatisticReport queryTodayTransactionTypeReportByServer(String group,
+                                                                              String serverAppName) {
 
         //获取当天的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryRealtimeTransactionReports(serverAppName,
+                this.transactionDataStorage.queryRealtimeTransactionReports(group, serverAppName,
                         this.getToday(), this.getCurrentHour());
 
         TransactionStatisticDataMerger merger = new TransactionStatisticDataMerger(serverAppName,
@@ -352,20 +369,23 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定小时的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @param hour          指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryHourTransactionTypeReportByServer(String serverAppName, String hour) {
+    public TransactionStatisticReport queryHourTransactionTypeReportByServer(String group,
+                                                                             String serverAppName,
+                                                                             String hour) {
         // 需要从Mongodb的TransactionHourlyReports中获取
         // TransactionHourlyReports格式和TransactionRealtimeReports格式一样
 
-        String startTime = hour.replace(hour.substring(14, 19), "00:00");
-        String endTime = hour.replace(hour.substring(14, 19), "59:59");
+        String startTime = hour.replace(hour.substring(14,19),"00:00");
+        String endTime = hour.replace(hour.substring(14,19),"59:59");
 
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime,
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName,startTime,endTime,
                         TransactionReportType.HOURLY);
 
         TransactionStatisticDataMerger merger = new TransactionStatisticDataMerger(serverAppName,
@@ -383,18 +403,21 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定日期的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @param date          指定日期,格式为 yyyy-MM-dd
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryDayTransactionTypeReportByServer(String serverAppName, String date) {
+    public TransactionStatisticReport queryDayTransactionTypeReportByServer(String group,
+                                                                            String serverAppName,
+                                                                            String date) {
 
-        String startTime = date + " " + "00:00:00";
-        String endTime = date + " " + "23:59:59";
+        String startTime = date  +  " " + "00:00:00";
+        String endTime = date  +  " " + "23:59:59";
 
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime,
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName,startTime,endTime,
                         TransactionReportType.DAILY);
 
         TransactionStatisticDataMerger merger = new TransactionStatisticDataMerger(serverAppName,
@@ -412,22 +435,25 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定周的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @param week          指定周的第一天日期,格式为 yyyy-MM-dd
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryWeekTransactionTypeReportByServer(String serverAppName, String week) {
+    public TransactionStatisticReport queryWeekTransactionTypeReportByServer(String group,
+                                                                             String serverAppName,
+                                                                             String week) {
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, Integer.parseInt(week.substring(0, 4)));
-        cal.set(Calendar.MONTH, Integer.parseInt(week.substring(5, 7)) - 1);
-        cal.set(Calendar.DATE, Integer.parseInt(week.substring(8, 10)));
-        cal.add(Calendar.DATE, 6);
+        cal.set(Calendar.YEAR,Integer.parseInt(week.substring(0,4)));
+        cal.set(Calendar.MONTH,Integer.parseInt(week.substring(5,7))-1);
+        cal.set(Calendar.DATE,Integer.parseInt(week.substring(8,10)));
+        cal.add(Calendar.DATE,6);
 
         String startTime = week + " 00:00:00";
         String endTime = simp.format(cal.getTime()) + " 23:59:59";
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime,
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName,startTime,endTime,
                         TransactionReportType.WEEKLY);
 
         TransactionStatisticDataMerger merger = new TransactionStatisticDataMerger(serverAppName,
@@ -440,27 +466,30 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         TransactionStatisticReport report = merger.toTransactionStatisticReport();
         return report;
 
-    }
+}
 
     /**
      * 获取指定月的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @param month         指定月份的第一条日期,格式为 yyyy-MM-dd
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryMonthTransactionTypeReportByServer(String serverAppName, String month) {
+    public TransactionStatisticReport queryMonthTransactionTypeReportByServer(String group,
+                                                                              String serverAppName,
+                                                                              String month) {
         Calendar calendar = Calendar.getInstance();
-        int year = Integer.parseInt(month.substring(0, 4));
-        int mon = Integer.parseInt(month.substring(5, 7)) - 1;
+        int year=Integer.parseInt(month.substring(0,4));
+        int mon =Integer.parseInt(month.substring(5,7))-1;
         calendar.set(year, mon, 1);
         calendar.roll(Calendar.DATE, -1);
 
         String startTime = month + " 00:00:00";
         String endTime = simp.format(calendar.getTime()) + " 23:59:59";
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime,
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName,startTime,endTime,
                         TransactionReportType.MONTHLY);
 
         TransactionStatisticDataMerger merger = new TransactionStatisticDataMerger(serverAppName,
@@ -478,13 +507,15 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取最近一小时的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryLastHourTransactionTypeReportByClient(String serverAppName,
+    public TransactionStatisticReport queryLastHourTransactionTypeReportByClient(String group,
+                                                                                 String serverAppName,
                                                                                  String transactionTypeName,
                                                                                  String serverIpAddress) {
         Map<String, Object> map = new HashMap<>();
@@ -497,7 +528,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryRealtimeTransactionReports(map);
+                this.transactionDataStorage.queryRealtimeTransactionReports(group, map);
 
         TransactionStatisticDataClientMerger merger = new TransactionStatisticDataClientMerger(serverAppName,
                 TransactionStatisticDataClientMerger.TransactionLevel.TransactionType,
@@ -514,6 +545,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定小时的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param hour                指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @param transactionTypeName 服务大类名称
@@ -521,12 +553,13 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryHourTransactionTypeReportByClient(String serverAppName,
-                                                                             String hour,
-                                                                             String transactionTypeName,
-                                                                             String serverIpAddress) {
-        String startTime = hour.replace(hour.substring(14, 19), "00:00");
-        String endTime = hour.replace(hour.substring(14, 19), "59:59");
+    public TransactionStatisticReport queryHourTransactionTypeReportByClient(String group,
+                                                                             String serverAppName,
+                                                                                 String hour,
+                                                                                 String transactionTypeName,
+                                                                                 String serverIpAddress){
+        String startTime = hour.replace(hour.substring(14,19),"00:00");
+        String endTime = hour.replace(hour.substring(14,19),"59:59");
 
         Map<String, Object> map = new HashMap<>();
 
@@ -537,7 +570,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime, TransactionReportType.HOURLY, map);
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName, startTime, endTime, TransactionReportType.HOURLY, map);
 
         TransactionStatisticDataClientMerger merger = new TransactionStatisticDataClientMerger(serverAppName,
                 TransactionStatisticDataClientMerger.TransactionLevel.TransactionType,
@@ -553,13 +586,17 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取当天的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryTodayTransactionTypeReportByClient(String serverAppName, String transactionTypeName, String serverIpAddress) {
+    public TransactionStatisticReport queryTodayTransactionTypeReportByClient(String group,
+                                                                              String serverAppName,
+                                                                              String transactionTypeName,
+                                                                              String serverIpAddress) {
         Map<String, Object> map = new HashMap<>();
         map.put("transactionType", transactionTypeName);
         if (StringUtils.hasText(serverIpAddress))
@@ -567,7 +604,8 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取指定时间的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryRealtimeTransactionReports(serverAppName, this.getToday(), this.getCurrentHour(), map);
+                this.transactionDataStorage.queryRealtimeTransactionReports(group, serverAppName,
+                        this.getToday(), this.getCurrentHour(), map);
 
         TransactionStatisticDataClientMerger merger = new TransactionStatisticDataClientMerger(serverAppName,
                 TransactionStatisticDataClientMerger.TransactionLevel.TransactionType,
@@ -583,6 +621,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定日期的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param date                指定日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -590,13 +629,14 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryDayTransactionTypeReportByClient(String serverAppName,
+    public TransactionStatisticReport queryDayTransactionTypeReportByClient(String group,
+                                                                            String serverAppName,
                                                                             String date,
                                                                             String transactionTypeName,
                                                                             String serverIpAddress) {
 
-        String startTime = date + " " + "00:00:00";
-        String endTime = date + " " + "23:59:59";
+        String startTime = date  +  " " + "00:00:00";
+        String endTime = date  +  " " + "23:59:59";
 
         Map<String, Object> map = new HashMap<>();
         map.put("transactionType", transactionTypeName);
@@ -606,7 +646,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime,
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName, startTime, endTime,
                         TransactionReportType.DAILY, map);
 
         TransactionStatisticDataClientMerger merger = new TransactionStatisticDataClientMerger(serverAppName,
@@ -624,6 +664,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定周的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param week                指定周的第一天日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -631,16 +672,17 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryWeekTransactionTypeReportByClient(String serverAppName,
-                                                                             String week,
-                                                                             String transactionTypeName,
-                                                                             String serverIpAddress) {
+    public TransactionStatisticReport queryWeekTransactionTypeReportByClient(String group,
+                                                                             String serverAppName,
+                                                                            String week,
+                                                                            String transactionTypeName,
+                                                                            String serverIpAddress) {
 
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, Integer.parseInt(week.substring(0, 4)));
-        cal.set(Calendar.MONTH, Integer.parseInt(week.substring(5, 7)) - 1);
-        cal.set(Calendar.DATE, Integer.parseInt(week.substring(8, 10)));
-        cal.add(Calendar.DATE, 6);
+        cal.set(Calendar.YEAR,Integer.parseInt(week.substring(0,4)));
+        cal.set(Calendar.MONTH,Integer.parseInt(week.substring(5,7))-1);
+        cal.set(Calendar.DATE,Integer.parseInt(week.substring(8,10)));
+        cal.add(Calendar.DATE,6);
 
         String startTime = week + " 00:00:00";
         String endTime = simp.format(cal.getTime()) + " 23:59:59";
@@ -653,7 +695,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime,
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName, startTime, endTime,
                         TransactionReportType.WEEKLY, map);
 
         TransactionStatisticDataClientMerger merger = new TransactionStatisticDataClientMerger(serverAppName,
@@ -671,6 +713,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定周的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param month               指定月份的第一条日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -678,14 +721,15 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 统计数据结果集
      */
     @Override
-    public TransactionStatisticReport queryMonthTransactionTypeReportByClient(String serverAppName,
-                                                                              String month,
-                                                                              String transactionTypeName,
-                                                                              String serverIpAddress) {
+    public TransactionStatisticReport queryMonthTransactionTypeReportByClient(String group,
+                                                                              String serverAppName,
+                                                                             String month,
+                                                                             String transactionTypeName,
+                                                                             String serverIpAddress) {
 
         Calendar calendar = Calendar.getInstance();
-        int year = Integer.parseInt(month.substring(0, 4));
-        int mon = Integer.parseInt(month.substring(5, 7)) - 1;
+        int year=Integer.parseInt(month.substring(0,4));
+        int mon =Integer.parseInt(month.substring(5,7))-1;
         calendar.set(year, mon, 1);
         calendar.roll(Calendar.DATE, -1);
 
@@ -700,7 +744,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime,
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName, startTime, endTime,
                         TransactionReportType.MONTHLY, map);
 
         TransactionStatisticDataClientMerger merger = new TransactionStatisticDataClientMerger(serverAppName,
@@ -718,13 +762,15 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取最近一小时的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
      * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
      */
     @Override
-    public TransactionCallTimesReport queryLastHourTransactionTypeCallTimesReportByServer(String serverAppName,
+    public TransactionCallTimesReport queryLastHourTransactionTypeCallTimesReportByServer(String group,
+                                                                                          String serverAppName,
                                                                                           String transactionTypeName,
                                                                                           String serverIpAddress) {
         Map<String, Object> map = new HashMap<>();
@@ -737,7 +783,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryRealtimeTransactionReports(map);
+                this.transactionDataStorage.queryRealtimeTransactionReports(group, map);
 
         TransactionCallTimesMerger transactionCallTimesMerger =
                 new TransactionCallTimesMerger(serverAppName, serverIpAddress, transactionTypeName);
@@ -765,6 +811,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定小时的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param hour                指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @param transactionTypeName 服务大类名称
@@ -772,14 +819,15 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
      */
     @Override
-    public TransactionCallTimesReport queryHourTransactionTypeCallTimesReportByServer(String serverAppName,
-                                                                                      String hour,
-                                                                                      String transactionTypeName,
-                                                                                      String serverIpAddress) {
+    public TransactionCallTimesReport queryHourTransactionTypeCallTimesReportByServer(String group,
+                                                                                      String serverAppName,
+                                                                                          String hour,
+                                                                                          String transactionTypeName,
+                                                                                          String serverIpAddress) {
 
 
-        String startTime = hour.replace(hour.substring(14, 19), "00:00");
-        String endTime = hour.replace(hour.substring(14, 19), "59:59");
+            String startTime = hour.replace(hour.substring(14,19),"00:00");
+            String endTime = hour.replace(hour.substring(14,19),"59:59");
 
 
         Map<String, Object> map = new HashMap<>();
@@ -790,7 +838,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime, TransactionReportType.HOURLY, map);
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName, startTime, endTime, TransactionReportType.HOURLY, map);
 
         TransactionCallTimesMerger transactionCallTimesMerger =
                 new TransactionCallTimesMerger(serverAppName, serverIpAddress, transactionTypeName);
@@ -814,50 +862,52 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         return transactionCallTimesReport;
     }
 
-    /**
-     * 获取当天的TransactionType调用次数的结果集,不进行分页
-     *
-     * @param serverAppName       应用服务系统名称
-     * @param transactionTypeName 服务大类名称
-     * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
-     * @return 调用次数结果集, 返回对象中durations的总长度为24, Key值为0-23,表示一天从0点到23点的每小时调用次数
-     */
-    @Override
-    public TransactionCallTimesReport queryTodayTransactionTypeCallTimesReportByServer(String serverAppName,
-                                                                                       String transactionTypeName,
-                                                                                       String serverIpAddress) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("transactionType", transactionTypeName);
-        if (StringUtils.hasText(serverIpAddress))
-            map.put("serverIp", serverIpAddress);
+        /**
+         * 获取当天的TransactionType调用次数的结果集,不进行分页
+         *
+         * @param group               系统类别
+         * @param serverAppName       应用服务系统名称
+         * @param transactionTypeName 服务大类名称
+         * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
+         * @return 调用次数结果集, 返回对象中durations的总长度为24, Key值为0-23,表示一天从0点到23点的每小时调用次数
+         */
+        @Override
+        public TransactionCallTimesReport queryTodayTransactionTypeCallTimesReportByServer(String group,
+                                                                                           String serverAppName,
+                                                                                                String transactionTypeName,
+                                                                                                String serverIpAddress) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("transactionType", transactionTypeName);
+            if (StringUtils.hasText(serverIpAddress))
+                map.put("serverIp", serverIpAddress);
 
-        //获取当前一小时的实时数据
-        List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryRealtimeTransactionReports(serverAppName,
-                        this.getToday(), this.getCurrentHour(), map);
+            //获取当前一小时的实时数据
+            List<TransactionReportVO> reports =
+                    this.transactionDataStorage.queryRealtimeTransactionReports(group, serverAppName,
+                            this.getToday(), this.getCurrentHour(), map);
 
-        LinkedHashMap<Integer, Long> durations = new LinkedHashMap<>();
-        for (int i = 0; i < 24; i++)
-            durations.put(i, 0L);
+            LinkedHashMap<Integer, Long> durations = new LinkedHashMap<>();
+            for (int i = 0; i < 24; i++)
+                durations.put(i, 0L);
 
-        for (TransactionReportVO report : reports) {
-            int hour = Integer.parseInt(report.getStartTime().substring(11, 13));
-            for (TransactionMachineVO machine : report.getMachines()) {
-                if (StringUtils.hasText(serverIpAddress) &&
-                        !machine.getIp().equals(serverIpAddress))
-                    continue;
-                for (TransactionClientVO client : machine.getTransactionClients()) {
-                    for (TransactionTypeVO transactionType : client.getTransactionTypes()) {
-                        if (StringUtils.hasText(transactionTypeName) &&
-                                !transactionType.getName().equals(transactionTypeName))
-                            continue;
+            for (TransactionReportVO report : reports) {
+                int hour = Integer.parseInt(report.getStartTime().substring(11, 13));
+                for (TransactionMachineVO machine : report.getMachines()) {
+                    if (StringUtils.hasText(serverIpAddress) &&
+                            !machine.getIp().equals(serverIpAddress))
+                        continue;
+                    for (TransactionClientVO client : machine.getTransactionClients()) {
+                        for (TransactionTypeVO transactionType : client.getTransactionTypes()) {
+                            if (StringUtils.hasText(transactionTypeName) &&
+                                    !transactionType.getName().equals(transactionTypeName))
+                                continue;
 
-                        Long count = durations.get(hour);
-                        durations.put(hour, transactionType.getTotalCount() + count);
+                            Long count = durations.get(hour);
+                            durations.put(hour, transactionType.getTotalCount() + count);
+                        }
                     }
                 }
             }
-        }
 
         TransactionCallTimesReport report = new TransactionCallTimesReport();
         report.setDurations(durations);
@@ -868,6 +918,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取最近一小时的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param date                指定日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -875,12 +926,13 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
      */
     @Override
-    public TransactionCallTimesReport queryDayTransactionTypeCallTimesReportByServer(String serverAppName,
-                                                                                     String date,
-                                                                                     String transactionTypeName,
-                                                                                     String serverIpAddress) {
-        String startTime = date + " " + "00:00:00";
-        String endTime = date + " " + "23:59:59";
+    public TransactionCallTimesReport queryDayTransactionTypeCallTimesReportByServer(String group,
+                                                                                     String serverAppName,
+                                                                                          String date,
+                                                                                          String transactionTypeName,
+                                                                                          String serverIpAddress) {
+        String startTime = date  +  " " + "00:00:00";
+        String endTime = date  +  " " + "23:59:59";
 
         Map<String, Object> map = new HashMap<>();
         map.put("startTime", startTime);
@@ -891,8 +943,8 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime,
-                        TransactionReportType.DAILY, map);
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName, startTime, endTime,
+                        TransactionReportType.DAILY, map );
 
         TransactionCallTimesMerger transactionCallTimesMerger =
                 new TransactionCallTimesMerger(serverAppName, serverIpAddress, transactionTypeName);
@@ -930,12 +982,13 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         report.setDurations(durations);
 
         return report;
-    }
+ }
 
 
     /**
      * 获取指定周的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param week                指定周的第一天日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -943,15 +996,16 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
      */
     @Override
-    public TransactionCallTimesReport queryWeekTransactionTypeCallTimesReportByServer(String serverAppName,
-                                                                                      String week,
-                                                                                      String transactionTypeName,
-                                                                                      String serverIpAddress) {
+    public TransactionCallTimesReport queryWeekTransactionTypeCallTimesReportByServer(String group,
+                                                                                      String serverAppName,
+                                                                                     String week,
+                                                                                     String transactionTypeName,
+                                                                                     String serverIpAddress) {
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, Integer.parseInt(week.substring(0, 4)));
-        cal.set(Calendar.MONTH, Integer.parseInt(week.substring(5, 7)) - 1);
-        cal.set(Calendar.DATE, Integer.parseInt(week.substring(8, 10)));
-        cal.add(Calendar.DATE, 6);
+        cal.set(Calendar.YEAR,Integer.parseInt(week.substring(0,4)));
+        cal.set(Calendar.MONTH,Integer.parseInt(week.substring(5,7))-1);
+        cal.set(Calendar.DATE,Integer.parseInt(week.substring(8,10)));
+        cal.add(Calendar.DATE,6);
 
         String startTime = week + " 00:00:00";
         String endTime = simp.format(cal.getTime()) + " 23:59:59";
@@ -965,8 +1019,8 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime,
-                        TransactionReportType.WEEKLY, map);
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName, startTime, endTime,
+                        TransactionReportType.WEEKLY, map );
 
         TransactionCallTimesMerger transactionCallTimesMerger =
                 new TransactionCallTimesMerger(serverAppName, serverIpAddress, transactionTypeName);
@@ -1002,12 +1056,13 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         TransactionCallTimesReport report = new TransactionCallTimesReport();
         report.setDurations(durations);
         return report;
-    }
+ }
 
 
     /**
      * 获取指定月的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param month               指定月份的第一条日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -1015,16 +1070,17 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
      */
     @Override
-    public TransactionCallTimesReport queryMonthTransactionTypeCallTimesReportByServer(String serverAppName,
-                                                                                       String month,
-                                                                                       String transactionTypeName,
-                                                                                       String serverIpAddress) {
+    public TransactionCallTimesReport queryMonthTransactionTypeCallTimesReportByServer(String group,
+                                                                                       String serverAppName,
+                                                                                      String month,
+                                                                                      String transactionTypeName,
+                                                                                      String serverIpAddress) {
         Calendar calendar = Calendar.getInstance();
-        int year = Integer.parseInt(month.substring(0, 4));
-        int mon = Integer.parseInt(month.substring(5, 7)) - 1;
+        int year=Integer.parseInt(month.substring(0,4));
+        int mon =Integer.parseInt(month.substring(5,7))-1;
         calendar.set(year, mon, 1);
         calendar.roll(Calendar.DATE, -1);
-        int maxDate = calendar.getActualMaximum(Calendar.DATE);
+        int maxDate  =  calendar.getActualMaximum(Calendar.DATE);
 
         String startTime = month + " 00:00:00";
         String endTime = simp.format(calendar.getTime()) + " 23:59:59";
@@ -1038,8 +1094,8 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(serverAppName, startTime, endTime,
-                        TransactionReportType.MONTHLY, map);
+                this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName, startTime, endTime,
+                        TransactionReportType.MONTHLY, map );
 
         TransactionCallTimesMerger transactionCallTimesMerger =
                 new TransactionCallTimesMerger(serverAppName, serverIpAddress, transactionTypeName);
@@ -1080,6 +1136,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取最近一小时内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param transactionTypeName 服务大类名称,非空
      * @param transactionName     服务名称,可选
@@ -1093,7 +1150,8 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 详细调用Transaction的明细清单
      */
     @Override
-    public TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
+    public TransactionMessageList queryLastHourTransactionMessageList(String group,
+                                                                      String serverAppName,
                                                                       String transactionTypeName,
                                                                       String transactionName,
                                                                       String serverIpAddress,
@@ -1110,7 +1168,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         start = start - start % HOUR;
         long end = start + HOUR;
 
-        MessageTreeList messageList = this.messageTreeStorage.queryMessageTree(serverAppName, start, end, map,
+        MessageTreeList messageList = this.messageTreeStorage.queryMessageTree(group, serverAppName, start, end, map,
                 startIndex, pageSize, orderBy);
 
         TransactionMessageList transactionMessageList = new TransactionMessageList();
@@ -1128,6 +1186,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定小时内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param hour                指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @param transactionTypeName 服务大类名称,非空
@@ -1142,31 +1201,32 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 详细调用Transaction的明细清单
      */
     @Override
-    public TransactionMessageList queryHourTransactionMessageList(String serverAppName,
-                                                                  String hour,
-                                                                  String transactionTypeName,
-                                                                  String transactionName,
-                                                                  String serverIpAddress,
-                                                                  String clientAppName,
-                                                                  String clientIpAddress,
-                                                                  String status,
-                                                                  int startIndex, int pageSize,
-                                                                  LinkedHashMap<String, String> orderBy) {
+    public TransactionMessageList queryHourTransactionMessageList(String group,
+                                                                  String serverAppName,
+                                                                      String hour,
+                                                                      String transactionTypeName,
+                                                                      String transactionName,
+                                                                      String serverIpAddress,
+                                                                      String clientAppName,
+                                                                      String clientIpAddress,
+                                                                      String status,
+                                                                      int startIndex, int pageSize,
+                                                                      LinkedHashMap<String, String> orderBy) {
 
         Map<String, Object> map = this.getArgumentMap(transactionTypeName, transactionName,
                 serverIpAddress, clientAppName, clientIpAddress, status);
         long startDate = 0;
         long endDate = 0;
         try {
-            startDate = simpleDateFormat.parse(hour.replace(hour.substring(14, 19), "00:00")).getTime();
-            endDate = simpleDateFormat.parse(hour.replace(hour.substring(14, 19), "59:59")).getTime();
+            startDate = simpleDateFormat.parse(hour.replace(hour.substring(14,19),"00:00")).getTime();
+            endDate = simpleDateFormat.parse(hour.replace(hour.substring(14,19),"59:59")).getTime();
 
         } catch (ParseException e) {
             throw new RuntimeException();
         }
 
 
-        MessageTreeList messageList = this.messageTreeStorage.queryMessageTree(serverAppName, startDate, endDate, map,
+        MessageTreeList messageList = this.messageTreeStorage.queryMessageTree(group, serverAppName, startDate, endDate, map,
                 startIndex, pageSize, orderBy);
 
         TransactionMessageList transactionMessageList = new TransactionMessageList();
@@ -1183,6 +1243,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取当天的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param transactionTypeName 服务大类名称,非空
      * @param transactionName     服务名称,可选
@@ -1196,15 +1257,16 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 详细调用Transaction的明细清单
      */
     @Override
-    public TransactionMessageList queryTodayTransactionMessageList(String serverAppName,
-                                                                   String transactionTypeName,
-                                                                   String transactionName,
-                                                                   String serverIpAddress,
-                                                                   String clientAppName,
-                                                                   String clientIpAddress,
-                                                                   String status,
-                                                                   int startIndex, int pageSize,
-                                                                   LinkedHashMap<String, String> orderBy) {
+    public TransactionMessageList queryTodayTransactionMessageList(String group,
+                                                                   String serverAppName,
+                                                                      String transactionTypeName,
+                                                                      String transactionName,
+                                                                      String serverIpAddress,
+                                                                      String clientAppName,
+                                                                      String clientIpAddress,
+                                                                      String status,
+                                                                      int startIndex, int pageSize,
+                                                                      LinkedHashMap<String, String> orderBy) {
 
         Map<String, Object> map = this.getArgumentMap(transactionTypeName, transactionName,
                 serverIpAddress, clientAppName, clientIpAddress, status);
@@ -1213,7 +1275,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         start = start - start % DAY;
         long end = start + DAY;
 
-        MessageTreeList messageList = this.messageTreeStorage.queryMessageTree(serverAppName, start, end, map,
+        MessageTreeList messageList = this.messageTreeStorage.queryMessageTree(group, serverAppName, start, end, map,
                 startIndex, pageSize, orderBy);
 
         TransactionMessageList transactionMessageList = new TransactionMessageList();
@@ -1228,9 +1290,11 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     }
 
 
+
     /**
      * 获取指定日期内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param date                指定日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称,非空
@@ -1245,16 +1309,17 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 详细调用Transaction的明细清单
      */
     @Override
-    public TransactionMessageList queryDayTransactionMessageList(String serverAppName,
-                                                                 String date,
-                                                                 String transactionTypeName,
-                                                                 String transactionName,
-                                                                 String serverIpAddress,
-                                                                 String clientAppName,
-                                                                 String clientIpAddress,
-                                                                 String status,
-                                                                 int startIndex, int pageSize,
-                                                                 LinkedHashMap<String, String> orderBy) {
+     public TransactionMessageList queryDayTransactionMessageList(String group,
+                                                                  String serverAppName,
+                                                                      String date,
+                                                                      String transactionTypeName,
+                                                                      String transactionName,
+                                                                      String serverIpAddress,
+                                                                      String clientAppName,
+                                                                      String clientIpAddress,
+                                                                      String status,
+                                                                      int startIndex, int pageSize,
+                                                                      LinkedHashMap<String, String> orderBy) {
 
         Map<String, Object> map = this.getArgumentMap(transactionTypeName, transactionName,
                 serverIpAddress, clientAppName, clientIpAddress, status);
@@ -1262,15 +1327,15 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         long startDate = 0;
         long endDate = 0;
         try {
-            startDate = simpleDateFormat.parse(date + " " + "00:00:00").getTime();
-            endDate = simpleDateFormat.parse(date + " " + "23:59:59").getTime();
+            startDate = simpleDateFormat.parse(date  +  " " + "00:00:00").getTime();
+            endDate = simpleDateFormat.parse(date  +  " " + "23:59:59").getTime();
 
         } catch (ParseException e) {
             throw new RuntimeException();
         }
 
 
-        MessageTreeList messageList = this.messageTreeStorage.queryMessageTree(serverAppName, startDate, endDate, map,
+        MessageTreeList messageList = this.messageTreeStorage.queryMessageTree(group, serverAppName, startDate, endDate, map,
                 startIndex, pageSize, orderBy);
 
         TransactionMessageList transactionMessageList = new TransactionMessageList();
@@ -1287,6 +1352,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定周内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param week                指定周的第一天日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称,非空
@@ -1301,25 +1367,26 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 详细调用Transaction的明细清单
      */
     @Override
-    public TransactionMessageList queryWeekTransactionMessageList(String serverAppName,
-                                                                  String week,
-                                                                  String transactionTypeName,
-                                                                  String transactionName,
-                                                                  String serverIpAddress,
-                                                                  String clientAppName,
-                                                                  String clientIpAddress,
-                                                                  String status,
-                                                                  int startIndex, int pageSize,
-                                                                  LinkedHashMap<String, String> orderBy) {
+    public TransactionMessageList queryWeekTransactionMessageList(String group,
+                                                                  String serverAppName,
+                                                                 String week,
+                                                                 String transactionTypeName,
+                                                                 String transactionName,
+                                                                 String serverIpAddress,
+                                                                 String clientAppName,
+                                                                 String clientIpAddress,
+                                                                 String status,
+                                                                 int startIndex, int pageSize,
+                                                                 LinkedHashMap<String, String> orderBy) {
 
         Map<String, Object> map = this.getArgumentMap(transactionTypeName, transactionName,
                 serverIpAddress, clientAppName, clientIpAddress, status);
 
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, Integer.parseInt(week.substring(0, 4)));
-        cal.set(Calendar.MONTH, Integer.parseInt(week.substring(5, 7)) - 1);
-        cal.set(Calendar.DATE, Integer.parseInt(week.substring(8, 10)));
-        cal.add(Calendar.DATE, 6);
+        cal.set(Calendar.YEAR,Integer.parseInt(week.substring(0,4)));
+        cal.set(Calendar.MONTH,Integer.parseInt(week.substring(5,7))-1);
+        cal.set(Calendar.DATE,Integer.parseInt(week.substring(8,10)));
+        cal.add(Calendar.DATE,6);
 
         String startTime = week + " 00:00:00";
         String endTime = simp.format(cal.getTime()) + " 23:59:59";
@@ -1335,7 +1402,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         }
 
 
-        MessageTreeList messageList = this.messageTreeStorage.queryMessageTree(serverAppName, startDate, endDate, map,
+        MessageTreeList messageList = this.messageTreeStorage.queryMessageTree(group, serverAppName, startDate, endDate, map,
                 startIndex, pageSize, orderBy);
 
         TransactionMessageList transactionMessageList = new TransactionMessageList();
@@ -1352,6 +1419,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     /**
      * 获取指定月内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param month               指定月份的第一条日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称,非空
@@ -1366,23 +1434,24 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
      * @return 详细调用Transaction的明细清单
      */
     @Override
-    public TransactionMessageList queryMonthTransactionMessageList(String serverAppName,
-                                                                   String month,
-                                                                   String transactionTypeName,
-                                                                   String transactionName,
-                                                                   String serverIpAddress,
-                                                                   String clientAppName,
-                                                                   String clientIpAddress,
-                                                                   String status,
-                                                                   int startIndex, int pageSize,
-                                                                   LinkedHashMap<String, String> orderBy) {
+    public TransactionMessageList queryMonthTransactionMessageList(String group,
+                                                                   String serverAppName,
+                                                                  String month,
+                                                                  String transactionTypeName,
+                                                                  String transactionName,
+                                                                  String serverIpAddress,
+                                                                  String clientAppName,
+                                                                  String clientIpAddress,
+                                                                  String status,
+                                                                  int startIndex, int pageSize,
+                                                                  LinkedHashMap<String, String> orderBy) {
 
         Map<String, Object> map = this.getArgumentMap(transactionTypeName, transactionName,
                 serverIpAddress, clientAppName, clientIpAddress, status);
 
         Calendar calendar = Calendar.getInstance();
-        int year = Integer.parseInt(month.substring(0, 4));
-        int mon = Integer.parseInt(month.substring(5, 7)) - 1;
+        int year=Integer.parseInt(month.substring(0,4));
+        int mon =Integer.parseInt(month.substring(5,7))-1;
         calendar.set(year, mon, 1);
         calendar.roll(Calendar.DATE, -1);
 
@@ -1400,7 +1469,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         }
 
 
-        MessageTreeList messageList = this.messageTreeStorage.queryMessageTree(serverAppName, startDate, endDate, map,
+        MessageTreeList messageList = this.messageTreeStorage.queryMessageTree(group, serverAppName, startDate, endDate, map,
                 startIndex, pageSize, orderBy);
 
         TransactionMessageList transactionMessageList = new TransactionMessageList();
@@ -1434,28 +1503,16 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         transactionMessage.setTransactionName(transaction.getName());
         transactionMessage.setUseTime(transaction.getDurationInMillis());
 
-//        if (StringUtils.hasText(transaction.getData())) {
-//            String datas = String.valueOf(transaction.getData());
-//            String[] keyValues = datas.split("&");
-//            for (String keyValue : keyValues) {
-//                String[] kv = keyValue.split("=");
-//                if (kv.length >= 2) {
-//                    transactionMessage.getDatas().put(kv[0], kv[1]);
-//                }
-//            }
-//        }
-
-        if (transaction.getData() != null) {
-            for (Map.Entry<String, Object> entry : transaction.getData().entrySet()) {
+        if (transaction.getData() !=null) {
+            for(Map.Entry<String,Object> entry : transaction.getData().entrySet()){
                 Object value = entry.getValue();
-                if (value == null) {
-                    transactionMessage.getDatas().put(entry.getKey(), "");
-                } else {
+                if(value == null){
+                    transactionMessage.getDatas().put(entry.getKey(),"");
+                }else{
                     transactionMessage.getDatas().put(entry.getKey(), value.toString());
                 }
             }
         }
-
 
         if ("0".equals(transaction.getStatus())) {
             transactionMessage.setStatus("成功");

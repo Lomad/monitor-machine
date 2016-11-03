@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -27,7 +28,7 @@ public class MongodbTransactionQueryServiceUT extends
 
     @Test
     public void testQueryDomains() {
-        LinkedHashSet<String> set = transactionDataQuery.getAllServerAppNames();
+        LinkedHashSet<String> set = transactionDataQuery.getAllServerAppNames("BI");
         System.out.println(set);
     }
 
@@ -53,189 +54,190 @@ public class MongodbTransactionQueryServiceUT extends
 
     @Test
     public void testQueryIps() {
-        LinkedHashSet<String> set = transactionDataQuery.getAllServerIpAddress("test1");
+        LinkedHashSet<String> set = transactionDataQuery.getAllServerIpAddress("BI","test1");
         System.out.println(set);
     }
 
 
     @Test
     public void testQueryLastHourTransactionTypeReportByServer() {
-        TransactionStatisticReport report = transactionDataQuery.queryLastHourTransactionTypeReportByServer("test1");
+        TransactionStatisticReport report = transactionDataQuery.queryLastHourTransactionTypeReportByServer("BI","test1");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryHourTransactionTypeReportByServer() {
-        TransactionStatisticReport report = transactionDataQuery.queryHourTransactionTypeReportByServer("test1", "2016-10-20 14:00:00");
+        TransactionStatisticReport report = transactionDataQuery.queryHourTransactionTypeReportByServer("BI","test1","2016-10-20 14:00:00") ;
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryDayTransactionTypeReportByServer() {
-        TransactionStatisticReport report = transactionDataQuery.queryDayTransactionTypeReportByServer("test1", "2016-10-24");
+        TransactionStatisticReport report = transactionDataQuery.queryDayTransactionTypeReportByServer("BI","test1","2016-10-24");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryWeekTransactionTypeReportByServer() {
-        TransactionStatisticReport report = transactionDataQuery.queryWeekTransactionTypeReportByServer("test1", "2016-10-24");
+        TransactionStatisticReport report = transactionDataQuery.queryWeekTransactionTypeReportByServer("BI", "test1","2016-10-24");
         Assert.assertNotNull(report);
     }
 
     @Test
-    public void testQueryMonthTransactionTypeReportByServer() {
-        TransactionStatisticReport report = transactionDataQuery.queryMonthTransactionTypeReportByServer("test1", "2016-10-01");
+    public void testQueryMonthTransactionTypeReportByServer(){
+        TransactionStatisticReport report = transactionDataQuery.queryMonthTransactionTypeReportByServer("BI", "test1","2016-10-01");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryTodayTransactionTypeReportByServer() {
-        TransactionStatisticReport report = transactionDataQuery.queryTodayTransactionTypeReportByServer("test1");
+        TransactionStatisticReport report = transactionDataQuery.queryTodayTransactionTypeReportByServer("BI","test1");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryLastHourTransactionTypeReportByClient() {
         TransactionStatisticReport report =
-                transactionDataQuery.queryLastHourTransactionTypeReportByClient("test1", "挂号", "");
+                transactionDataQuery.queryLastHourTransactionTypeReportByClient("BI", "test1", "挂号", "");
         Assert.assertNotNull(report);
         report =
-                transactionDataQuery.queryLastHourTransactionTypeReportByClient("test1", "收费", "10.0.0.15");
+                transactionDataQuery.queryLastHourTransactionTypeReportByClient("BI", "test1", "收费", "10.0.0.15");
         Assert.assertNotNull(report);
     }
 
     @Test
-    public void testQueryHourTransactionTypeReportByClient() {
+    public void testQueryHourTransactionTypeReportByClient(){
         TransactionStatisticReport report =
-                transactionDataQuery.queryHourTransactionTypeReportByClient("test1", "2016-10-31 15:00:00", "挂号", "");
+                transactionDataQuery.queryHourTransactionTypeReportByClient("BI", "test1","2016-10-31 15:00:00", "挂号", "");
         Assert.assertNotNull(report);
         report =
-                transactionDataQuery.queryHourTransactionTypeReportByClient("test1", "2016-10-31 15:00:00", "收费", "10.0.0.15");
+                transactionDataQuery.queryHourTransactionTypeReportByClient("BI", "test1","2016-10-31 15:00:00", "收费", "10.0.0.15");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryTodayTransactionTypeReportByClient() {
         TransactionStatisticReport report =
-                transactionDataQuery.queryTodayTransactionTypeReportByClient("test1", "挂号", "");
+                transactionDataQuery.queryTodayTransactionTypeReportByClient("BI", "test1", "挂号", "");
         Assert.assertNotNull(report);
         report =
-                transactionDataQuery.queryTodayTransactionTypeReportByClient("test1", "收费", "10.0.0.15");
+                transactionDataQuery.queryTodayTransactionTypeReportByClient("BI","test1", "收费", "10.0.0.15");
         Assert.assertNotNull(report);
     }
+
 
 
     @Test
     public void testQueryDayTransactionTypeReportByClient() {
         TransactionStatisticReport report =
-                transactionDataQuery.queryDayTransactionTypeReportByClient("test1", "2016-10-31", "挂号", "");
+                transactionDataQuery.queryDayTransactionTypeReportByClient("BI", "test1","2016-10-31", "挂号", "");
         Assert.assertNotNull(report);
         report =
-                transactionDataQuery.queryDayTransactionTypeReportByClient("test1", "2016-10-31", "收费", "10.0.0.15");
+                transactionDataQuery.queryDayTransactionTypeReportByClient("BI", "test1","2016-10-31", "收费", "10.0.0.15");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryWeekTransactionTypeReportByClient() {
         TransactionStatisticReport report =
-                transactionDataQuery.queryWeekTransactionTypeReportByClient("test1", "2016-10-24", "挂号", "");
+                transactionDataQuery.queryWeekTransactionTypeReportByClient("BI", "test1","2016-10-24", "挂号", "");
         Assert.assertNotNull(report);
         report =
-                transactionDataQuery.queryWeekTransactionTypeReportByClient("test1", "2016-10-24", "收费", "10.0.0.15");
+                transactionDataQuery.queryWeekTransactionTypeReportByClient("BI", "test1","2016-10-24", "收费", "10.0.0.15");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryMonthTransactionTypeReportByClient() {
         TransactionStatisticReport report =
-                transactionDataQuery.queryMonthTransactionTypeReportByClient("test1", "2016-10-01", "挂号", "");
+                transactionDataQuery.queryMonthTransactionTypeReportByClient("BI", "test1","2016-10-01", "挂号", "");
         Assert.assertNotNull(report);
         report =
-                transactionDataQuery.queryMonthTransactionTypeReportByClient("test1", "2016-10-01", "收费", "10.0.0.15");
+                transactionDataQuery.queryMonthTransactionTypeReportByClient("BI", "test1","2016-10-01", "收费", "10.0.0.15");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryLastHourTransactionTypeCallTimesReportByServer() {
         TransactionCallTimesReport report =
-                transactionDataQuery.queryLastHourTransactionTypeCallTimesReportByServer("test1", "挂号", "");
+                transactionDataQuery.queryLastHourTransactionTypeCallTimesReportByServer("BI", "test1", "挂号", "");
         Assert.assertNotNull(report);
     }
 
     @Test
-    public void testQueryHourTransactionTypeCallTimesReportByServer() {
+    public void testQueryHourTransactionTypeCallTimesReportByServer(){
         TransactionCallTimesReport report =
-                transactionDataQuery.queryHourTransactionTypeCallTimesReportByServer("test1", "2016-10-31 15:00:00", "挂号", "");
+                transactionDataQuery.queryHourTransactionTypeCallTimesReportByServer("BI", "test1", "2016-10-31 15:00:00", "挂号", "");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryTodayTransactionTypeCallTimesReportByServer() {
         TransactionCallTimesReport report =
-                transactionDataQuery.queryTodayTransactionTypeCallTimesReportByServer("test1", "挂号", "");
+                transactionDataQuery.queryTodayTransactionTypeCallTimesReportByServer("BI", "test1", "挂号", "");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryDayTransactionTypeCallTimesReportByServer() {
         TransactionCallTimesReport report =
-                transactionDataQuery.queryDayTransactionTypeCallTimesReportByServer("test1", "2016-10-31", "挂号", "");
+                transactionDataQuery.queryDayTransactionTypeCallTimesReportByServer("BI", "test1","2016-10-31", "挂号", "");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryWeekTransactionTypeCallTimesReportByServer() {
         TransactionCallTimesReport report =
-                transactionDataQuery.queryWeekTransactionTypeCallTimesReportByServer("test1", "2016-10-24", "挂号", "");
+                transactionDataQuery.queryWeekTransactionTypeCallTimesReportByServer("BI", "test1","2016-10-24", "挂号", "");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryMonthTransactionTypeCallTimesReportByServer() {
         TransactionCallTimesReport report =
-                transactionDataQuery.queryMonthTransactionTypeCallTimesReportByServer("test1", "2016-10-01", "挂号", "");
+                transactionDataQuery.queryMonthTransactionTypeCallTimesReportByServer("BI", "test1","2016-10-01", "挂号", "");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryLastHourTransactionNameReportByServer() {
         TransactionStatisticReport report =
-                transactionDataQuery.queryLastHourTransactionNameReportByServer("test1", "挂号", "");
+                transactionDataQuery.queryLastHourTransactionNameReportByServer("BI", "test1", "挂号", "");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryHourTransactionNameReportByServer() {
         TransactionStatisticReport report =
-                transactionDataQuery.queryHourTransactionNameReportByServer("test1", "2016-10-31 15:00:00", "挂号", "");
+                transactionDataQuery.queryHourTransactionNameReportByServer("BI", "test1","2016-10-31 15:00:00", "挂号", "");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryTodayTransactionNameReportByServer() {
         TransactionStatisticReport report =
-                transactionDataQuery.queryTodayTransactionNameReportByServer("test1", "挂号", "");
+                transactionDataQuery.queryTodayTransactionNameReportByServer("BI", "test1", "挂号", "");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryDayTransactionNameReportByServer() {
         TransactionStatisticReport report =
-                transactionDataQuery.queryDayTransactionNameReportByServer("test1", "2016-10-21", "挂号", "");
+                transactionDataQuery.queryDayTransactionNameReportByServer("BI", "test1","2016-10-21", "挂号", "");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryWeekTransactionNameReportByServer() {
         TransactionStatisticReport report =
-                transactionDataQuery.queryWeekTransactionNameReportByServer("test1", "2016-10-24", "挂号", "");
+                transactionDataQuery.queryWeekTransactionNameReportByServer("BI", "test1","2016-10-24", "挂号", "");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryMonthTransactionNameReportByServer() {
         TransactionStatisticReport report =
-                transactionDataQuery.queryMonthTransactionNameReportByServer("test1", "2016-10-01", "挂号", "");
+                transactionDataQuery.queryMonthTransactionNameReportByServer("BI", "test1","2016-10-01", "挂号", "");
         Assert.assertNotNull(report);
     }
 
@@ -246,7 +248,7 @@ public class MongodbTransactionQueryServiceUT extends
         order.put("time", "ASC");
 
         TransactionMessageList transactionMessageList =
-                transactionDataQuery.queryLastHourTransactionMessageList("test1", "挂号", "", "", "", "", "成功", 0, 100, order);
+                transactionDataQuery.queryLastHourTransactionMessageList("BI", "test1", "挂号", "", "", "", "", "成功", 0, 100, order);
 
         Assert.assertNotNull(transactionMessageList);
     }
@@ -258,7 +260,7 @@ public class MongodbTransactionQueryServiceUT extends
         order.put("time", "ASC");
 
         TransactionMessageList transactionMessageList =
-                transactionDataQuery.queryHourTransactionMessageList("test1", "2016-10-31 15:00:00", "挂号", "", "", "", "", "成功", 0, 100, order);
+                transactionDataQuery.queryHourTransactionMessageList("BI", "test1", "2016-10-31 15:00:00","挂号", "", "", "", "", "成功", 0, 100, order);
 
         Assert.assertNotNull(transactionMessageList);
     }
@@ -270,7 +272,7 @@ public class MongodbTransactionQueryServiceUT extends
         order.put("time", "ASC");
 
         TransactionMessageList transactionMessageList =
-                transactionDataQuery.queryTodayTransactionMessageList("test1", "挂号", "", "", "", "", "成功", 0, 100, order);
+                transactionDataQuery.queryTodayTransactionMessageList("BI", "test1", "挂号", "", "", "", "", "成功", 0, 100, order);
 
         Assert.assertNotNull(transactionMessageList);
     }
@@ -282,7 +284,7 @@ public class MongodbTransactionQueryServiceUT extends
         order.put("time", "ASC");
 
         TransactionMessageList transactionMessageList =
-                transactionDataQuery.queryDayTransactionMessageList("test1", "2016-10-31", "挂号", "", "", "", "", "成功", 0, 100, order);
+                transactionDataQuery.queryDayTransactionMessageList("BI","test1", "2016-10-31", "挂号", "", "", "", "", "成功", 0, 100, order);
 
         Assert.assertNotNull(transactionMessageList);
     }
@@ -294,7 +296,7 @@ public class MongodbTransactionQueryServiceUT extends
         order.put("time", "ASC");
 
         TransactionMessageList transactionMessageList =
-                transactionDataQuery.queryWeekTransactionMessageList("test1", "2016-10-24", "挂号", "", "", "", "", "成功", 0, 100, order);
+                transactionDataQuery.queryWeekTransactionMessageList("BI", "test1", "2016-10-24", "挂号", "", "", "", "", "成功", 0, 100, order);
 
         Assert.assertNotNull(transactionMessageList);
     }
@@ -306,7 +308,7 @@ public class MongodbTransactionQueryServiceUT extends
         order.put("time", "ASC");
 
         TransactionMessageList transactionMessageList =
-                transactionDataQuery.queryMonthTransactionMessageList("test-group", "2016-11-01", "挂号", "", "", "", "", "成功", 0, 100, order);
+                transactionDataQuery.queryMonthTransactionMessageList("BI", "test1", "2016-10-01", "挂号", "", "", "", "", "成功", 0, 100, order);
 
         Assert.assertNotNull(transactionMessageList);
     }

@@ -19,14 +19,14 @@ public class MongodbTransactionQueryUT extends
 
     @Test
     public void testQuery() {
-        transactionDataQuery.queryTransactionReport("test1", "2016-09-14 11:00:00",
+        transactionDataQuery.queryTransactionReport("BI","test1", "2016-09-14 11:00:00",
                 TransactionReportType.REALTIME);
 
     }
 
     @Test
     public void testQueryType() {
-        transactionDataQuery.queryByTranscationType("application-helloworld", "2016-09-18 16:00:00",
+        transactionDataQuery.queryByTranscationType("BI", "application-helloworld", "2016-09-18 16:00:00",
                 "rpc",
                 TransactionReportType.REALTIME);
 

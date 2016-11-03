@@ -10,9 +10,9 @@ import com.winning.monitor.data.api.transaction.vo.TransactionTypeVO;
 @Deprecated
 public interface ITransactionDataQuery {
 
-    TransactionReportVO queryTransactionReport(String domain, String startTime, TransactionReportType type);
+    TransactionReportVO queryTransactionReport(String group,String domain, String startTime, TransactionReportType type);
 
-    TransactionTypeVO queryByTranscationType(String domain, String startTime, String typeName,
+    TransactionTypeVO queryByTranscationType(String group, String domain, String startTime, String typeName,
                                              TransactionReportType type);
 
 

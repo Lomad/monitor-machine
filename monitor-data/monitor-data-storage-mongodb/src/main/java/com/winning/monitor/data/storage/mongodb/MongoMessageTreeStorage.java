@@ -39,7 +39,7 @@ public class MongoMessageTreeStorage implements MessageTreeStorage {
     }
 
     @Override
-    public MessageTreeList queryMessageTree(String domain, long startTime,
+    public MessageTreeList queryMessageTree(String group,String domain, long startTime,
                                             long endTime, Map<String, Object> arguments,
                                             int startIndex, int pageSize,
                                             LinkedHashMap<String, String> orderBy) {
@@ -48,6 +48,7 @@ public class MongoMessageTreeStorage implements MessageTreeStorage {
 
         Query query = new Query();
         query.addCriteria(new Criteria("domain").is(domain));
+        query.addCriteria(new Criteria("group").is(group));
         query.addCriteria(new Criteria("messageTree.message.timestampInMillis")
                 .gte(startTime).lt(endTime));
 

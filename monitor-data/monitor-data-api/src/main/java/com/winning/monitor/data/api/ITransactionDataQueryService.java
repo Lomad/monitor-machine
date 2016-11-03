@@ -16,113 +16,131 @@ public interface ITransactionDataQueryService {
     /**
      * 获取所有的应用服务系统名称
      *
+     * @param group               系统类别
      * @return
      */
-    LinkedHashSet<String> getAllServerAppNames();
+    LinkedHashSet<String> getAllServerAppNames(String group);
 
 
     /**
      * 获取所有的应用服务系统对应的IP地址
      *
+     * @param group               系统类别
      * @return
      */
-    LinkedHashSet<String> getAllServerIpAddress(String domain);
+    LinkedHashSet<String> getAllServerIpAddress(String group, String domain);
 
     /**
      * 获取最近一小时的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryLastHourTransactionTypeReportByServer(String serverAppName);
+    TransactionStatisticReport queryLastHourTransactionTypeReportByServer(String group,String serverAppName);
 
 
     /**
      * 获取当天的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryTodayTransactionTypeReportByServer(String serverAppName);
+    TransactionStatisticReport queryTodayTransactionTypeReportByServer(String group, String serverAppName);
 
 
     /**
      * 获取指定小时的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @param hour          指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryHourTransactionTypeReportByServer(String serverAppName,
-                                                                      String hour);
+    TransactionStatisticReport queryHourTransactionTypeReportByServer(String group,
+                                                                        String serverAppName,
+                                                                        String hour);
 
     /**
      * 获取指定日期的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @param date          指定日期,格式为 yyyy-MM-dd
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryDayTransactionTypeReportByServer(String serverAppName,
+    TransactionStatisticReport queryDayTransactionTypeReportByServer(String group,
+                                                                     String serverAppName,
                                                                      String date);
 
 
     /**
      * 获取指定周的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @param week          指定周的第一天日期,格式为 yyyy-MM-dd
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryWeekTransactionTypeReportByServer(String serverAppName,
+    TransactionStatisticReport queryWeekTransactionTypeReportByServer(String group,
+                                                                      String serverAppName,
                                                                       String week);
 
 
     /**
      * 获取指定月的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName 应用服务系统名称
      * @param month         指定月份的第一条日期,格式为 yyyy-MM-dd
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryMonthTransactionTypeReportByServer(String serverAppName,
+    TransactionStatisticReport queryMonthTransactionTypeReportByServer(String group,
+                                                                       String serverAppName,
                                                                        String month);
 
 
     /**
      * 获取最近一小时的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryLastHourTransactionNameReportByServer(String serverAppName,
+    TransactionStatisticReport queryLastHourTransactionNameReportByServer(String group,
+                                                                          String serverAppName,
                                                                           String transactionTypeName,
                                                                           String serverIpAddress);
 
     /**
      * 获取当天的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryTodayTransactionNameReportByServer(String serverAppName,
+    TransactionStatisticReport queryTodayTransactionNameReportByServer(String group,
+                                                                       String serverAppName,
                                                                           String transactionTypeName,
                                                                           String serverIpAddress);
 
     /**
      * 获取指定天的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param date          指定日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryDayTransactionNameReportByServer(String serverAppName,
+    TransactionStatisticReport queryDayTransactionNameReportByServer(String group,
+                                                                     String serverAppName,
                                                                          String date,
                                                                          String transactionTypeName,
                                                                          String serverIpAddress);
@@ -130,13 +148,15 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定周的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param week                指定周的第一天日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
-     TransactionStatisticReport queryWeekTransactionNameReportByServer(String serverAppName,
+     TransactionStatisticReport queryWeekTransactionNameReportByServer(String group,
+                                                                       String serverAppName,
                                                                              String week,
                                                                              String transactionTypeName,
                                                                              String serverIpAddress);
@@ -145,13 +165,15 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定月的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param month               指定月份的第一条日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
      * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
      */
-     TransactionCallTimesReport queryMonthTransactionTypeCallTimesReportByServer(String serverAppName,
+     TransactionCallTimesReport queryMonthTransactionTypeCallTimesReportByServer(String group,
+                                                                                 String serverAppName,
                                                                                        String month,
                                                                                        String transactionTypeName,
                                                                                        String serverIpAddress);
@@ -160,13 +182,15 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定月的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param month               指定月份的第一条日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryMonthTransactionNameReportByServer(String serverAppName,
+    TransactionStatisticReport queryMonthTransactionNameReportByServer(String group,
+                                                                       String serverAppName,
                                                                               String month,
                                                                               String transactionTypeName,
                                                                               String serverIpAddress);
@@ -175,13 +199,15 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定小时的TransactionName服务步骤统计结果不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param hour                指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryHourTransactionNameReportByServer(String serverAppName,
+    TransactionStatisticReport queryHourTransactionNameReportByServer(String group,
+                                                                      String serverAppName,
                                                                           String hour,
                                                                           String transactionTypeName,
                                                                           String serverIpAddress);
@@ -190,25 +216,29 @@ public interface ITransactionDataQueryService {
     /**
      * 获取最近一小时的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryLastHourTransactionTypeReportByClient(String serverAppName,
+    TransactionStatisticReport queryLastHourTransactionTypeReportByClient(String group,
+                                                                          String serverAppName,
                                                                           String transactionTypeName,
                                                                           String serverIpAddress);
 
     /**
      * 获取指定小时的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param hour          指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryHourTransactionTypeReportByClient(String serverAppName,
+    TransactionStatisticReport queryHourTransactionTypeReportByClient(String group,
+                                                                      String serverAppName,
                                                                           String hour,
                                                                           String transactionTypeName,
                                                                           String serverIpAddress);
@@ -216,25 +246,29 @@ public interface ITransactionDataQueryService {
        /**
      * 获取最近一小时的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
      * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
      */
-    TransactionCallTimesReport queryLastHourTransactionTypeCallTimesReportByServer(String serverAppName,
+    TransactionCallTimesReport queryLastHourTransactionTypeCallTimesReportByServer(String group,
+                                                                                   String serverAppName,
                                                                                    String transactionTypeName,
                                                                                    String serverIpAddress);
 
     /**
      * 获取最近一小时的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param hour                指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
      * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
      */
-    TransactionCallTimesReport queryHourTransactionTypeCallTimesReportByServer(String serverAppName,
+    TransactionCallTimesReport queryHourTransactionTypeCallTimesReportByServer(String group,
+                                                                               String serverAppName,
                                                                                    String hour,
                                                                                    String transactionTypeName,
                                                                                    String serverIpAddress);
@@ -243,6 +277,7 @@ public interface ITransactionDataQueryService {
     /**
      * 获取最近一小时的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param date                指定日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
@@ -250,7 +285,8 @@ public interface ITransactionDataQueryService {
      * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
      */
 
-     TransactionCallTimesReport queryDayTransactionTypeCallTimesReportByServer(String serverAppName,
+     TransactionCallTimesReport queryDayTransactionTypeCallTimesReportByServer(String group,
+                                                                               String serverAppName,
                                                                                      String date,
                                                                                      String transactionTypeName,
                                                                                      String serverIpAddress);
@@ -260,25 +296,29 @@ public interface ITransactionDataQueryService {
     /**
      * 获取当天的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryTodayTransactionTypeReportByClient(String serverAppName,
+    TransactionStatisticReport queryTodayTransactionTypeReportByClient(String group,
+                                                                       String serverAppName,
                                                                        String transactionTypeName,
                                                                        String serverIpAddress);
 
     /**
      * 获取指定周的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param week                指定周的第一天日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
      * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
      */
-    TransactionCallTimesReport queryWeekTransactionTypeCallTimesReportByServer(String serverAppName,
+    TransactionCallTimesReport queryWeekTransactionTypeCallTimesReportByServer(String group,
+                                                                               String serverAppName,
                                                                                       String week,
                                                                                       String transactionTypeName,
                                                                                       String serverIpAddress);
@@ -287,13 +327,15 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定日期的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param date                指定日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
-     TransactionStatisticReport queryDayTransactionTypeReportByClient(String serverAppName,
+     TransactionStatisticReport queryDayTransactionTypeReportByClient(String group,
+                                                                      String serverAppName,
                                                                             String date,
                                                                             String transactionTypeName,
                                                                             String serverIpAddress);
@@ -301,13 +343,15 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定周的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
-     *  @param week          指定周的第一天日期,格式为 yyyy-MM-dd
+     * @param week          指定周的第一天日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
-    TransactionStatisticReport queryWeekTransactionTypeReportByClient(String serverAppName,
+    TransactionStatisticReport queryWeekTransactionTypeReportByClient(String group,
+                                                                      String serverAppName,
                                                                              String week,
                                                                              String transactionTypeName,
                                                                              String serverIpAddress);
@@ -315,13 +359,15 @@ public interface ITransactionDataQueryService {
     /**
      * 获取指定周的TransactionType服务对应的消费者统计结果,根据客户端应用名称进行分组,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param month         指定月份的第一条日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机
      * @return 统计数据结果集
      */
-     TransactionStatisticReport queryMonthTransactionTypeReportByClient(String serverAppName,
+     TransactionStatisticReport queryMonthTransactionTypeReportByClient(String group,
+                                                                        String serverAppName,
                                                                               String month,
                                                                               String transactionTypeName,
                                                                               String serverIpAddress);
@@ -330,12 +376,14 @@ public interface ITransactionDataQueryService {
     /**
      * 获取最近一小时的TransactionType调用次数的结果集,不进行分页
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
      * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
      * @return 调用次数结果集, 返回对象中durations的总长度为24, Key值为0-23,表示一天从0点到23点的每小时调用次数
      */
-    TransactionCallTimesReport queryTodayTransactionTypeCallTimesReportByServer(String serverAppName,
+    TransactionCallTimesReport queryTodayTransactionTypeCallTimesReportByServer(String group,
+                                                                                String serverAppName,
                                                                                 String transactionTypeName,
                                                                                 String serverIpAddress);
 
@@ -343,6 +391,7 @@ public interface ITransactionDataQueryService {
     /**
  * 获取最近一小时内的调用消息明细记录
  *
+ * @param group               系统类别
  * @param serverAppName       应用服务系统名称,非空
  * @param transactionTypeName 服务大类名称,非空
  * @param transactionName     服务名称,可选
@@ -359,7 +408,8 @@ public interface ITransactionDataQueryService {
  *                            status    根据状态排序
  * @return 详细调用Transaction的明细清单
  */
-TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
+TransactionMessageList queryLastHourTransactionMessageList(String group,
+                                                           String serverAppName,
                                                            String transactionTypeName,
                                                            String transactionName,
                                                            String serverIpAddress,
@@ -373,6 +423,7 @@ TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
     /**
      * 获取指定小时内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param hour                指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @param transactionTypeName 服务大类名称,非空
@@ -390,7 +441,8 @@ TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
      *                            status    根据状态排序
      * @return 详细调用Transaction的明细清单
      */
-    TransactionMessageList queryHourTransactionMessageList(String serverAppName,
+    TransactionMessageList queryHourTransactionMessageList(String group,
+                                                           String serverAppName,
                                                                String hour,
                                                                String transactionTypeName,
                                                                String transactionName,
@@ -408,6 +460,7 @@ TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
     /**
      * 获取当天内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param transactionTypeName 服务大类名称,非空
      * @param transactionName     服务名称,可选
@@ -424,7 +477,8 @@ TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
      *                            status    根据状态排序
      * @return 详细调用Transaction的明细清单
      */
-    TransactionMessageList queryTodayTransactionMessageList(String serverAppName,
+    TransactionMessageList queryTodayTransactionMessageList(String group,
+                                                            String serverAppName,
                                                                String transactionTypeName,
                                                                String transactionName,
                                                                String serverIpAddress,
@@ -438,6 +492,7 @@ TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
     /**
      * 获取指定日期内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param date                指定日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称,非空
@@ -451,7 +506,8 @@ TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
      * @param orderBy             排序参数, key表示需要排序的字段,value表示排序顺序,DESC或ASC,且要按照顺序,不填则不进行排序
      * @return 详细调用Transaction的明细清单
      */
-    TransactionMessageList queryDayTransactionMessageList(String serverAppName,
+    TransactionMessageList queryDayTransactionMessageList(String group,
+                                                          String serverAppName,
                                                           String date,
                                                           String transactionTypeName,
                                                           String transactionName,
@@ -465,6 +521,7 @@ TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
     /**
      * 获取指定周内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param week                指定周的第一天日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称,非空
@@ -478,7 +535,8 @@ TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
      * @param orderBy             排序参数, key表示需要排序的字段,value表示排序顺序,DESC或ASC,且要按照顺序,不填则不进行排序
      * @return 详细调用Transaction的明细清单
      */
-   TransactionMessageList queryWeekTransactionMessageList(String serverAppName,
+   TransactionMessageList queryWeekTransactionMessageList(String group,
+                                                          String serverAppName,
                                                                   String week,
                                                                   String transactionTypeName,
                                                                   String transactionName,
@@ -492,6 +550,7 @@ TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
     /**
      * 获取指定月内的调用消息明细记录
      *
+     * @param group               系统类别
      * @param serverAppName       应用服务系统名称,非空
      * @param month               指定月份的第一条日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称,非空
@@ -505,7 +564,8 @@ TransactionMessageList queryLastHourTransactionMessageList(String serverAppName,
      * @param orderBy             排序参数, key表示需要排序的字段,value表示排序顺序,DESC或ASC,且要按照顺序,不填则不进行排序
      * @return 详细调用Transaction的明细清单
      */
-     TransactionMessageList queryMonthTransactionMessageList(String serverAppName,
+     TransactionMessageList queryMonthTransactionMessageList(String group,
+                                                             String serverAppName,
                                                                    String month,
                                                                    String transactionTypeName,
                                                                    String transactionName,

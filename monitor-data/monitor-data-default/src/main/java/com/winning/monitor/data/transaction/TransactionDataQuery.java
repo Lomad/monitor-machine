@@ -22,11 +22,11 @@ public class TransactionDataQuery implements ITransactionDataQuery {
 
 
     @Override
-    public TransactionReportVO queryTransactionReport(String domain, String startTime,
+    public TransactionReportVO queryTransactionReport(String group, String domain, String startTime,
                                                       TransactionReportType type) {
 
         List<TransactionReportVO> reports =
-                transactionDataStorage.queryRealtimeTransactionReports(domain, startTime);
+                transactionDataStorage.queryRealtimeTransactionReports(group,domain, startTime);
 
 
         TransactionReportMerger transactionReportMerger = new TransactionReportMerger();
@@ -36,9 +36,9 @@ public class TransactionDataQuery implements ITransactionDataQuery {
     }
 
     @Override
-    public TransactionTypeVO queryByTranscationType(String domain, String startTime, String typeName, TransactionReportType type) {
+    public TransactionTypeVO queryByTranscationType(String group, String domain, String startTime, String typeName, TransactionReportType type) {
         List<TransactionReportVO> reports =
-                transactionDataStorage.queryTransactionReportsByType(domain, startTime, typeName, type);
+                transactionDataStorage.queryTransactionReportsByType(group, domain, startTime, typeName, type);
         return null;
     }
 }
