@@ -50,6 +50,15 @@ public class TransactionDataStorage implements ITransactionDataStorage {
     }
 
     @Override
+    public LinkedHashSet<String> findAllTransactionClients(String group) {
+        Query query = new Query();
+        query.addCriteria(new Criteria("group").is(group));
+        List<String> clients = this.mongoTemplate.getCollection(REALTIME_COLLECTION_NAME).distinct("machines.transactionClients.domain");
+        Collections.sort(clients);
+        return new LinkedHashSet<>(clients);
+    }
+
+    @Override
     public LinkedHashSet<String> findAllServerIpAddress(String group, String domain) {
         Criteria criteria = Criteria.where("domain").is(domain)
                            .and("group").is(group);
@@ -82,6 +91,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
     public List<TransactionReportVO> queryRealtimeTransactionReports(String group, Map<String, Object> map) {
         Query query = new Query();
         query.addCriteria(new Criteria("type").is(TransactionReportType.REALTIME.getName()));
+        query.addCriteria(new Criteria("group").is(group));
         if (map != null && map.containsKey("domain"))
             query.addCriteria(new Criteria("domain").is(map.get("domain")));
         if (map != null && map.containsKey("startTime"))
@@ -90,8 +100,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
             query.addCriteria(new Criteria("machines.transactionClients.transactionTypes.name").is(map.get("transactionType")));
         if (map != null && map.containsKey("serverIp"))
             query.addCriteria(new Criteria("machines.ip").is(map.get("serverIp")));
-        if (map != null && map.containsKey("group"))
-            query.addCriteria(new Criteria("group").is(map.get("group")));
+
 
         List<TransactionReportVO> list =
                 this.mongoTemplate.find(query, TransactionReportVO.class, REALTIME_COLLECTION_NAME);
@@ -178,6 +187,8 @@ public class TransactionDataStorage implements ITransactionDataStorage {
             query.addCriteria(new Criteria("machines.transactionClients.transactionTypes.name").is(map.get("transactionType")));
         if (map != null && map.containsKey("serverIp"))
             query.addCriteria(new Criteria("machines.ip").is(map.get("serverIp")));
+        if (map != null && map.containsKey("clientAppName"))
+            query.addCriteria(new Criteria("machines.transactionClients.domain").is(map.get("clientAppName")));
 
         List<TransactionReportVO> list =
                 this.mongoTemplate.find(query, TransactionReportVO.class, collectionName);
@@ -199,6 +210,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
         query.addCriteria(new Criteria("startTime").is(startTime));
         query.addCriteria(new Criteria("machines.transactionTypes.name").is(typeName));
         query.addCriteria(new Criteria("type").is(type));
+        query.addCriteria(new Criteria("group").is(group));
 
         List<TransactionReportVO> list =
                 this.mongoTemplate.find(query, TransactionReportVO.class, REALTIME_COLLECTION_NAME);

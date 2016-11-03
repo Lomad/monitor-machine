@@ -27,35 +27,35 @@ public class TransactionReportBuilderUT extends
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Test
-    public void testMergeReport() throws ParseException {
+    public void testMergeReport(String group) throws ParseException {
         Date period = sdf.parse("2016-11-01 09:00:00");
         boolean result = this.transactionReportBuilder.buildHourlyTask
-                (TransactionReportBuilder.TASK_BUILDER_NAME, "test1", period);
+                (group, TransactionReportBuilder.TASK_BUILDER_NAME, "test1", period);
         Assert.assertTrue(result);
     }
 
     @Test
-    public void testMergeDailyReport() throws ParseException {
+    public void testMergeDailyReport(String group) throws ParseException {
         Date period = sdf.parse("2016-11-01 09:00:00");
         boolean result = this.transactionReportBuilder.buildDailyTask
-                (TransactionReportBuilder.TASK_BUILDER_NAME, "test1", period);
+                (group, TransactionReportBuilder.TASK_BUILDER_NAME, "test1", period);
         Assert.assertTrue(result);
     }
 
     @Test
-    public void testMergeWeeklyReport() throws ParseException {
+    public void testMergeWeeklyReport(String group) throws ParseException {
         Date period = sdf.parse("2016-10-24 00:00:00");
         boolean result = this.transactionReportBuilder.buildWeeklyTask
-                (TransactionReportBuilder.TASK_BUILDER_NAME, "test1", period);
+                (group, TransactionReportBuilder.TASK_BUILDER_NAME, "test1", period);
         Assert.assertTrue(result);
     }
 
 
     @Test
-    public void testMergeMonthReport() throws ParseException {
+    public void testMergeMonthReport(String group) throws ParseException {
         Date period = sdf.parse("2016-09-01 00:00:00");
         boolean result = this.transactionReportBuilder.buildMonthlyTask
-                (TransactionReportBuilder.TASK_BUILDER_NAME, "test1", period);
+                (group, TransactionReportBuilder.TASK_BUILDER_NAME, "test1", period);
         Assert.assertTrue(result);
     }
 

@@ -36,14 +36,14 @@ public class TransactionReportBuilder implements TaskBuilder {
     }
 
     @Override
-    public boolean buildDailyTask(String name, String domain, Date period) {
+    public boolean buildDailyTask(String group, String name, String domain, Date period) {
 
         try {
             long startTime = period.getTime();
             Date endTime = new Date(startTime + TimeHelper.ONE_DAY);
 
             TransactionReportVO report =
-                    this.queryHourlyReportsByDuration(domain, period, endTime, 24);
+                    this.queryHourlyReportsByDuration(group, domain, period, endTime, 24);
 
             if (report == null) {
                 logger.info("未找到{}的日报表数据!", domain);
@@ -68,7 +68,7 @@ public class TransactionReportBuilder implements TaskBuilder {
     }
 
     @Override
-    public boolean buildHourlyTask(String name, String domain, Date period) {
+    public boolean buildHourlyTask(String group, String name, String domain, Date period) {
         try {
             long startTime = period.getTime();
             Date endTime = new Date(startTime + TimeHelper.ONE_HOUR);
@@ -106,7 +106,7 @@ public class TransactionReportBuilder implements TaskBuilder {
     }
 
     @Override
-    public boolean buildMonthlyTask(String name, String domain, Date period) {
+    public boolean buildMonthlyTask(String group, String name, String domain, Date period) {
         try {
             Date end = null;
 
@@ -117,7 +117,7 @@ public class TransactionReportBuilder implements TaskBuilder {
             }
 
             TransactionReportVO report =
-                    this.queryDailyReportsByDuration(domain, period, end);
+                    this.queryDailyReportsByDuration(group, domain, period, end);
 
             if (report == null) {
                 logger.info("未找到{}的月报表数据!", domain);
@@ -143,7 +143,7 @@ public class TransactionReportBuilder implements TaskBuilder {
     }
 
     @Override
-    public boolean buildWeeklyTask(String name, String domain, Date period) {
+    public boolean buildWeeklyTask(String group, String name, String domain, Date period) {
         try {
             Date end = null;
 
@@ -154,7 +154,7 @@ public class TransactionReportBuilder implements TaskBuilder {
             }
 
             TransactionReportVO report =
-                    this.queryDailyReportsByDuration(domain, period, end);
+                    this.queryDailyReportsByDuration(group, domain, period, end);
 
             if (report == null) {
                 logger.info("未找到{}的周报表数据!", domain);
@@ -179,13 +179,13 @@ public class TransactionReportBuilder implements TaskBuilder {
     }
 
 
-    private TransactionReportVO queryHourlyReportsByDuration(String domain, Date start, Date end, int hours) {
+    private TransactionReportVO queryHourlyReportsByDuration(String group, String domain, Date start, Date end, int hours) {
         String kssj = this.sdf.format(start);
         String jssj = this.sdf.format(end);
 
         //查询出所有时间段内的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(domain,
+                this.transactionDataStorage.queryHistoryTransactionReports(group, domain,
                         kssj, jssj, TransactionReportType.HOURLY);
 
         HistoryTransactionReportMerger transactionReportMerger = new HistoryTransactionReportMerger(0, hours);
@@ -193,13 +193,13 @@ public class TransactionReportBuilder implements TaskBuilder {
         return transactionReport;
     }
 
-    private TransactionReportVO queryDailyReportsByDuration(String domain, Date start, Date end) {
+    private TransactionReportVO queryDailyReportsByDuration(String group, String domain, Date start, Date end) {
         String kssj = this.sdf.format(start);
         String jssj = this.sdf.format(end);
 
         //查询出所有时间段内的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryTransactionReports(domain,
+                this.transactionDataStorage.queryHistoryTransactionReports(group, domain,
                         kssj, jssj, TransactionReportType.DAILY);
 
         int days = this.daysBetween(start, end);

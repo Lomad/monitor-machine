@@ -16,6 +16,8 @@ public interface ITransactionDataStorage {
 
     LinkedHashSet<String> findAllTransactionDomains(String group);
 
+    LinkedHashSet<String> findAllTransactionClients(String group);
+
     LinkedHashSet<String> findAllServerIpAddress(String group, String domain);
 
     List<TransactionReportVO> queryRealtimeTransactionReports(String group, String domain, String startTime);
