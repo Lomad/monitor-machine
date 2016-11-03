@@ -94,14 +94,12 @@ public interface IClientTransactionDataQueryService {
      * @param clientAppName       消费系统名称
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
-     * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
      * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
      */
     TransactionCallTimesReport queryLastHourTransactionTypeCallTimesReportByClient(String group,
                                                                                    String clientAppName,
                                                                                    String serverAppName,
-                                                                                   String transactionTypeName,
-                                                                                   String serverIpAddress);
+                                                                                   String transactionTypeName);
 
     /**
      * 获取当天的TransactionType调用次数的结果集,不进行分页
@@ -110,7 +108,6 @@ public interface IClientTransactionDataQueryService {
      * @param clientAppName       消费系统名称
      * @param serverAppName       应用服务系统名称
      * @param transactionTypeName 服务大类名称
-
      * @return 调用次数结果集, 返回对象中durations的总长度为24, Key值为0-23,表示一天从0点到23点的每小时调用次数
      */
      TransactionCallTimesReport queryTodayTransactionTypeCallTimesReportByClient(String group,
@@ -126,15 +123,13 @@ public interface IClientTransactionDataQueryService {
      * @param serverAppName       应用服务系统名称
      * @param hour                指定小时,格式为 yyyy-MM-dd HH:mm:ss
      * @param transactionTypeName 服务大类名称
-     * @param serverIpAddress     应用服务端的IP地址,如果传空,表示所有主机总和
      * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
      */
     TransactionCallTimesReport queryHourTransactionTypeCallTimesReportByClient(String group,
                                                                                String clientAppName,
                                                                                String serverAppName,
                                                                                String hour,
-                                                                               String transactionTypeName,
-                                                                               String serverIpAddress);
+                                                                               String transactionTypeName);
 
 
     /**
@@ -145,7 +140,6 @@ public interface IClientTransactionDataQueryService {
      * @param serverAppName       应用服务系统名称
      * @param date                指定日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
-
      * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
      */
 
@@ -180,7 +174,6 @@ public interface IClientTransactionDataQueryService {
      * @param serverAppName       应用服务系统名称
      * @param month               指定月份的第一条日期,格式为 yyyy-MM-dd
      * @param transactionTypeName 服务大类名称
-
      * @return 调用次数结果集, 返回对象中durations的总长度为60, Key值为0-59,表示一小时从第0分钟到第59分钟的每分钟调用次数
      */
     TransactionCallTimesReport queryMonthTransactionTypeCallTimesReportByClient(String group,
