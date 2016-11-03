@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -25,6 +24,7 @@ public class MongodbTransactionQueryServiceUT extends
 
     @Autowired
     private ITransactionDataQueryService transactionDataQuery;
+
 
     @Test
     public void testQueryDomains() {
@@ -67,7 +67,7 @@ public class MongodbTransactionQueryServiceUT extends
 
     @Test
     public void testQueryHourTransactionTypeReportByServer() {
-        TransactionStatisticReport report = transactionDataQuery.queryHourTransactionTypeReportByServer("BI","test1","2016-10-20 14:00:00") ;
+        TransactionStatisticReport report = transactionDataQuery.queryHourTransactionTypeReportByServer("BI","test1","2016-11-02 10:00:00") ;
         Assert.assertNotNull(report);
     }
 
@@ -188,7 +188,7 @@ public class MongodbTransactionQueryServiceUT extends
     @Test
     public void testQueryWeekTransactionTypeCallTimesReportByServer() {
         TransactionCallTimesReport report =
-                transactionDataQuery.queryWeekTransactionTypeCallTimesReportByServer("BI", "test1","2016-10-24", "挂号", "");
+                transactionDataQuery.queryWeekTransactionTypeCallTimesReportByServer("BI", "test1","2016-10-31", "预约挂号服务", "");
         Assert.assertNotNull(report);
     }
 
@@ -284,7 +284,7 @@ public class MongodbTransactionQueryServiceUT extends
         order.put("time", "ASC");
 
         TransactionMessageList transactionMessageList =
-                transactionDataQuery.queryDayTransactionMessageList("BI","test1", "2016-10-31", "挂号", "", "", "", "", "成功", 0, 100, order);
+                transactionDataQuery.queryDayTransactionMessageList("BI","test1", "2016-11-01", "挂号", "", "", "", "", "失败", 0, 100, order);
 
         Assert.assertNotNull(transactionMessageList);
     }

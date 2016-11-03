@@ -1005,6 +1005,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         cal.set(Calendar.YEAR,Integer.parseInt(week.substring(0,4)));
         cal.set(Calendar.MONTH,Integer.parseInt(week.substring(5,7))-1);
         cal.set(Calendar.DATE,Integer.parseInt(week.substring(8,10)));
+        int day = cal.get(Calendar.DAY_OF_WEEK)-1;
         cal.add(Calendar.DATE,6);
 
         String startTime = week + " 00:00:00";
@@ -1032,27 +1033,28 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         LinkedHashMap<Integer, Long> durations = new LinkedHashMap<>();
 
 
-        for (int i = 0; i < 7; i++)
+        for (int i = 1; i < 8; i++)
             durations.put(i, 0L);
 
-        for (TransactionReportVO report : reports) {
-            int day = Integer.parseInt(report.getStartTime().substring(8, 10));
-            for (TransactionMachineVO machine : report.getMachines()) {
-                if (StringUtils.hasText(serverIpAddress) &&
-                        !machine.getIp().equals(serverIpAddress))
-                    continue;
-                for (TransactionClientVO client : machine.getTransactionClients()) {
-                    for (TransactionTypeVO transactionType : client.getTransactionTypes()) {
-                        if (StringUtils.hasText(transactionTypeName) &&
-                                !transactionType.getName().equals(transactionTypeName))
-                            continue;
+            for (TransactionReportVO report : reports) {
 
-                        Long count = durations.get(day);
-                        durations.put(day, transactionType.getTotalCount() + count);
+                for (TransactionMachineVO machine : report.getMachines()) {
+                    if (StringUtils.hasText(serverIpAddress) &&
+                            !machine.getIp().equals(serverIpAddress))
+                        continue;
+                    for (TransactionClientVO client : machine.getTransactionClients()) {
+                        for (TransactionTypeVO transactionType : client.getTransactionTypes()) {
+                            if (StringUtils.hasText(transactionTypeName) &&
+                                    !transactionType.getName().equals(transactionTypeName))
+                                continue;
+
+                            Long count = durations.get(day);
+                            durations.put(day, transactionType.getTotalCount() + count);
+                        }
                     }
                 }
             }
-        }
+
         TransactionCallTimesReport report = new TransactionCallTimesReport();
         report.setDurations(durations);
         return report;
@@ -1107,11 +1109,11 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         LinkedHashMap<Integer, Long> durations = new LinkedHashMap<>();
 
 
-        for (int i = 0; i < maxDate; i++)
+        for (int i = 1; i <= maxDate; i++)
             durations.put(i, 0L);
 
         for (TransactionReportVO report : reports) {
-
+            int day = Integer.parseInt(month.substring(8,10));
             for (TransactionMachineVO machine : report.getMachines()) {
                 if (StringUtils.hasText(serverIpAddress) &&
                         !machine.getIp().equals(serverIpAddress))
@@ -1122,8 +1124,8 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
                                 !transactionType.getName().equals(transactionTypeName))
                             continue;
 
-                        Long count = durations.get(mon);
-                        durations.put(mon, transactionType.getTotalCount() + count);
+                        Long count = durations.get(day);
+                        durations.put(day, transactionType.getTotalCount() + count);
                     }
                 }
             }

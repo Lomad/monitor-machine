@@ -7,6 +7,7 @@ import com.winning.monitor.data.api.transaction.vo.TransactionClientVO;
 import com.winning.monitor.data.api.transaction.vo.TransactionMachineVO;
 import com.winning.monitor.data.api.transaction.vo.TransactionReportVO;
 import com.winning.monitor.data.api.transaction.vo.TransactionTypeVO;
+import com.winning.monitor.data.api.vo.Range2;
 import org.springframework.util.StringUtils;
 
 import java.util.LinkedHashMap;
@@ -20,10 +21,12 @@ public class ClientCallTransactionTypeStatisticDataMerger {
     private final static TransactionReportMerger transactionMerger = new TransactionReportMerger();
     private Map<String, Map<String, TransactionTypeVO>> transactionTypeMap;
     private String clientDomain;
+    private LinkedHashMap<Integer, Range2> range2;
 
     public ClientCallTransactionTypeStatisticDataMerger(String clientDomain) {
         this.clientDomain = clientDomain;
         this.transactionTypeMap = new LinkedHashMap<>();
+        this.range2 = new LinkedHashMap<>();
     }
 
     public void add(TransactionReportVO report) {
@@ -99,6 +102,10 @@ public class ClientCallTransactionTypeStatisticDataMerger {
         statisticData.setLine99Value(Math.round(transactionType.getLine99Value() * 100) / 100.0);
 
         return statisticData;
+    }
+
+    public LinkedHashMap<Integer, Range2> getRange2s() {
+        return this.range2;
     }
 
 }
