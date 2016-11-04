@@ -127,30 +127,30 @@ public class ClientHistoryController {
     /**
      * 获取指定周的TransactionType调用次数的结果集,不进行分页
      * @param clientAppName
-     * @param serverAppName
+     * @param flname
      * @param date
      * @param transactionTypeName
      * @return
      */
     @RequestMapping(value = {"/paas/queryWeekTransactionTypeCallTimesReportByClient"})
     @ResponseBody
-    public TransactionCallTimesReport queryWeekTransactionTypeCallTimesReportByClient(String clientAppName,String serverAppName,String date,String transactionTypeName ){
-        TransactionCallTimesReport report = ClientTransactionDataQuery.queryWeekTransactionTypeCallTimesReportByClient(GroupId, clientAppName, serverAppName, date, transactionTypeName);
+    public TransactionCallTimesReport queryWeekTransactionTypeCallTimesReportByClient(String clientAppName,String flname,String date,String transactionTypeName ){
+        TransactionCallTimesReport report = ClientTransactionDataQuery.queryWeekTransactionTypeCallTimesReportByClient(GroupId, clientAppName, flname, date, transactionTypeName);
         return report;
 
     }
     /**
      * 获取指定月的TransactionType调用次数的结果集,不进行分页
      * @param clientAppName
-     * @param serverAppName
+     * @param flname
      * @param date
      * @param transactionTypeName
      * @return
      */
     @RequestMapping(value = {"/paas/queryMonthTransactionTypeCallTimesReportByClient"})
     @ResponseBody
-    public TransactionCallTimesReport queryMonthTransactionTypeCallTimesReportByClient(String clientAppName,String serverAppName,String date,String transactionTypeName ){
-        TransactionCallTimesReport report = ClientTransactionDataQuery.queryMonthTransactionTypeCallTimesReportByClient(GroupId, clientAppName, serverAppName, date, transactionTypeName);
+    public TransactionCallTimesReport queryMonthTransactionTypeCallTimesReportByClient(String clientAppName,String flname,String date,String transactionTypeName ){
+        TransactionCallTimesReport report = ClientTransactionDataQuery.queryMonthTransactionTypeCallTimesReportByClient(GroupId, clientAppName, flname, date, transactionTypeName);
         return report;
 
     }
