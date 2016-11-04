@@ -11,10 +11,10 @@ $(document).ready(function () {
     //    global_Object.tableData.push(json);
     //}
     $.post(contextPath+"/paas/qeryAllClient", {}, function (data) {
-        $("#flname").html(data[1] + ' <i class="fa  fa-caret-down"></i>');
-        global_Object.flname = data[1];
+        $("#flname").html(data[0] + ' <i class="fa  fa-caret-down"></i>');
+        global_Object.flname = data[0];
         global_Object.queryTableData();
-        console.log(data.length+";"+data[0] + ";" + global_Object.flname);
+        console.log("length:"+data.length+";data[0]:"+data[0]);
         var li = [];
         $.each(data, function (i, v) {
             var option = '<li role="presentation"><a role="menuitem" tabindex="-1">' + v + '</a></li>';
@@ -115,7 +115,14 @@ var global_Object = {
         };
 
         var html = [];
-        $.each(global_Object.tableData, function (i, v) {
+        var StatisticDatas = global_Object.tableData;
+        var length = StatisticDatas.length;
+        if (StatisticDatas != null && StatisticDatas.length > 0) {
+            $.each(StatisticDatas, function (i, v) {
+                html.push(alltr(length,i,v));
+            });
+        }
+        /*$.each(global_Object.tableData, function (i, v) {
             var StatisticDatas = v.transactionStatisticDataDetails;
             var length =StatisticDatas.length;
             if (StatisticDatas != null && StatisticDatas.length > 0) {
@@ -123,8 +130,8 @@ var global_Object = {
                     html.push(alltr(length,i2,v2));
                 });
             }
-        });
-        console.log(html);
+        });*/
+        //console.log(html);
         $("#fTable tbody").html(html.join(""));
         /* 子表动作 == 删除
         $("#fTable .icon").on("click", function () {
