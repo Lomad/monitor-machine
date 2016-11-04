@@ -36,9 +36,9 @@ public class ClientCallTransactionTypeStatisticDataMerger {
                     continue;
 
                 Map<String, TransactionTypeVO> clientDomainMap = this.transactionTypeMap.get(client.getDomain());
-                if (clientDomainMap == null) {
-                    clientDomainMap = new LinkedHashMap<>();
-                    this.transactionTypeMap.put(client.getDomain(), clientDomainMap);
+                    if (clientDomainMap == null) {
+                        clientDomainMap = new LinkedHashMap<>();
+                        this.transactionTypeMap.put(client.getDomain(), clientDomainMap);
                 }
 
                 for (TransactionTypeVO transactionType : client.getTransactionTypes()) {
@@ -66,13 +66,13 @@ public class ClientCallTransactionTypeStatisticDataMerger {
         TransactionStatisticReport transactionStatisticReport = new TransactionStatisticReport();
 
         for (Map.Entry<String, Map<String, TransactionTypeVO>> entry : this.transactionTypeMap.entrySet()) {
-            String serverDomain = entry.getKey();
+            String setClientAppName = entry.getKey();
             Map<String, TransactionTypeVO> transactionTypeMap = entry.getValue();
 
             for (Map.Entry<String, TransactionTypeVO> callerEntry : transactionTypeMap.entrySet()) {
                 TransactionTypeVO transactionTypeVO = callerEntry.getValue();
                 TransactionStatisticData statisticData =
-                        this.toTransactionStatisticData(serverDomain, transactionTypeVO);
+                        this.toTransactionStatisticData(setClientAppName, transactionTypeVO);
                 transactionStatisticReport.addTransactionStatisticData(statisticData);
             }
         }
@@ -81,11 +81,11 @@ public class ClientCallTransactionTypeStatisticDataMerger {
     }
 
 
-    private TransactionStatisticData toTransactionStatisticData(String serverDomain,
+    private TransactionStatisticData toTransactionStatisticData(String clintDomain,
                                                                 TransactionTypeVO transactionType) {
 
         TransactionStatisticData statisticData = new TransactionStatisticData();
-        statisticData.setServerAppName(serverDomain);
+        statisticData.setClientAppName(clintDomain);
         statisticData.setTransactionTypeName(transactionType.getName());
 
         statisticData.setTotalCount(transactionType.getTotalCount());
