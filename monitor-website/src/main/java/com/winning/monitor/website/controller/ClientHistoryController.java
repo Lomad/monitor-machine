@@ -49,37 +49,7 @@ public class ClientHistoryController {
     @ResponseBody
     public TransactionStatisticReport queryDayClientReportByClient(String clientAppName,String date){
         TransactionStatisticReport report = ClientTransactionDataQuery.queryDayClientReportByClient(GroupId,clientAppName,date);
-
-        List<TransactionStatisticData> TsdArray = report.getTransactionStatisticDatas();
-        List<TransactionStatisticData> newTsdArray = new ArrayList<TransactionStatisticData>();
-        TransactionStatisticReport newreport = new TransactionStatisticReport();
-        long totalSize = 0;
-        for (int i=0;i<TsdArray.size();i++){
-
-            TransactionStatisticData Tsd = TsdArray.get(i);
-            String serverAppName = Tsd.getServerAppName();
-
-            for (int j =0;j<newTsdArray.size();j++){
-                TransactionStatisticData ts = newTsdArray.get(j);
-                if (ts.getServerAppName().equals(serverAppName)){
-                    List<TransactionStatisticData> tep = ts.getTransactionStatisticDataDetails();
-                    tep.add(Tsd);
-                    ts.setTransactionStatisticDataDetails(tep);
-                    totalSize ++;
-                    break;
-                }
-            }
-            TransactionStatisticData newTsd = new TransactionStatisticData();
-            newTsd.setServerAppName(serverAppName);
-            List<TransactionStatisticData> tep = new ArrayList<TransactionStatisticData>();
-            tep.add(Tsd);
-            newTsd.setTransactionStatisticDataDetails(tep);
-            newTsdArray.add(newTsd);
-            totalSize ++;
-        }
-
-        newreport.setTransactionStatisticDatas(newTsdArray);
-        newreport.setTotalSize(totalSize);
+        TransactionStatisticReport newreport = getNewReport(report);
         return newreport;
     }
 
@@ -93,7 +63,8 @@ public class ClientHistoryController {
     @ResponseBody
     public TransactionStatisticReport queryWeekClientReportByClient(String clientAppName,String date){
         TransactionStatisticReport report = ClientTransactionDataQuery.queryWeekClientReportByClient(GroupId, clientAppName, date);
-        return report;
+        TransactionStatisticReport newreport = getNewReport(report);
+        return newreport;
     }
 
     /**
@@ -106,7 +77,8 @@ public class ClientHistoryController {
     @ResponseBody
     public TransactionStatisticReport queryMonthClientReportByClient(String clientAppName,String date){
         TransactionStatisticReport report = ClientTransactionDataQuery.queryMonthClientReportByClient(GroupId, clientAppName, date);
-        return report;
+        TransactionStatisticReport newreport = getNewReport(report);
+        return newreport;
     }
 
     /**
@@ -156,5 +128,41 @@ public class ClientHistoryController {
     }
 
 
+
+    public TransactionStatisticReport getNewReport(TransactionStatisticReport report){
+        List<TransactionStatisticData> TsdArray = report.getTransactionStatisticDatas();
+        List<TransactionStatisticData> newTsdArray = new ArrayList<TransactionStatisticData>();
+        TransactionStatisticReport newreport = new TransactionStatisticReport();
+        long totalSize = 0;
+        ourter:
+        for (int i=0;i<TsdArray.size();i++){
+
+            TransactionStatisticData Tsd = TsdArray.get(i);
+            String serverAppName = Tsd.getServerAppName();
+
+            for (int j =0;j<newTsdArray.size();j++){
+                TransactionStatisticData ts = newTsdArray.get(j);
+                if (ts.getServerAppName().equals(serverAppName)){
+                    List<TransactionStatisticData> tep = ts.getTransactionStatisticDataDetails();
+                    tep.add(Tsd);
+                    ts.setTransactionStatisticDataDetails(tep);
+                    totalSize ++;
+                    break ourter ;
+                }
+            }
+
+            TransactionStatisticData newTsd = new TransactionStatisticData();
+            newTsd.setServerAppName(serverAppName);
+            List<TransactionStatisticData> tep = new ArrayList<TransactionStatisticData>();
+            tep.add(Tsd);
+            newTsd.setTransactionStatisticDataDetails(tep);
+            newTsdArray.add(newTsd);
+            totalSize ++;
+        }
+
+        newreport.setTransactionStatisticDatas(newTsdArray);
+        newreport.setTotalSize(totalSize);
+        return newreport;
+    }
 
 }

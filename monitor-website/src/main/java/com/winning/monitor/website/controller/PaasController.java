@@ -631,7 +631,7 @@ public class PaasController {
             orderValue="ASC";
         }
         orderBy.put(linkkey[orderNum],orderValue);
-        System.out.println(serverAppName+"--"+time+"--"+transactionTypeName+"--"+transactionName+"--"+ serverIpAddress+"--"+clientAppName+"--"+clientIpAddress+"--"+status+"--"+startIndex+"--"+pageSize+"--"+orderBy);
+        System.out.println("serverAppName="+serverAppName+"time="+time+"transactionTypeName="+transactionTypeName+"transactionName="+transactionName+"serverIpAddress="+ serverIpAddress+"clientAppName="+clientAppName+"clientIpAddress="+clientIpAddress+"status="+status+"startIndex="+startIndex+"pageSize="+pageSize+"orderBy="+orderBy);
         TransactionMessageList report = transactionDataQuery.queryHourTransactionMessageList(GroupId,serverAppName,time,transactionTypeName,transactionName, serverIpAddress,clientAppName,clientIpAddress,status,startIndex,pageSize,orderBy);
         return  report;
     }

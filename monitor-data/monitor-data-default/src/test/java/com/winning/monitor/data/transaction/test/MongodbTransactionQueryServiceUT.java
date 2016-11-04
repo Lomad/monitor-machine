@@ -181,14 +181,14 @@ public class MongodbTransactionQueryServiceUT extends
     @Test
     public void testQueryDayTransactionTypeCallTimesReportByServer() {
         TransactionCallTimesReport report =
-                transactionDataQuery.queryDayTransactionTypeCallTimesReportByServer("BI", "test1","2016-10-31", "挂号", "");
+                transactionDataQuery.queryDayTransactionTypeCallTimesReportByServer("BI", "test1","2016-11-02", "门诊收费服务", "");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryWeekTransactionTypeCallTimesReportByServer() {
         TransactionCallTimesReport report =
-                transactionDataQuery.queryWeekTransactionTypeCallTimesReportByServer("BI", "test1","2016-10-31", "预约挂号服务", "");
+                transactionDataQuery.queryWeekTransactionTypeCallTimesReportByServer("BI", "test-group","2016-10-31", "门诊收费服务", "");
         Assert.assertNotNull(report);
     }
 
