@@ -151,7 +151,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
 
         String startTime = hour.replace(hour.substring(14,19),"00:00");
-        String endTime = hour.replace(hour.substring(14,19),"59:59");
+        String endTime = hour.substring(0,14)+"59:59";
 
         //获取指定时间的实时数据
         List<TransactionReportVO> reports =
@@ -382,7 +382,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         // TransactionHourlyReports格式和TransactionRealtimeReports格式一样
 
         String startTime = hour.replace(hour.substring(14,19),"00:00");
-        String endTime = hour.replace(hour.substring(14,19),"59:59");
+        String endTime = hour.substring(0,14)+"59:59";
 
         List<TransactionReportVO> reports =
                 this.transactionDataStorage.queryHistoryTransactionReports(group, serverAppName,startTime,endTime,
@@ -559,7 +559,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
                                                                                  String transactionTypeName,
                                                                                  String serverIpAddress){
         String startTime = hour.replace(hour.substring(14,19),"00:00");
-        String endTime = hour.replace(hour.substring(14,19),"59:59");
+        String endTime = hour.substring(0,14)+"59:59";
 
         Map<String, Object> map = new HashMap<>();
 
@@ -827,7 +827,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
 
             String startTime = hour.replace(hour.substring(14,19),"00:00");
-            String endTime = hour.replace(hour.substring(14,19),"59:59");
+            String endTime = hour.substring(0,14)+"59:59";
 
 
         Map<String, Object> map = new HashMap<>();
@@ -885,6 +885,12 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
             List<TransactionReportVO> reports =
                     this.transactionDataStorage.queryRealtimeTransactionReports(group, serverAppName,
                             this.getToday(), this.getCurrentHour(), map);
+
+            TransactionCallTimesMerger merger = new TransactionCallTimesMerger(serverAppName, serverIpAddress, transactionTypeName);
+
+
+            for (TransactionReportVO report : reports)
+                merger.add(report);
 
             LinkedHashMap<Integer, Long> durations = new LinkedHashMap<>();
             for (int i = 0; i < 24; i++)
@@ -1221,7 +1227,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         long endDate = 0;
         try {
             startDate = simpleDateFormat.parse(hour.replace(hour.substring(14,19),"00:00")).getTime();
-            endDate = simpleDateFormat.parse(hour.replace(hour.substring(14,19),"59:59")).getTime();
+            endDate = simpleDateFormat.parse(hour.substring(0,14)+"59:59").getTime();
 
         } catch (ParseException e) {
             throw new RuntimeException();

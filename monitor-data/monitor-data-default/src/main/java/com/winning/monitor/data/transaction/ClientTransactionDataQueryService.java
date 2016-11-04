@@ -6,6 +6,7 @@ import com.winning.monitor.data.api.transaction.domain.TransactionStatisticRepor
 import com.winning.monitor.data.api.transaction.vo.*;
 import com.winning.monitor.data.api.vo.Range2;
 import com.winning.monitor.data.storage.api.ITransactionDataStorage;
+import com.winning.monitor.data.transaction.builder.ClientCallTimesTransactionTypeMerger;
 import com.winning.monitor.data.transaction.builder.ClientCallTransactionTypeStatisticDataMerger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,7 +99,7 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
     @Override
     public TransactionStatisticReport queryHourClientReportByClient(String group, String clientAppName, String hour) {
         String startTime = hour.replace(hour.substring(14,19),"00:00");
-        String endTime = hour.replace(hour.substring(14,19),"59:59");
+        String endTime = hour.substring(0,14)+"59:59";
 
         List<TransactionReportVO> reports =
                 this.transactionDataStorage.queryHistoryClientTransactionReports(group, clientAppName,startTime,endTime,
@@ -230,7 +231,7 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
             List<TransactionReportVO> reports =
                     this.transactionDataStorage.queryRealtimeClientTransactionReports(group, map);
 
-        ClientCallTransactionTypeStatisticDataMerger merger = new ClientCallTransactionTypeStatisticDataMerger(clientAppName);
+        ClientCallTimesTransactionTypeMerger merger = new ClientCallTimesTransactionTypeMerger(clientAppName,transactionTypeName);
 
             for (TransactionReportVO report : reports)
                 merger.add(report);
@@ -275,6 +276,12 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
         List<TransactionReportVO> reports =
                 this.transactionDataStorage.queryRealtimeClientTransactionReports(group, clientAppName,
                         this.getToday(), this.getCurrentHour(), map);
+
+        ClientCallTimesTransactionTypeMerger merger = new ClientCallTimesTransactionTypeMerger(clientAppName,transactionTypeName);
+
+        for (TransactionReportVO report : reports)
+            merger.add(report);
+
 
         LinkedHashMap<Integer, Long> durations = new LinkedHashMap<>();
         for (int i = 0; i < 24; i++)
@@ -324,7 +331,7 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
                                                                                       String hour,
                                                                                       String transactionTypeName) {
         String startTime = hour.replace(hour.substring(14,19),"00:00");
-        String endTime = hour.replace(hour.substring(14,19),"59:59");
+        String endTime = hour.substring(0,14)+"59:59";
 
 
         Map<String, Object> map = new HashMap<>();
@@ -335,9 +342,9 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryClientTransactionReports(group, serverAppName, startTime, endTime, TransactionReportType.HOURLY, map);
+                this.transactionDataStorage.queryHistoryClientTransactionReports(group, clientAppName, startTime, endTime, TransactionReportType.HOURLY, map);
 
-        ClientCallTransactionTypeStatisticDataMerger merger = new ClientCallTransactionTypeStatisticDataMerger(clientAppName);
+        ClientCallTimesTransactionTypeMerger merger = new ClientCallTimesTransactionTypeMerger(clientAppName,transactionTypeName);
 
         for (TransactionReportVO report : reports)
             merger.add(report);
@@ -391,7 +398,7 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
                 this.transactionDataStorage.queryHistoryClientTransactionReports(group, serverAppName, startTime, endTime,
                         TransactionReportType.DAILY, map );
 
-        ClientCallTransactionTypeStatisticDataMerger merger = new ClientCallTransactionTypeStatisticDataMerger(clientAppName);
+        ClientCallTimesTransactionTypeMerger merger = new ClientCallTimesTransactionTypeMerger(clientAppName,transactionTypeName);
 
 
         for (TransactionReportVO report : reports)
@@ -469,7 +476,7 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
                 this.transactionDataStorage.queryHistoryClientTransactionReports(group, serverAppName, startTime, endTime,
                         TransactionReportType.WEEKLY, map );
 
-        ClientCallTransactionTypeStatisticDataMerger merger = new ClientCallTransactionTypeStatisticDataMerger(clientAppName);
+        ClientCallTimesTransactionTypeMerger merger = new ClientCallTimesTransactionTypeMerger(clientAppName,transactionTypeName);
 
 
 
@@ -546,7 +553,7 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
                 this.transactionDataStorage.queryHistoryClientTransactionReports(group, serverAppName, startTime, endTime,
                         TransactionReportType.MONTHLY, map );
 
-        ClientCallTransactionTypeStatisticDataMerger merger = new ClientCallTransactionTypeStatisticDataMerger(clientAppName);
+        ClientCallTimesTransactionTypeMerger merger = new ClientCallTimesTransactionTypeMerger(clientAppName,transactionTypeName);
 
 
         for (TransactionReportVO report : reports)
