@@ -7,8 +7,6 @@ import com.winning.monitor.data.api.transaction.vo.*;
 import com.winning.monitor.data.api.vo.Range2;
 import com.winning.monitor.data.storage.api.ITransactionDataStorage;
 import com.winning.monitor.data.transaction.builder.ClientCallTransactionTypeStatisticDataMerger;
-import com.winning.monitor.data.transaction.builder.TransactionCallTimesMerger;
-import com.winning.monitor.data.transaction.builder.TransactionStatisticDataMerger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -275,7 +273,7 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryRealtimeClientTransactionReports(group, serverAppName,
+                this.transactionDataStorage.queryRealtimeClientTransactionReports(group, clientAppName,
                         this.getToday(), this.getCurrentHour(), map);
 
         LinkedHashMap<Integer, Long> durations = new LinkedHashMap<>();
