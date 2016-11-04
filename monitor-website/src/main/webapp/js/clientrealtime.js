@@ -11,10 +11,10 @@ $(document).ready(function () {
     //    global_Object.tableData.push(json);
     //}
     $.post(contextPath+"/paas/qeryAllClient", {}, function (data) {
-        $("#flname").html(data[0] + ' <i class="fa  fa-caret-down"></i>');
-        global_Object.flname = data[0];
+        $("#flname").html(data[1] + ' <i class="fa  fa-caret-down"></i>');
+        global_Object.flname = data[1];
         global_Object.queryTableData();
-
+        console.log(data.length+";"+data[0] + ";" + global_Object.flname);
         var li = [];
         $.each(data, function (i, v) {
             var option = '<li role="presentation"><a role="menuitem" tabindex="-1">' + v + '</a></li>';
