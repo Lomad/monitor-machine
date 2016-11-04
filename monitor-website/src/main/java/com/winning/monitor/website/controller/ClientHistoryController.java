@@ -2,13 +2,16 @@ package com.winning.monitor.website.controller;
 
 import com.winning.monitor.data.api.IClientTransactionDataQueryService;
 import com.winning.monitor.data.api.transaction.domain.TransactionCallTimesReport;
+import com.winning.monitor.data.api.transaction.domain.TransactionStatisticData;
 import com.winning.monitor.data.api.transaction.domain.TransactionStatisticReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 /**
  * Created by Evan on 2016/11/3.
@@ -46,7 +49,38 @@ public class ClientHistoryController {
     @ResponseBody
     public TransactionStatisticReport queryDayClientReportByClient(String clientAppName,String date){
         TransactionStatisticReport report = ClientTransactionDataQuery.queryDayClientReportByClient(GroupId,clientAppName,date);
-        return report;
+
+        List<TransactionStatisticData> TsdArray = report.getTransactionStatisticDatas();
+        List<TransactionStatisticData> newTsdArray = new ArrayList<TransactionStatisticData>();
+        TransactionStatisticReport newreport = new TransactionStatisticReport();
+        long totalSize = 0;
+        for (int i=0;i<TsdArray.size();i++){
+
+            TransactionStatisticData Tsd = TsdArray.get(i);
+            String serverAppName = Tsd.getServerAppName();
+
+            for (int j =0;j<newTsdArray.size();j++){
+                TransactionStatisticData ts = newTsdArray.get(j);
+                if (ts.getServerAppName().equals(serverAppName)){
+                    List<TransactionStatisticData> tep = ts.getTransactionStatisticDataDetails();
+                    tep.add(Tsd);
+                    ts.setTransactionStatisticDataDetails(tep);
+                    totalSize ++;
+                    break;
+                }
+            }
+            TransactionStatisticData newTsd = new TransactionStatisticData();
+            newTsd.setServerAppName(serverAppName);
+            List<TransactionStatisticData> tep = new ArrayList<TransactionStatisticData>();
+            tep.add(Tsd);
+            newTsd.setTransactionStatisticDataDetails(tep);
+            newTsdArray.add(newTsd);
+            totalSize ++;
+        }
+
+        newreport.setTransactionStatisticDatas(newTsdArray);
+        newreport.setTotalSize(totalSize);
+        return newreport;
     }
 
     /**

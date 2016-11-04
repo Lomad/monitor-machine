@@ -6,6 +6,7 @@
 $(document).ready(function(){
     global_Object.initDomEvent();
     $.post(contextPath+"/paas/getAllClientNames",{},function(data){
+        console.log(data);
         $("#flname").html(data[0]+" <i class=\"fa fa-caret-down\"></i>");
         global_Object.flname = data[0];
         global_Object.queryTableData();
@@ -167,6 +168,7 @@ var global_Object={
         return currentdate;
     },
     queryTableData:function(){
+
         $.post(global_Object.url,{clientAppName:global_Object.flname,date:global_Object.formatdate},function(data){
             console.log(data);
             global_Object.totalSize = data.totalSize;
