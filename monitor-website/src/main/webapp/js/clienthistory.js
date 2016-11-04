@@ -225,13 +225,13 @@ var global_Object={
         else if(global_Object.type=="month"){
             url =contextPath+"/paas/queryMonthTransactionTypeCallTimesReportByClient";
         }
-        console.log("-----------------")
-        var datas = {clientAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverAppName:$(obj).parents("tr").data("serverAppName"),date:global_Object.formatdate};
-        console.log(datas);
+        //console.log("-----------------")
+        var datas = {clientAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverAppName:$(obj).parents("tr").data("serverappname"),date:global_Object.formatdate};
+        //console.log(datas);
         $.post(url, datas, function (data) {
             var json=[];
             var name =[];
-            console.log(data);
+            //console.log(data);
             for(var key in data.durations){
                 name.push(key);
                 json.push(data.durations[key]);
@@ -287,7 +287,7 @@ var global_Object={
         global_Object.value = $("#datevalue").val();
         var url =contextPath+"/paas/serverdetailedhistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":"",historyPageType:"client",dateValue:global_Object.formatdate};
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value,"clientAppName":global_Object.flname,"clientIpAddress":"","status":"",historyPageType:"client",dateValue:global_Object.formatdate};
         console.log(datas);
         JqCommon.openPostWindow(url,datas);
     }
