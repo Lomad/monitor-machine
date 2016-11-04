@@ -160,7 +160,7 @@ public class MongodbTransactionQueryServiceUT extends
     @Test
     public void testQueryLastHourTransactionTypeCallTimesReportByServer() {
         TransactionCallTimesReport report =
-                transactionDataQuery.queryLastHourTransactionTypeCallTimesReportByServer("BI", "test1", "挂号", "");
+                transactionDataQuery.queryLastHourTransactionTypeCallTimesReportByServer("BI", "test-group", "门诊收费服务", "");
         Assert.assertNotNull(report);
     }
 

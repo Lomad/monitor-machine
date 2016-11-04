@@ -32,13 +32,13 @@ public class MongodbClientTransactionQueryServiceUT extends
 
     @Test
     public void testQueryLastHourClientReportByClient() {
-        TransactionStatisticReport report = IClienttransactionDataQuery.queryLastHourClientReportByClient("BI","HIS");
+        TransactionStatisticReport report = IClienttransactionDataQuery.queryLastHourClientReportByClient("BI","住院系统");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryTodayClientReportByClient() {
-        TransactionStatisticReport report = IClienttransactionDataQuery.queryTodayClientTypeReportByClient("BI","HIS");
+        TransactionStatisticReport report = IClienttransactionDataQuery.queryTodayClientTypeReportByClient("BI","住院系统");
         Assert.assertNotNull(report);
     }
 
@@ -70,14 +70,14 @@ public class MongodbClientTransactionQueryServiceUT extends
     @Test
     public void testQueryLastHourTransactionTypeCallTimesReportByServer(){
         TransactionCallTimesReport report =
-                IClienttransactionDataQuery.queryLastHourTransactionTypeCallTimesReportByClient("BI", "HIS","test1","挂号");
+                IClienttransactionDataQuery.queryLastHourTransactionTypeCallTimesReportByClient("BI", "住院系统","test-group","门诊收费服务");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryTodayTransactionTypeCallTimesReportByServer(){
         TransactionCallTimesReport report =
-                IClienttransactionDataQuery.queryTodayTransactionTypeCallTimesReportByClient("BI", "HIS","test1","挂号");
+                IClienttransactionDataQuery.queryTodayTransactionTypeCallTimesReportByClient("BI", "住院系统","test-group","门诊收费服务");
         Assert.assertNotNull(report);
     }
 
