@@ -54,6 +54,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
         Query query = new Query();
         query.addCriteria(new Criteria("group").is(group));
         List<String> clients = this.mongoTemplate.getCollection(REALTIME_COLLECTION_NAME).distinct("machines.transactionClients.domain");
+        clients.remove("");
         Collections.sort(clients);
         return new LinkedHashSet<>(clients);
     }

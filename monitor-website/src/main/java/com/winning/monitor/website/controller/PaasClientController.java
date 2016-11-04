@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
@@ -29,7 +30,20 @@ public class PaasClientController {
     @RequestMapping(value = {"/paas/qeryAllClient"})
     public @ResponseBody
     LinkedHashSet<String> qeryAllClient(){
-        LinkedHashSet<String> set = clientTransactionDataQuery.getAllClientNames(GroupId);
+        LinkedHashSet<String> set = new LinkedHashSet<String>();
+
+        LinkedHashSet<String> tmp = clientTransactionDataQuery.getAllClientNames(GroupId);
+        if ( tmp == null )
+            return set;
+        Iterator<String> it = tmp.iterator();
+        while (it.hasNext()) {
+            String e = it.next();
+            if (e == null || (e!=null && e.length()==0))
+                set.add("");
+            else
+                set.add(e);
+        }
+
         return set;
     }
 

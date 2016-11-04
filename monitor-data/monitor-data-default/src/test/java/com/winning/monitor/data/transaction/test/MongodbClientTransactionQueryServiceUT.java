@@ -84,7 +84,7 @@ public class MongodbClientTransactionQueryServiceUT extends
     @Test
     public void testQueryHourTransactionTypeCallTimesReportByServer(){
         TransactionCallTimesReport report =
-                IClienttransactionDataQuery.queryHourTransactionTypeCallTimesReportByClient("BI", "HIS","test1","2016-11-3 15:00:00","挂号");
+                IClienttransactionDataQuery.queryHourTransactionTypeCallTimesReportByClient("BI", "住院系统","test-group","2016-11-04 15:00:00","门诊收费服务");
         Assert.assertNotNull(report);
     }
 
