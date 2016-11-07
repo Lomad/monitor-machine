@@ -324,13 +324,14 @@ var global_Object = {
             url =contextPath+"/paas/queryDayTransactionTypeCallTimesReportByServer";
         }
         else if(global_Object.type=="week"){
-            url =contextPath+"/paas/queryWeekTransactionTypeCallTimesReportByClient";
+            url =contextPath+"/paas/queryWeekTransactionTypeCallTimesReportByServer";
         }
         else if(global_Object.type=="month"){
-            url =contextPath+"/paas/queryMonthTransactionTypeCallTimesReportByClient";
+            url =contextPath+"/paas/queryMonthTransactionTypeCallTimesReportByServer";
         }
         var datas = {flname: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress"),date:global_Object.formatdate};
-        console.log(datas);
+        //console.log(datas);
+        //console.log(url)
         $.post(url,datas, function (data) {
             var json=[];
             var name =[]
@@ -403,6 +404,7 @@ var global_Object = {
         //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":"",historyPageType:"server",dateValue:global_Object.formatdate};
         console.log(datas);
+        console.log("----------");
         //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
     },

@@ -6,7 +6,6 @@
 $(document).ready(function(){
     global_Object.initDomEvent();
     $.post(contextPath+"/paas/getAllClientNames",{},function(data){
-        //console.log(data);
         $("#flname").html(data[0]+" <i class=\"fa fa-caret-down\"></i>");
         global_Object.flname = data[0];
         global_Object.queryTableData();
@@ -168,9 +167,11 @@ var global_Object={
         return currentdate;
     },
     queryTableData:function(){
-
-        $.post(global_Object.url,{clientAppName:global_Object.flname,date:global_Object.formatdate},function(data){
-            //console.log(data);
+        var datas = {clientAppName:global_Object.flname,date:global_Object.formatdate};
+        console.log(datas);
+        console.log(global_Object.url);
+        $.post(global_Object.url,datas,function(data){
+            console.log(data);
             global_Object.totalSize = data.totalSize;
             global_Object.tableData = data.transactionStatisticDatas;
             global_Object.setTable();
@@ -184,8 +185,8 @@ var global_Object={
             }
             tr += '<td>' + data.transactionTypeName + '</td>';
             tr += '<td><a onclick="global_Object.openPostTotalCount(this)" href="javascript:void(0)">' + data.totalCount + '次</a></td>';
-            //tr += '<td><a onclick="global_Object.openPostAvg(this)" href="javascript:void(0)">' + data.avg + 'ms</a></td>';
-            tr += '<td>' + data.avg + 'ms</td>';
+            tr += '<td><a onclick="global_Object.openPostAvg(this)" href="javascript:void(0)">' + data.avg + 'ms</a></td>';
+            //tr += '<td>' + data.avg + 'ms</td>';
             tr += '<td>' + data.line99Value + 'ms</td>';
             tr += '<td>' + data.line95Value + 'ms</td>';
             tr += '<td>' + data.min + 'ms</td>';
@@ -225,9 +226,10 @@ var global_Object={
         else if(global_Object.type=="month"){
             url =contextPath+"/paas/queryMonthTransactionTypeCallTimesReportByClient";
         }
-        //console.log("-----------------")
+        console.log("-----------------");
         var datas = {clientAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverAppName:$(obj).parents("tr").data("serverappname"),date:global_Object.formatdate};
-        //console.log(datas);
+        console.log(datas);
+        console.log(url);
         $.post(url, datas, function (data) {
             var json=[];
             var name =[];
@@ -279,15 +281,33 @@ var global_Object={
     openPostAvg:function(obj){
         global_Object.value = $("#datevalue").val();
         var url =contextPath+"/paas/serverstephistory";
-        //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value,historyPageType:"client"};
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),
+            "serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),
+            "clientAppName":global_Object.flname,
+            "type":(global_Object.type==undefined?"":global_Object.type),
+            "value":global_Object.value,
+            "historyPageType":"client",
+            "dateValue":global_Object.formatdate,
+            "serverAppName":$(obj).parents("tr").data("serverappname")==undefined?"":$(obj).parents("tr").data("serverappname")
+        };
+        console.log("datas======");
+        console.log(datas.serverAppName);
+        console.log(datas);
         JqCommon.openPostWindow(url,datas);
     },
     openPostTotalCount:function(obj){
         global_Object.value = $("#datevalue").val();
         var url =contextPath+"/paas/serverdetailedhistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value,"clientAppName":global_Object.flname,"clientIpAddress":"","status":"",historyPageType:"client",dateValue:global_Object.formatdate};
+        var datas={
+            "transactionTypeName":$(obj).parents("tr").data("transactiontypename"),
+            "serverIpAddress":"",
+            "serverAppName":$(obj).parents("tr").data("serverappname")==undefined?"":$(obj).parents("tr").data("serverappname"),
+            "type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value,"clientAppName":global_Object.flname,"clientIpAddress":"",
+            "status":"",
+            "historyPageType":"client",
+            "dateValue":global_Object.formatdate
+            };
         console.log(datas);
         JqCommon.openPostWindow(url,datas);
     }

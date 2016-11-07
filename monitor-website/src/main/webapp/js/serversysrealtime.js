@@ -148,6 +148,7 @@ var global_Object = {
 
             tr += '<td><a onclick="global_Object.openPostTotalCount(this)" href="javascript:void(0)">' + data.totalCount + '次</a></td>';
             tr += '<td>' + data.avg + 'ms</td>';
+            //tr += '<td><a onclick="global_Object.openPostAvg(this)" href="javascript:void(0)">' + data.avg + 'ms</a></td>';
             tr += '<td>' + data.line99Value + 'ms</td>';
             tr += '<td>' + data.line95Value + 'ms</td>';
             tr += '<td>' + data.min + 'ms</td>';
@@ -241,6 +242,23 @@ var global_Object = {
             "clientIpAddress": $(obj).parents("tr").data("clientipaddress") == undefined ? "" : $(obj).parents("tr").data("clientipaddress"),
             "status":""
         };
+        console.log(datas);
         JqCommon.openPostWindow(url, datas);
+    },
+    openPostAvg:function(obj){
+        var url =contextPath+"/paas/serverstephistory";
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),
+            "serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),
+            "clientAppName":$(obj).parents("tr").data("clientappname")==undefined?"":$(obj).parents("tr").data("clientappname"),
+            "type":(global_Object.type==undefined?"":global_Object.type),
+            "value":global_Object.value,
+            "historyPageType":"client",
+            "dateValue":global_Object.formatdate,
+            "serverAppName":global_Object.flname
+        };
+        console.log("datas======");
+        console.log(datas.serverAppName);
+        console.log(datas);
+        JqCommon.openPostWindow(url,datas);
     }
 }

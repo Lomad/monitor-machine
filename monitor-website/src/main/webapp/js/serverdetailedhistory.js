@@ -110,6 +110,7 @@ var global_Object = {
         json2=[];
         var datas = {date:global_Object.dateValue,serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status};
         console.log(datas);
+        console.log(global_Object.url);
         fTable.queryDataInPage(global_Object.url,datas);
     },
     bzClick:function(obj,index){

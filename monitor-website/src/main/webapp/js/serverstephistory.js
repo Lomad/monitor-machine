@@ -4,6 +4,9 @@
 
 $(document).ready(function () {
 
+    if($("#clientAppName").val()!= undefined){
+        global_Object.clientAppName = $("#clientAppName").val();
+    }
     global_Object.initDomEvent();
     if (global_Object.type == "day") {
         global_Object.url = contextPath+"/paas/queryDayTransactionNameReportByServer"
@@ -54,6 +57,8 @@ var global_Object = {
     dateValue:$("#dateValue").val(),
     serverAppName: $("#serverAppName").val(),
     transactionTypeName: $("#transactionTypeName").val(),
+    clientAppName:"",
+
     initDomEvent: function () {
 
     },
@@ -62,7 +67,8 @@ var global_Object = {
             flname: global_Object.serverAppName,
             transactionTypeName: global_Object.transactionTypeName,
             serverIpAddress: global_Object.serverIpAddress,
-            date:global_Object.dateValue
+            date:global_Object.dateValue,
+            clientAppName:global_Object.clientAppName
         };
         console.log(global_Object.url);
         console.log(datas);

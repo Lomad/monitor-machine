@@ -89,6 +89,9 @@ public class PaasController {
         } catch (IOException e) {
             //e.printStackTrace();
         }
+
+
+
         ModelAndView mv = new ModelAndView("paas/serverstephistory");
         String transactionTypeName=map.get("transactionTypeName").toString();
         String serverIpAddress=map.get("serverIpAddress").toString();
@@ -97,6 +100,15 @@ public class PaasController {
         String value=map.get("value").toString();
         String historyPageType=map.get("historyPageType").toString();
         String dateValue=map.get("dateValue").toString();
+
+        String clientAppName ="";
+        Iterator key = map.keySet().iterator();
+        while(key.hasNext()) {
+            if ("clientAppName".equals(key.next())) {
+                clientAppName = map.get("clientAppName").toString();
+                mv.addObject("clientAppName", clientAppName);
+            }
+        }
         mv.addObject("transactionTypeName",transactionTypeName);
         mv.addObject("serverIpAddress",serverIpAddress);
         mv.addObject("serverAppName",serverAppName);
@@ -484,8 +496,8 @@ public class PaasController {
     @RequestMapping(value = {"/paas/queryLastHourTransactionNameReportByServer"})
     public @ResponseBody TransactionStatisticReport queryLastHourTransactionNameReportByServer(String serverAppName,
                                                                                                String transactionTypeName,
-                                                                                               String serverIpAddress){
-        TransactionStatisticReport report =transactionDataQuery.queryLastHourTransactionNameReportByServer(GroupId,serverAppName, transactionTypeName, serverIpAddress);
+                                                                                               String serverIpAddress,String clientAppName){
+        TransactionStatisticReport report =transactionDataQuery.queryLastHourTransactionNameReportByServer(GroupId,serverAppName, transactionTypeName, serverIpAddress,clientAppName);
         return  report;
     }
 
@@ -499,8 +511,8 @@ public class PaasController {
     @RequestMapping(value = {"/paas/queryTodayTransactionNameReportByServer"})
     public @ResponseBody TransactionStatisticReport queryTodayTransactionNameReportByServer(String serverAppName,
                                                                                                String transactionTypeName,
-                                                                                               String serverIpAddress){
-        TransactionStatisticReport report =transactionDataQuery.queryTodayTransactionNameReportByServer(GroupId,serverAppName, transactionTypeName, serverIpAddress);
+                                                                                               String serverIpAddress,String clientAppName){
+        TransactionStatisticReport report =transactionDataQuery.queryTodayTransactionNameReportByServer(GroupId,serverAppName, transactionTypeName, serverIpAddress,clientAppName);
         return  report;
     }
 
@@ -517,10 +529,10 @@ public class PaasController {
     public @ResponseBody TransactionStatisticReport queryHourTransactionNameReportByServer(String serverAppName,
                                                                                                String transactionTypeName,
                                                                                                String serverIpAddress,
-                                                                                               String time){
+                                                                                               String time,String clientAppName){
 //        System.out.println(serverAppName+"--"+time+"--"+transactionTypeName+"--"+serverIpAddress);
 //        System.out.println("------------------------------------");
-        TransactionStatisticReport report =transactionDataQuery.queryHourTransactionNameReportByServer(GroupId,serverAppName,time,transactionTypeName,serverIpAddress);
+        TransactionStatisticReport report =transactionDataQuery.queryHourTransactionNameReportByServer(GroupId,serverAppName,time,transactionTypeName,serverIpAddress,clientAppName);
         return  report;
     }
 
@@ -631,7 +643,7 @@ public class PaasController {
             orderValue="ASC";
         }
         orderBy.put(linkkey[orderNum],orderValue);
-        System.out.println("serverAppName="+serverAppName+"time="+time+"transactionTypeName="+transactionTypeName+"transactionName="+transactionName+"serverIpAddress="+ serverIpAddress+"clientAppName="+clientAppName+"clientIpAddress="+clientIpAddress+"status="+status+"startIndex="+startIndex+"pageSize="+pageSize+"orderBy="+orderBy);
+//        System.out.println("serverAppName="+serverAppName+"time="+time+"transactionTypeName="+transactionTypeName+"transactionName="+transactionName+"serverIpAddress="+ serverIpAddress+"clientAppName="+clientAppName+"clientIpAddress="+clientIpAddress+"status="+status+"startIndex="+startIndex+"pageSize="+pageSize+"orderBy="+orderBy);
         TransactionMessageList report = transactionDataQuery.queryHourTransactionMessageList(GroupId,serverAppName,time,transactionTypeName,transactionName, serverIpAddress,clientAppName,clientIpAddress,status,startIndex,pageSize,orderBy);
         return  report;
     }
@@ -691,8 +703,8 @@ public class PaasController {
      */
     @RequestMapping(value = {"/paas/queryDayTransactionNameReportByServer"})
     @ResponseBody
-    public TransactionStatisticReport queryDayTransactionNameReportByServer(String flname,String date,String transactionTypeName,String serverIpAddress){
-        TransactionStatisticReport report = transactionDataQuery.queryDayTransactionNameReportByServer(GroupId,flname,date,transactionTypeName,serverIpAddress);
+    public TransactionStatisticReport queryDayTransactionNameReportByServer(String flname,String date,String transactionTypeName,String serverIpAddress,String clientAppName){
+        TransactionStatisticReport report = transactionDataQuery.queryDayTransactionNameReportByServer(GroupId,flname,date,transactionTypeName,serverIpAddress,clientAppName);
         return report;
     }
 
@@ -790,8 +802,8 @@ public class PaasController {
      */
     @RequestMapping(value = {"/paas/queryWeekTransactionNameReportByServer"})
     @ResponseBody
-    public TransactionStatisticReport queryWeekTransactionNameReportByServer(String flname,String date,String transactionTypeName,String serverIpAddress){
-        TransactionStatisticReport report = transactionDataQuery.queryWeekTransactionNameReportByServer(GroupId,flname, date, transactionTypeName, serverIpAddress);
+    public TransactionStatisticReport queryWeekTransactionNameReportByServer(String flname,String date,String transactionTypeName,String serverIpAddress,String clientAppName){
+        TransactionStatisticReport report = transactionDataQuery.queryWeekTransactionNameReportByServer(GroupId,flname, date, transactionTypeName, serverIpAddress,clientAppName);
         return report;
     }
 
@@ -889,8 +901,8 @@ public class PaasController {
      */
     @RequestMapping(value = {"/paas/queryMonthTransactionNameReportByServer"})
     @ResponseBody
-    public TransactionStatisticReport queryMonthTransactionNameReportByServer(String flname,String date,String transactionTypeName,String serverIpAddress){
-        TransactionStatisticReport report = transactionDataQuery.queryMonthTransactionNameReportByServer(GroupId,flname, date, transactionTypeName, serverIpAddress);
+    public TransactionStatisticReport queryMonthTransactionNameReportByServer(String flname,String date,String transactionTypeName,String serverIpAddress,String clientAppName){
+        TransactionStatisticReport report = transactionDataQuery.queryMonthTransactionNameReportByServer(GroupId,flname, date, transactionTypeName, serverIpAddress,clientAppName);
         return report;
     }
 

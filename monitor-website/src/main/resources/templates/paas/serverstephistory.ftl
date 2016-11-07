@@ -148,6 +148,7 @@
 <input type="hidden" id="serverIpAddresshidden" value="${serverIpAddress}">
 <input type="hidden" id="value" value="${value}">
 <input type="hidden" id="dateValue" value="${dateValue}">
+<input type="hidden" id="clientAppName" value="${clientAppName}">
 <input type="hidden" id="historypagetype" value="${historyPageType}">
 <@foot.foot>
     <#assign contextPath=request.contextPath>

@@ -15,7 +15,7 @@ public class LoggingUT {
 
         while (true) {
             MonitorLogger.setCaller("住院系统", "192.16.0.1", "PC");//调用方
-            Transaction parentTransaction = MonitorLogger.beginTransactionType("门诊收费服务2");//大服务
+            Transaction parentTransaction = MonitorLogger.beginTransactionType("门诊收费服务");//大服务
             parentTransaction.addData("data1", "data1");
 
             Transaction childTransaction = MonitorLogger.beginTransactionName(parentTransaction, "读取数据库");//步骤

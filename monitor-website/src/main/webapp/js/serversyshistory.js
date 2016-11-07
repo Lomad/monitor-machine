@@ -238,9 +238,10 @@ var global_Object = {
             "clientAppName": $(obj).parents("tr").data("clientappname"),
             "clientIpAddress": $(obj).parents("tr").data("clientipaddress") == undefined ? "" : $(obj).parents("tr").data("clientipaddress"),
             "status":"",
-            historyPageType:"server"
+            "historyPageType":"server"
         };
         console.log(datas);
+        alert("ss")
         JqCommon.openPostWindow(url, datas);
     }
 
