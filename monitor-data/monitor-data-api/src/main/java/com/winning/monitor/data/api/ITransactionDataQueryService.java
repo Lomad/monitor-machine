@@ -113,7 +113,8 @@ public interface ITransactionDataQueryService {
     TransactionStatisticReport queryLastHourTransactionNameReportByServer(String group,
                                                                           String serverAppName,
                                                                           String transactionTypeName,
-                                                                          String serverIpAddress);
+                                                                          String serverIpAddress,
+                                                                          String clientAppName);
 
     /**
      * 获取当天的TransactionName服务步骤统计结果不进行分页
@@ -127,7 +128,8 @@ public interface ITransactionDataQueryService {
     TransactionStatisticReport queryTodayTransactionNameReportByServer(String group,
                                                                        String serverAppName,
                                                                           String transactionTypeName,
-                                                                          String serverIpAddress);
+                                                                          String serverIpAddress,
+                                                                          String clientAppName);
 
     /**
      * 获取指定天的TransactionName服务步骤统计结果不进行分页
@@ -143,7 +145,8 @@ public interface ITransactionDataQueryService {
                                                                      String serverAppName,
                                                                          String date,
                                                                          String transactionTypeName,
-                                                                         String serverIpAddress);
+                                                                         String serverIpAddress,
+                                                                        String clientAppName);
 
     /**
      * 获取指定周的TransactionName服务步骤统计结果不进行分页
@@ -159,7 +162,8 @@ public interface ITransactionDataQueryService {
                                                                        String serverAppName,
                                                                              String week,
                                                                              String transactionTypeName,
-                                                                             String serverIpAddress);
+                                                                             String serverIpAddress,
+                                                                             String clientAppName);
 
 
     /**
@@ -193,7 +197,8 @@ public interface ITransactionDataQueryService {
                                                                        String serverAppName,
                                                                               String month,
                                                                               String transactionTypeName,
-                                                                              String serverIpAddress);
+                                                                              String serverIpAddress,
+                                                                              String clientAppName);
 
 
     /**
@@ -210,7 +215,8 @@ public interface ITransactionDataQueryService {
                                                                       String serverAppName,
                                                                           String hour,
                                                                           String transactionTypeName,
-                                                                          String serverIpAddress);
+                                                                          String serverIpAddress,
+                                                                          String clientAppName);
 
 
     /**

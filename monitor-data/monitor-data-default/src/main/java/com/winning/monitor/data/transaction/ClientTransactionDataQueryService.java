@@ -395,8 +395,8 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryClientTransactionReports(group, serverAppName, startTime, endTime,
-                        TransactionReportType.DAILY, map );
+                this.transactionDataStorage.queryHistoryClientTransactionReports(group, clientAppName, startTime, endTime,
+                        TransactionReportType.HOURLY, map );
 
         ClientCallTimesTransactionTypeMerger merger = new ClientCallTimesTransactionTypeMerger(clientAppName,transactionTypeName);
 
@@ -413,7 +413,6 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
 
         for (TransactionReportVO report : reports) {
             int hour = Integer.parseInt(report.getStartTime().substring(11, 13));
-
             for (TransactionMachineVO machine : report.getMachines()) {
                 for (TransactionClientVO client : machine.getTransactionClients()) {
                     if (StringUtils.isEmpty(client.getDomain()) || !clientAppName.equals(client.getDomain()))
@@ -427,6 +426,7 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
                         Long count = durations.get(hour);
                         durations.put(hour, transactionType.getTotalCount() + count);
                     }
+
                 }
             }
         }
@@ -458,7 +458,7 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
         cal.set(Calendar.YEAR,Integer.parseInt(week.substring(0,4)));
         cal.set(Calendar.MONTH,Integer.parseInt(week.substring(5,7))-1);
         cal.set(Calendar.DATE,Integer.parseInt(week.substring(8,10)));
-        int day = cal.get(Calendar.DAY_OF_WEEK)-1;
+
         cal.add(Calendar.DATE,6);
 
         String startTime = week + " 00:00:00";
@@ -473,8 +473,8 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryClientTransactionReports(group, serverAppName, startTime, endTime,
-                        TransactionReportType.WEEKLY, map );
+                this.transactionDataStorage.queryHistoryClientTransactionReports(group, clientAppName, startTime, endTime,
+                        TransactionReportType.DAILY, map );
 
         ClientCallTimesTransactionTypeMerger merger = new ClientCallTimesTransactionTypeMerger(clientAppName,transactionTypeName);
 
@@ -491,12 +491,17 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
             durations.put(i, 0L);
 
         for (TransactionReportVO report : reports) {
-
-                if (StringUtils.hasText(serverAppName) &&
-                        !report.getDomain().equals(serverAppName))
-                    continue;
+            Calendar calendar = Calendar.getInstance();
+            calendar.setFirstDayOfWeek(Calendar.MONDAY);
+            calendar.set(Calendar.YEAR,Integer.parseInt(report.getStartTime().substring(0,4)));
+            calendar.set(Calendar.MONTH,Integer.parseInt(report.getStartTime().substring(5,7))-1);
+            calendar.set(Calendar.DATE,Integer.parseInt(report.getStartTime().substring(8,10)));
+            int day = calendar.get(Calendar.DAY_OF_WEEK);
             for (TransactionMachineVO machine : report.getMachines()) {
                 for (TransactionClientVO client : machine.getTransactionClients()) {
+                    if (StringUtils.isEmpty(client.getDomain()) || !clientAppName.equals(client.getDomain()))
+                        continue;
+
                     for (TransactionTypeVO transactionType : client.getTransactionTypes()) {
                         if (StringUtils.hasText(transactionTypeName) &&
                                 !transactionType.getName().equals(transactionTypeName))
@@ -533,7 +538,7 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
         Calendar calendar = Calendar.getInstance();
         int year=Integer.parseInt(month.substring(0,4));
         int mon =Integer.parseInt(month.substring(5,7))-1;
-        int day = Integer.parseInt(month.substring(8,10));
+
         calendar.set(year, mon, 1);
         calendar.roll(Calendar.DATE, -1);
         int maxDate  =  calendar.getActualMaximum(Calendar.DATE);
@@ -550,8 +555,8 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
 
         //获取当前一小时的实时数据
         List<TransactionReportVO> reports =
-                this.transactionDataStorage.queryHistoryClientTransactionReports(group, serverAppName, startTime, endTime,
-                        TransactionReportType.MONTHLY, map );
+                this.transactionDataStorage.queryHistoryClientTransactionReports(group, clientAppName, startTime, endTime,
+                        TransactionReportType.DAILY, map );
 
         ClientCallTimesTransactionTypeMerger merger = new ClientCallTimesTransactionTypeMerger(clientAppName,transactionTypeName);
 
@@ -567,17 +572,16 @@ public class ClientTransactionDataQueryService implements IClientTransactionData
             durations.put(i, 0L);
 
         for (TransactionReportVO report : reports) {
-
-                if (StringUtils.hasText(clientAppName) &&
-                        !report.getDomain().equals(clientAppName))
-                    continue;
+            int day = Integer.parseInt(report.getStartTime().substring(8,10));
             for (TransactionMachineVO machine : report.getMachines()) {
                 for (TransactionClientVO client : machine.getTransactionClients()) {
+                    if (StringUtils.isEmpty(client.getDomain()) || !clientAppName.equals(client.getDomain()))
+                        continue;
+
                     for (TransactionTypeVO transactionType : client.getTransactionTypes()) {
                         if (StringUtils.hasText(transactionTypeName) &&
                                 !transactionType.getName().equals(transactionTypeName))
                             continue;
-
                         Long count = durations.get(day);
                         durations.put(day, transactionType.getTotalCount() + count);
                     }
