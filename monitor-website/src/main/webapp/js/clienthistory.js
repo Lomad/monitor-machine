@@ -6,7 +6,7 @@
 $(document).ready(function(){
     global_Object.initDomEvent();
     $.post(contextPath+"/paas/getAllClientNames",{},function(data){
-        console.log(data);
+        //console.log(data);
         $("#flname").html(data[0]+" <i class=\"fa fa-caret-down\"></i>");
         global_Object.flname = data[0];
         global_Object.queryTableData();
@@ -18,7 +18,7 @@ $(document).ready(function(){
         $("#fl a").on("click",function(){
             $("#flname").html($(this).text()+" <i class=\"fa fa-caret-down\"></i>");
             global_Object.flname =$(this).text();
-            alert(global_Object.flname);
+            //alert(global_Object.flname);
             global_Object.queryTableData();
         });
     });
@@ -170,7 +170,7 @@ var global_Object={
     queryTableData:function(){
 
         $.post(global_Object.url,{clientAppName:global_Object.flname,date:global_Object.formatdate},function(data){
-            console.log(data);
+            //console.log(data);
             global_Object.totalSize = data.totalSize;
             global_Object.tableData = data.transactionStatisticDatas;
             global_Object.setTable();
@@ -180,9 +180,9 @@ var global_Object={
         var alltr = function(length,i,data){
             var tr = '<tr data-transactiontypename="'+data.transactionTypeName+'" data-serverAppName="'+data.serverAppName+'">';
             if(i==0){
-                tr+='<td rowspan='+length+' class="vam tac">'+data.transactionTypeName+'</td>';
+                tr+='<td rowspan='+length+' class="vam tac">'+data.serverAppName+'</td>';
             }
-            tr += '<td>' + data.serverIpAddress + '</td>';
+            tr += '<td>' + data.transactionTypeName + '</td>';
             tr += '<td><a onclick="global_Object.openPostTotalCount(this)" href="javascript:void(0)">' + data.totalCount + '次</a></td>';
             //tr += '<td><a onclick="global_Object.openPostAvg(this)" href="javascript:void(0)">' + data.avg + 'ms</a></td>';
             tr += '<td>' + data.avg + 'ms</td>';
@@ -216,20 +216,22 @@ var global_Object={
         $("#picEdit").modal("show");
         //var url =contextPath+"/paas/queryTodayTransactionTypeCallTimesReportByServer";
         var url =""
-        alert(global_Object.type);
         if(global_Object.type=="day"){
             url =contextPath+"/paas/queryDayTransactionTypeCallTimesReportByClient";
         }
         else if(global_Object.type=="week"){
-            url =contextPath+"/paas/queryWeekTransactionTypeCallTimesReportByServer";
+            url =contextPath+"/paas/queryWeekTransactionTypeCallTimesReportByClient";
         }
         else if(global_Object.type=="month"){
-            url =contextPath+"/paas/queryMonthTransactionTypeCallTimesReportByServer";
+            url =contextPath+"/paas/queryMonthTransactionTypeCallTimesReportByClient";
         }
-        alert(url)
-        $.post(url, {clientAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverAppName:$(obj).parents("tr").data("serverAppName"),date:global_Object.formatdate}, function (data) {
+        //console.log("-----------------")
+        var datas = {clientAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverAppName:$(obj).parents("tr").data("serverappname"),date:global_Object.formatdate};
+        //console.log(datas);
+        $.post(url, datas, function (data) {
             var json=[];
             var name =[];
+            //console.log(data);
             for(var key in data.durations){
                 name.push(key);
                 json.push(data.durations[key]);
@@ -285,7 +287,7 @@ var global_Object={
         global_Object.value = $("#datevalue").val();
         var url =contextPath+"/paas/serverdetailedhistory";
         //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":"",historyPageType:"client",dateValue:global_Object.formatdate};
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":(global_Object.type==undefined?"":global_Object.type),value:global_Object.value,"clientAppName":global_Object.flname,"clientIpAddress":"","status":"",historyPageType:"client",dateValue:global_Object.formatdate};
         console.log(datas);
         JqCommon.openPostWindow(url,datas);
     }
