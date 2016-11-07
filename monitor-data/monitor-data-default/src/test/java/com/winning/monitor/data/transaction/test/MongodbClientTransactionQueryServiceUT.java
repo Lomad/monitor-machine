@@ -91,7 +91,7 @@ public class MongodbClientTransactionQueryServiceUT extends
     @Test
     public void testQueryDayTransactionTypeCallTimesReportByServer(){
         TransactionCallTimesReport report =
-                IClienttransactionDataQuery.queryDayTransactionTypeCallTimesReportByClient("BI", "HIS","test1","2016-11-3","挂号");
+                IClienttransactionDataQuery.queryDayTransactionTypeCallTimesReportByClient("BI", "住院系统","test-group","2016-11-04","门诊收费服务");
         Assert.assertNotNull(report);
     }
 
@@ -99,14 +99,14 @@ public class MongodbClientTransactionQueryServiceUT extends
     @Test
     public void testQueryWeekTransactionTypeCallTimesReportByServer(){
         TransactionCallTimesReport report =
-                IClienttransactionDataQuery.queryWeekTransactionTypeCallTimesReportByClient("BI", "HIS","test1","2016-10-31","挂号");
+                IClienttransactionDataQuery.queryWeekTransactionTypeCallTimesReportByClient("BI", "住院系统","test-group","2016-10-31","门诊收费服务");
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryMonthTransactionTypeCallTimesReportByServer(){
         TransactionCallTimesReport report =
-                IClienttransactionDataQuery.queryMonthTransactionTypeCallTimesReportByClient("BI", "HIS","test1","2016-10-31","挂号");
+                IClienttransactionDataQuery.queryMonthTransactionTypeCallTimesReportByClient("BI", "住院系统","test-group","2016-10-01","门诊收费服务");
         Assert.assertNotNull(report);
     }
 
