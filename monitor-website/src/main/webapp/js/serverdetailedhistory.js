@@ -76,9 +76,7 @@ $(document).ready(function () {
     //    var datas = {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status,date:global_Object.dateValue};
     //}
 
-    console.log("------------------------------")
-    console.log(datas)
-    console.log(global_Object.url)
+
     fTable.queryDataInPage(global_Object.url,datas);
 });
 var global_Object = {
@@ -109,12 +107,10 @@ var global_Object = {
         index2=0;
         json2=[];
         var datas = {date:global_Object.dateValue,serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status};
-        console.log(datas);
-        console.log(global_Object.url);
         fTable.queryDataInPage(global_Object.url,datas);
     },
     bzClick:function(obj,index){
-        console.log(json[index]);
+        //console.log(json[index]);
         if ($(obj).hasClass("fa-chevron-down")) {
             var tableHtml = '<tr class="" style="display: none"><td colspan="12"><div class="ml15 mr15"> <table class="table table-head  table-condensed flip-content"> <thead class="flip-content ">';
             tableHtml += '<tr>';

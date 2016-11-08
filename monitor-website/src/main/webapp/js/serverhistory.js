@@ -382,30 +382,22 @@ var global_Object = {
     },
     openPostWindow:function(obj){
         global_Object.value = $("#datevalue").val();
-        //console.log(global_Object.type);
         var url =contextPath+"/paas/serversyshistory";
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,historyPageType:"server",dateValue:global_Object.formatdate};
-        console.log(datas);
-        //alert($(obj).data("transactionyypename"))
+        //console.log(datas);
         JqCommon.openPostWindow(url,datas);
     },
     openPostAvg:function(obj){
         global_Object.value = $("#datevalue").val();
         var url =contextPath+"/paas/serverstephistory";
-        //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,historyPageType:"server",dateValue:global_Object.formatdate};
         //console.log(datas);
-        //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
     },
     openPostTotalCount:function(obj){
         global_Object.value = $("#datevalue").val();
         var url =contextPath+"/paas/serverdetailedhistory";
-        //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":"",historyPageType:"server",dateValue:global_Object.formatdate};
-        console.log(datas);
-        console.log("----------");
-        //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
     },
     openPostFalse:function(obj){

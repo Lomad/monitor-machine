@@ -229,9 +229,9 @@ var global_Object = {
             url =contextPath+"/paas/queryHourTransactionTypeCallTimesReportByServer";
         }
 
-        console.log(url);
+        //console.log(url);
         var datas = {serverAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress"),hour:global_Object.time};
-        console.log(datas);
+        //console.log(datas);
         $.post(url,datas, function (data) {
             var json=[];
             var name =[]
@@ -300,7 +300,6 @@ var global_Object = {
         //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
         //console.log(datas);
-        //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
     },
     openPostTotalCount:function(obj){
@@ -317,10 +316,8 @@ var global_Object = {
     },
     openPostAvg:function(obj){
         var url =contextPath+"/paas/serversteprealtime";
-        //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
         //console.log(datas);
-        //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
     }
 

@@ -242,7 +242,7 @@ var global_Object = {
             "clientIpAddress": $(obj).parents("tr").data("clientipaddress") == undefined ? "" : $(obj).parents("tr").data("clientipaddress"),
             "status":""
         };
-        console.log(datas);
+        //console.log(datas);
         JqCommon.openPostWindow(url, datas);
     },
     openPostAvg:function(obj){
@@ -256,9 +256,9 @@ var global_Object = {
             "dateValue":global_Object.formatdate,
             "serverAppName":global_Object.flname
         };
-        console.log("datas======");
-        console.log(datas.serverAppName);
-        console.log(datas);
+        //console.log("datas======");
+        //console.log(datas.serverAppName);
+        //console.log(datas);
         JqCommon.openPostWindow(url,datas);
     }
 }

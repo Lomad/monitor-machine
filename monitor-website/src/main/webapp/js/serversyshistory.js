@@ -81,7 +81,7 @@ var global_Object = {
             transactionTypeName:global_Object.transactionTypeName,
             serverIpAddress:global_Object.serverIpAddress};
 
-        console.log(datas);
+        //console.log(datas);
 
         $.post(global_Object.url,datas,
             function (data) {
@@ -240,8 +240,8 @@ var global_Object = {
             "status":"",
             "historyPageType":"server"
         };
-        console.log(datas);
-        alert("ss")
+        //console.log(datas);
+        //alert("ss")
         JqCommon.openPostWindow(url, datas);
     }
 

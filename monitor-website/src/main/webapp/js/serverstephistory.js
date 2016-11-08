@@ -7,6 +7,7 @@ $(document).ready(function () {
     if($("#clientAppName").val()!= undefined){
         global_Object.clientAppName = $("#clientAppName").val();
     }
+    global_Object.historypagetype = $("#historypagetype").val();
     global_Object.initDomEvent();
     if (global_Object.type == "day") {
         global_Object.url = contextPath+"/paas/queryDayTransactionNameReportByServer"
@@ -18,12 +19,16 @@ $(document).ready(function () {
         global_Object.url = contextPath+"/paas/queryMonthTransactionNameReportByServer"
     }
     $.post(contextPath+"/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
-//alert( $("#serverIpAddresshidden").val());
-        if (global_Object.serverIpAddress == "") {
-            $("#serverIpAddresss").html("所有主机" + ' <i class="fa  fa-caret-down"></i>');
-        }
-        else {
-            $("#serverIpAddresss").html(global_Object.serverIpAddress + ' <i class="fa  fa-caret-down"></i>');
+
+        if(global_Object.historypagetype == "client"){
+            $("#serverIpAddresss").hide();
+        }else{
+            if (global_Object.serverIpAddress == "") {
+                $("#serverIpAddresss").html("所有主机" + ' <i class="fa  fa-caret-down"></i>');
+            }
+            else {
+                $("#serverIpAddresss").html(global_Object.serverIpAddress + ' <i class="fa  fa-caret-down"></i>');
+            }
         }
         //global_Object.serverIpAddress = $();
         global_Object.queryTableData();
@@ -58,7 +63,7 @@ var global_Object = {
     serverAppName: $("#serverAppName").val(),
     transactionTypeName: $("#transactionTypeName").val(),
     clientAppName:"",
-
+    historypagetype:"",
     initDomEvent: function () {
 
     },
@@ -70,11 +75,11 @@ var global_Object = {
             date:global_Object.dateValue,
             clientAppName:global_Object.clientAppName
         };
-        console.log(global_Object.url);
-        console.log(datas);
+        //console.log(global_Object.url);
+        //console.log(datas);
         $.post(global_Object.url,datas,function (data) {
 
-            console.log(data);
+            //console.log(data);
             global_Object.tableDataOld = data.transactionStatisticDatas;
             global_Object.tableData = data.transactionStatisticDatas;
             global_Object.totalSize = data.totalSize;
@@ -122,7 +127,7 @@ var global_Object = {
         $("#form").submit({serverAppName: "123", age: "年龄"});
     },
     setPic: function () {
-        console.log(global_Object.tableData);
+        //console.log(global_Object.tableData);
         $("#echart").css("width", $("#fTable").width());
         var name=[];
         var json=[];
