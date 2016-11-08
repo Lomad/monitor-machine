@@ -27,7 +27,7 @@ $(document).ready(function () {
     global_Object.initDomEvent();
     fTable = $("#fTable").winningTable({
         "pageLength": 10,
-        "processing": false,
+        "processing": true,
         "ordering": true, //排序功能
         "order": [[ 6, "desc" ]],
         "columns": [
