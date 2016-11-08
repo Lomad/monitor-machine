@@ -53,6 +53,7 @@ var global_Object = {
     time: $("#time").val(),
     serverAppName: $("#serverAppName").val(),
     transactionTypeName: $("#transactionTypeName").val(),
+    clientAppName: $("#clientAppName").val(),
     initDomEvent: function () {
 
     },
@@ -73,6 +74,7 @@ var global_Object = {
     },
 
     setTable: function () {
+        console.log("clientAppName:"+global_Object.clientAppName);
         var alltr = function (data, type, index) {
             var tr = '<tr>';
             tr += '<td>' + (index + 1) + '</td>';
