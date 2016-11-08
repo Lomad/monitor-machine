@@ -500,7 +500,6 @@ public class PaasController {
     public @ResponseBody TransactionStatisticReport queryLastHourTransactionNameReportByServer(String serverAppName,
                                                                                                String transactionTypeName,
                                                                                                String serverIpAddress,String clientAppName){
-        System.out.println("ClientAppName:"+ clientAppName);
         TransactionStatisticReport report =transactionDataQuery.queryLastHourTransactionNameReportByServer(GroupId,serverAppName, transactionTypeName, serverIpAddress,clientAppName);
         return  report;
     }
@@ -516,7 +515,6 @@ public class PaasController {
     public @ResponseBody TransactionStatisticReport queryTodayTransactionNameReportByServer(String serverAppName,
                                                                                                String transactionTypeName,
                                                                                                String serverIpAddress,String clientAppName){
-        System.out.println("ClientAppName:"+ clientAppName);
         TransactionStatisticReport report =transactionDataQuery.queryTodayTransactionNameReportByServer(GroupId,serverAppName, transactionTypeName, serverIpAddress,clientAppName);
         return  report;
     }
@@ -537,8 +535,6 @@ public class PaasController {
                                                                                                String time,String clientAppName){
 //        System.out.println(serverAppName+"--"+time+"--"+transactionTypeName+"--"+serverIpAddress);
 //        System.out.println("------------------------------------");
-        System.out.println("ClientAppName:"+ clientAppName);
-        System.out.println("ServerIpAddress:"+ serverIpAddress);
         TransactionStatisticReport report =transactionDataQuery.queryHourTransactionNameReportByServer(GroupId,serverAppName,time,transactionTypeName,serverIpAddress,clientAppName);
         return  report;
     }

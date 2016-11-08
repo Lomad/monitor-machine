@@ -62,7 +62,8 @@ var global_Object = {
             serverAppName: global_Object.serverAppName,
             transactionTypeName: global_Object.transactionTypeName,
             serverIpAddress: global_Object.serverIpAddress,
-            clientAppName: global_Object.clientAppName
+            clientAppName: global_Object.clientAppName,
+            time:global_Object.time
         }, function (data) {
             //console.log(data);
             global_Object.tableDataOld = data.transactionStatisticDatas;
@@ -75,6 +76,7 @@ var global_Object = {
 
     setTable: function () {
         console.log("clientAppName:"+global_Object.clientAppName);
+        console.log("time:"+global_Object.time);
         var alltr = function (data, type, index) {
             var tr = '<tr>';
             tr += '<td>' + (index + 1) + '</td>';
