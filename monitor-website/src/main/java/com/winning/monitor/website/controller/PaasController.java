@@ -155,11 +155,14 @@ public class PaasController {
         String serverAppName=map.get("serverAppName").toString();
         String type=map.get("type").toString();
         String time=map.get("time").toString();
+        String clientAppName = map.get("clientAppName").toString();
+
         mv.addObject("transactionTypeName",transactionTypeName);
         mv.addObject("serverIpAddress",serverIpAddress);
         mv.addObject("serverAppName",serverAppName);
         mv.addObject("type",type);
         mv.addObject("time",time);
+        mv.addObject("clientAppName",clientAppName);
         return mv;
     }
 

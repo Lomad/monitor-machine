@@ -7,14 +7,15 @@
 
 <div class="row bgf bb1" style="margin-top:-15px;">
     <div class="col-md-12  lh50">
-        <span>${serverAppName} > ${transactionTypeName} >
+        <span>
+            ${clientAppName} > ${serverAppName} > ${transactionTypeName} >
             <#if type = "指定小时">
                ${time}
             <#else>
                ${type}
             </#if>
          </span>
-        <span class="dropdown-toggle cp pull-right " id="serverIpAddresss" data-toggle="dropdown" id="">
+        <#--<span class="dropdown-toggle cp pull-right " id="serverIpAddresss" data-toggle="dropdown" id="">
             <#if serverIpAddress = "">
                 所有主机
             <#else>
@@ -25,7 +26,7 @@
         <ul class="dropdown-menu mr15 pull-right"  id="serverIpAddresss2" role="menu" aria-labelledby="dropdownMenu1">
             <li role="presentation"><a role="menuitem" tabindex="-1">192.168.0.1</a></li>
             <li role="presentation"><a role="menuitem" tabindex="-1">192.168.0.2</a></li>
-        </ul>
+        </ul>-->
     </div>
 
 </div>
@@ -64,6 +65,7 @@
     </div>
 </div>
 <input type="hidden" id="transactionTypeName" value="${transactionTypeName}">
+<input type="hidden" id="clientAppName" value="${clientAppName}">
 <input type="hidden" id="serverAppName" value="${serverAppName}">
 <input type="hidden" id="type" value="${type}">
 <input type="hidden" id="time" value="${time}">
