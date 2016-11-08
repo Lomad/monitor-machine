@@ -88,10 +88,10 @@ var global_Object = {
             global_Object.tableDataOld =data.transactionStatisticDatas;
             global_Object.tableData = data.transactionStatisticDatas;
             global_Object.totalSize = data.totalSize;
-            if(global_Object.totalSize>0){
+            if(global_Object.totalSize > 0){
                 global_Object.setTable();
             }else{
-                $("#fTable tbody").html('<tr class="odd"><td valign="top" colspan="13" class="dataTables_empty">表中数据为空</td></tr>');
+                $("#fTable tbody").html('<tr class="odd"><td valign="top" colspan="12" class="dataTables_empty">表中数据为空</td></tr>');
             }
         });
     },
