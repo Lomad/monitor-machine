@@ -9,10 +9,10 @@ $(document).ready(function () {
         global_Object.url = "/paas/queryLastHourTransactionNameReportByServer"
     }
     else if (global_Object.type == "当天") {
-        global_Object.url = "/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = "/paas/queryTodayTransactionNameReportByServer"
     }
     else if (global_Object.type == "指定小时") {
-        global_Object.url = "/paas/queryLastHourTransactionNameReportByServer"
+        global_Object.url = "/paas/queryHourTransactionNameReportByServer"
     }
     $.post("/paas/getAllServerIpAddress", {serverAppName: global_Object.serverAppName}, function (data) {
 //alert( $("#serverIpAddresshidden").val());
@@ -60,7 +60,8 @@ var global_Object = {
         $.post(global_Object.url, {
             serverAppName: global_Object.serverAppName,
             transactionTypeName: global_Object.transactionTypeName,
-            serverIpAddress: global_Object.serverIpAddress
+            serverIpAddress: global_Object.serverIpAddress,
+            clientAppName: global_Object.clientAppName
         }, function (data) {
             //console.log(data);
             global_Object.tableDataOld = data.transactionStatisticDatas;
