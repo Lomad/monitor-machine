@@ -746,7 +746,7 @@ public class PaasController {
             orderValue="ASC";
         }
         orderBy.put(linkkey[orderNum],orderValue);
-        System.out.println(serverAppName+"--"+date+"--"+transactionTypeName+"--"+transactionName+"--"+serverIpAddress+"--"+clientAppName+"--"+clientIpAddress+"--"+status+"--"+startIndex+"--"+pageSize+"--"+orderBy);
+//        System.out.println(serverAppName+"--"+date+"--"+transactionTypeName+"--"+transactionName+"--"+serverIpAddress+"--"+clientAppName+"--"+clientIpAddress+"--"+status+"--"+startIndex+"--"+pageSize+"--"+orderBy);
         TransactionMessageList report = transactionDataQuery.queryDayTransactionMessageList(GroupId,serverAppName,date,transactionTypeName,transactionName,serverIpAddress,clientAppName,clientIpAddress,status,startIndex,pageSize,orderBy);
         return report;
     }
@@ -760,7 +760,7 @@ public class PaasController {
     @RequestMapping(value = {"/paas/queryWeekTransactionTypeReportByServer"})
     @ResponseBody
     public TransactionStatisticReport queryWeekTransactionTypeReportByServer(String flname,String date){
-        System.out.println("week"+flname+"---"+date);
+//        System.out.println("week"+flname+"---"+date);
         TransactionStatisticReport report = transactionDataQuery.queryWeekTransactionTypeReportByServer(GroupId,flname,date);
         return report;
     }
@@ -859,7 +859,6 @@ public class PaasController {
      */
     @RequestMapping(value = {"/paas/queryMonthTransactionTypeReportByServer"})
     public @ResponseBody TransactionStatisticReport queryMonthTransactionTypeReportByServer(String flname,String date){
-        System.out.println("month"+flname+"---"+date);
         TransactionStatisticReport report = transactionDataQuery.queryMonthTransactionTypeReportByServer(GroupId,flname, date);
         return  report;
     }
