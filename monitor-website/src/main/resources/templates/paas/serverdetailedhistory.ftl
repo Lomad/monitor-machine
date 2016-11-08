@@ -74,6 +74,13 @@
                 </tr>
                 </thead>
                 <tbody>
+               <#--<tr>-->
+                <#--<div id="loading"  style="text-align: center">-->
+                    <#--<div style="width: 94%">-->
+                        <#--<img src="${contextPath}/images/loading.gif">-->
+                     <#--</div>-->
+                 <#--</div>-->
+               <#--</tr>-->
                 <#--<tr>-->
                     <#--<td><i class="fa  icon cp fa-chevron-down"></i> EMPI基础服务</td>-->
                     <#--<td class="numeric">100</td>-->
@@ -148,6 +155,13 @@
 
                 </tbody>
             </table>
+
+        <div id="loading"  style="text-align: center;padding: 50px;">
+        <div style="width: 94%">
+        <img src="${contextPath}/images/loading.gif">
+        </div>
+        </div>
+
         </div>
     </div>
 </div>

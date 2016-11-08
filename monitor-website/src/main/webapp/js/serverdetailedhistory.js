@@ -75,8 +75,6 @@ $(document).ready(function () {
     //}else if(global_Object.historypagetype == "client"){
     //    var datas = {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status,date:global_Object.dateValue};
     //}
-
-
     fTable.queryDataInPage(global_Object.url,datas);
 });
 var global_Object = {

@@ -35,8 +35,12 @@ var global_Object = {
             autoclose: true,//选中之后自动隐藏日期选择框
             format: "yyyy-mm-dd",//日期格式
             weekStart:1,
-            showWeekNumbers:true
+            showWeekNumbers:true,
+            endDate:"-1d"
+
+
         });
+        //alert(new Date())
         global_Object.formatdate = global_Object.getYesterdayFormatDate();
         $("#date_picker").datepicker('update',global_Object.formatdate);
         global_Object.queryTableData();
@@ -97,7 +101,9 @@ var global_Object = {
                 autoclose: true,//选中之后自动隐藏日期选择框
                 format: "yyyy-mm-dd",//日期格式
                 weekStart:1,
-                showWeekNumbers:true
+                showWeekNumbers:true,
+                endDate:"-1d"
+
             });
             global_Object.url = contextPath+"/paas/queryDayTransactionTypeReportByServer";
             global_Object.formatdate = global_Object.getYesterdayFormatDate();
@@ -113,7 +119,8 @@ var global_Object = {
                 weekStart:1,
                 showWeekNumbers:true,
                 calendarWeeks: true,
-                todayHighlight: true
+                todayHighlight: true,
+                endDate:"-1d"
                 //daysOfWeekDisabled:[0,2,3,4,5,6]
                 //beforeShowDay: function(date){
                 //    var day = date.getDay();
@@ -143,7 +150,8 @@ var global_Object = {
                 weekStart:1,
                 showWeekNumbers:true,
                 startView: 'year',
-                minViewMode:1
+                minViewMode:1,
+                endDate:new Date()
             });
             global_Object.url = contextPath+"/paas/queryMonthTransactionTypeReportByServer";
             var date = new Date();
@@ -183,7 +191,11 @@ var global_Object = {
             global_Object.tableDataOld =data.transactionStatisticDatas;
             global_Object.tableData = data.transactionStatisticDatas;
             global_Object.totalSize = data.totalSize;
-            global_Object.setTable();
+            if(global_Object.totalSize>0){
+                global_Object.setTable();
+            }else{
+                $("#fTable tbody").html('<tr class="odd"><td valign="top" colspan="13" class="dataTables_empty">表中数据为空</td></tr>');
+            }
         });
     },
 

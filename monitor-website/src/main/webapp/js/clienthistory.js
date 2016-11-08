@@ -37,7 +37,8 @@ var global_Object={
             autoclose: true,//选中之后自动隐藏日期选择框
             format: "yyyy-mm-dd",//日期格式
             weekStart:1,
-            showWeekNumbers:true
+            showWeekNumbers:true,
+            endDate:"-1d"
         });
         //var date = new Date();
         //var yesterday = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate()-1);
@@ -84,7 +85,8 @@ var global_Object={
                 autoclose: true,//选中之后自动隐藏日期选择框
                 format: "yyyy-mm-dd",//日期格式
                 weekStart:1,
-                showWeekNumbers:true
+                showWeekNumbers:true,
+                endDate:"-1d"
             });
             global_Object.url = contextPath+"/paas/queryDayClientReportByClient";
             global_Object.formatdate = global_Object.getYesterdayFormatDate();
@@ -100,7 +102,8 @@ var global_Object={
                 weekStart:1,
                 showWeekNumbers:true,
                 calendarWeeks: true,
-                todayHighlight: true
+                todayHighlight: true,
+                endDate:"-1d"
             });
             global_Object.url = contextPath+"/paas/queryWeekClientReportByClient";
             var date = new Date();
@@ -120,7 +123,8 @@ var global_Object={
                 weekStart:1,
                 showWeekNumbers:true,
                 startView: 'year',
-                minViewMode:1
+                minViewMode:1,
+                endDate:new Date()
             });
             global_Object.url = contextPath+"/paas/queryMonthClientReportByClient";
             var date = new Date();
@@ -174,7 +178,11 @@ var global_Object={
             //console.log(data);
             global_Object.totalSize = data.totalSize;
             global_Object.tableData = data.transactionStatisticDatas;
-            global_Object.setTable();
+            if(global_Object.totalSize>0){
+                global_Object.setTable();
+            }else{
+                $("#fTable tbody").html('<tr class="odd"><td valign="top" colspan="13" class="dataTables_empty">表中数据为空</td></tr>');
+            }
         });
     },
     setTable:function(){
