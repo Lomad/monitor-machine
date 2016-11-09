@@ -64,7 +64,10 @@
     if(pathname== contextPath+"/paas/serverdetailedrealtime" || pathname==contextPath+"/paas/serversysrealtime" || pathname==contextPath+"/paas/serversteprealtime"){
         pathname=contextPath+"/paas/serverrealtime";
     }
-
+    //var pathname = window.location.pathname.replace("#", "");
+    else if(pathname== contextPath+"/paas/clientdetailedrealtime" || pathname==contextPath+"/paas/clientrealtime" || pathname==contextPath+"/paas/clientsteprealtime"){
+        pathname=contextPath+"/paas/clientrealtime";
+    }
     if(pathname==contextPath+"/paas/serverdetailedhistory" || pathname==contextPath+"/paas/serversyshistory" || pathname==contextPath+"/paas/serverstephistory"){
         if(document.getElementById("historypagetype")!= null){
             if($("#historypagetype").val()=="client"){
