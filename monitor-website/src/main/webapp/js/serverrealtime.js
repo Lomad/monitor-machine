@@ -61,6 +61,11 @@ var global_Object = {
             global_Object.time=global_Object.getNowFormatDate()+" "+$(this).text().split('-')[0]+":00";
             global_Object.type="指定小时";
             $("#time3").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
+            var date = new Date();
+            var hour =$(this).text().substring(0,2);
+            if(hour == date.getHours()){
+                global_Object.url = contextPath+"/paas/queryTransactionTypeList";
+            }
             global_Object.queryTableData();
         });
         //$("#picEdit").on("show.bs.modal", function () {

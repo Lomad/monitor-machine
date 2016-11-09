@@ -5,6 +5,7 @@ $(document).ready(function () {
     global_Object.initDomEvent();
     $.post(contextPath+"/paas/qeryAllDomain", {}, function (data) {
         $("#flname").html(data[0] + ' <i class="fa  fa-caret-down"></i>');
+        //alert(data[0]);
         global_Object.flname = data[0];
         global_Object.queryTableData();
         var li = [];
@@ -43,7 +44,6 @@ var global_Object = {
         //alert(new Date())
         global_Object.formatdate = global_Object.getYesterdayFormatDate();
         $("#date_picker").datepicker('update',global_Object.formatdate);
-        global_Object.queryTableData();
         $("#sel a").on('click',function(){
             var data =$(this).attr("data");
             $("#selbtn").html($(this).text()+' <i class="fa  fa-caret-down"></i>');
@@ -183,7 +183,7 @@ var global_Object = {
         return (getdate(monday)+"-"+getdate(millSeconds));
     },
     queryTableData: function () {
-        //console.log(global_Object.flname)
+        //console.log(global_Object.flname);
         //console.log(global_Object.url)
         //console.log(global_Object.formatdate);
         $.post(global_Object.url, {flname: global_Object.flname,date:global_Object.formatdate}, function (data) {

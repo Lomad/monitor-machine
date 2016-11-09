@@ -365,17 +365,17 @@ public class PaasController {
         return  report;
     }
 
-    /**
-     * 获取指定日期的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
-     * @param flname
-     * @param date
-     * @return
-     */
-    @RequestMapping(value = {"/paas/queryDayTransactionTypeReportBySaerver"})
-    public @ResponseBody TransactionStatisticReport queryDayTransactionTypeReportBySaerver(String flname,String date){
-        TransactionStatisticReport report = transactionDataQuery.queryDayTransactionTypeReportByServer(GroupId,flname,date);
-        return  report;
-    }
+//    /**
+//     * 获取指定日期的TransactionType服务统计结果,根据服务端IP进行分组,不进行分页
+//     * @param flname
+//     * @param date
+//     * @return
+//     */
+//    @RequestMapping(value = {"/paas/queryDayTransactionTypeReportBySaerver"})
+//    public @ResponseBody TransactionStatisticReport queryDayTransactionTypeReportBySaerver(String flname,String date){
+//        TransactionStatisticReport report = transactionDataQuery.queryDayTransactionTypeReportByServer(GroupId,flname,date);
+//        return  report;
+//    }
 
 
 
