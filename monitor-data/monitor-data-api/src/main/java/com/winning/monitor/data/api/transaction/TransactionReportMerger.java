@@ -219,7 +219,7 @@ public class TransactionReportMerger {
                     if (oldClient == null) {
                         oldMachine.addTransactionClient(otherClient);
                     } else {
-                        for (TransactionTypeVO otherType : oldClient.getTransactionTypes()) {
+                        for (TransactionTypeVO otherType : otherClient.getTransactionTypes()) {
                             TransactionTypeVO oldType = oldClient.getTransactionType(otherType.getId());
                             if (oldType == null) {
                                 oldClient.addTransactionType(otherType);

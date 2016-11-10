@@ -39,6 +39,7 @@ public class ReportFacade implements ApplicationContextAware {
             int type = task.getTaskType();
             String reportName = task.getReportName();
             String reportDomain = task.getReportDomain();
+            String reportGroup = task.getReportGroup();
             Date reportPeriod = task.getReportPeriod();
             TaskBuilder reportBuilder = getReportBuilder(reportName);
 
@@ -49,13 +50,13 @@ public class ReportFacade implements ApplicationContextAware {
                 boolean result = false;
 
                 if (type == TaskManager.REPORT_HOUR) {
-                    result = reportBuilder.buildHourlyTask(reportName, reportDomain, reportPeriod);
+                    result = reportBuilder.buildHourlyTask(reportName, reportGroup, reportDomain, reportPeriod);
                 } else if (type == TaskManager.REPORT_DAILY) {
-                    result = reportBuilder.buildDailyTask(reportName, reportDomain, reportPeriod);
+                    result = reportBuilder.buildDailyTask(reportName, reportGroup, reportDomain, reportPeriod);
                 } else if (type == TaskManager.REPORT_WEEK) {
-                    result = reportBuilder.buildWeeklyTask(reportName, reportDomain, reportPeriod);
+                    result = reportBuilder.buildWeeklyTask(reportName, reportGroup, reportDomain, reportPeriod);
                 } else if (type == TaskManager.REPORT_MONTH) {
-                    result = reportBuilder.buildMonthlyTask(reportName, reportDomain, reportPeriod);
+                    result = reportBuilder.buildMonthlyTask(reportName, reportGroup, reportDomain, reportPeriod);
                 }
                 if (result) {
                     return result;

@@ -31,19 +31,19 @@ public class TaskManager {
     @Autowired
     private ITaskDao taskDao;
 
-    private void createDailyTask(Date period, String domain, String name) throws TaskStoreException {
-        createTask(period, domain, name, REPORT_DAILY);
+    private void createDailyTask(Date period, String group, String domain, String name) throws TaskStoreException {
+        createTask(period, group, domain, name, REPORT_DAILY);
     }
 
-    private void createHourlyTask(Date period, String domain, String name) throws TaskStoreException {
-        createTask(period, domain, name, REPORT_HOUR);
+    private void createHourlyTask(Date period, String group, String domain, String name) throws TaskStoreException {
+        createTask(period, group, domain, name, REPORT_HOUR);
     }
 
-    private void createMonthlyTask(Date period, String domain, String name) throws TaskStoreException {
-        createTask(period, domain, name, REPORT_MONTH);
+    private void createMonthlyTask(Date period, String group, String domain, String name) throws TaskStoreException {
+        createTask(period, group, domain, name, REPORT_MONTH);
     }
 
-    protected void createTask(Date period, String domain, String name, int reportType) throws TaskStoreException {
+    protected void createTask(Date period, String group, String domain, String name, int reportType) throws TaskStoreException {
 
         Task task = new Task();
 
@@ -51,6 +51,7 @@ public class TaskManager {
         task.setCreationDate(new Date());
         task.setProducer(NetworkInterfaceManager.INSTANCE.getLocalHostAddress());
         task.setReportDomain(domain);
+        task.setReportGroup(group);
         task.setReportName(name);
         task.setReportPeriod(period);
         task.setStatus(STATUS_TODO);
@@ -62,10 +63,10 @@ public class TaskManager {
         taskDao.upsert(task);
     }
 
-    public boolean createTask(Date period, String domain, String name, TaskCreationPolicy prolicy) {
+    public boolean createTask(Date period, String group, String domain, String name, TaskCreationPolicy prolicy) {
         try {
             if (prolicy.shouldCreateHourlyTask()) {
-                createHourlyTask(period, domain, name);
+                createHourlyTask(period, group, domain, name);
             }
 
             Calendar cal = Calendar.getInstance();
@@ -77,7 +78,7 @@ public class TaskManager {
 
             //收集并生成当天内的数据
             if (prolicy.shouldCreateDailyTask()) {
-                createDailyTask(new Date(currentDay.getTime()), domain, name);
+                createDailyTask(new Date(currentDay.getTime()), group, domain, name);
 //                if (cal.get(Calendar.HOUR_OF_DAY) % 4 == 0) {
 //                    createDailyTask(new Date(currentDay.getTime() - ONE_DAY), domain, name);
 //                    createDailyTask(new Date(currentDay.getTime() - ONE_DAY * 2), domain, name);
@@ -90,7 +91,7 @@ public class TaskManager {
                 int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
                 //每周一生成上周所有
 //                if (dayOfWeek == 1) {
-                createWeeklyTask(new Date(currentDay.getTime() - (dayOfWeek - 2) * ONE_DAY), domain, name);
+                createWeeklyTask(new Date(currentDay.getTime() - (dayOfWeek - 2) * ONE_DAY), group, domain, name);
 //                }
 //                createWeeklyTask(new Date(currentDay.getTime() - (dayOfWeek - 1 + 7) * ONE_DAY), domain, name);
 
@@ -101,10 +102,10 @@ public class TaskManager {
             //收集本月以及上月
             if (prolicy.shouldCreateMonthTask()) {
                 int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-                createMonthlyTask(new Date(currentDay.getTime() - (dayOfMonth - 1) * ONE_DAY), domain, name);
+                createMonthlyTask(new Date(currentDay.getTime() - (dayOfMonth - 1) * ONE_DAY), group, domain, name);
                 if (dayOfMonth == 1) {
                     cal.add(Calendar.MONTH, -1);
-                    createMonthlyTask(cal.getTime(), domain, name);
+                    createMonthlyTask(cal.getTime(), group, domain, name);
                 }
 //                createMonthlyTask(new Date(currentDay.getTime() - (dayOfMonth - 1) * ONE_DAY), domain, name);
 
@@ -121,8 +122,8 @@ public class TaskManager {
         }
     }
 
-    private void createWeeklyTask(Date period, String domain, String name) throws TaskStoreException {
-        createTask(period, domain, name, REPORT_WEEK);
+    private void createWeeklyTask(Date period, String group, String domain, String name) throws TaskStoreException {
+        createTask(period, group, domain, name, REPORT_WEEK);
 
     }
 
