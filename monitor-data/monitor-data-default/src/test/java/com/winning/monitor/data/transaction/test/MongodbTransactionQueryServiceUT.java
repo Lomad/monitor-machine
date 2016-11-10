@@ -67,13 +67,13 @@ public class MongodbTransactionQueryServiceUT extends
 
     @Test
     public void testQueryHourTransactionTypeReportByServer() {
-        TransactionStatisticReport report = transactionDataQuery.queryHourTransactionTypeReportByServer("BI","test1","2016-11-02 10:00:00") ;
+        TransactionStatisticReport report = transactionDataQuery.queryHourTransactionTypeReportByServer("BI","test-group","2016-11-07 10:00:00") ;
         Assert.assertNotNull(report);
     }
 
     @Test
     public void testQueryDayTransactionTypeReportByServer() {
-        TransactionStatisticReport report = transactionDataQuery.queryDayTransactionTypeReportByServer("BI","test1","2016-10-24");
+        TransactionStatisticReport report = transactionDataQuery.queryDayTransactionTypeReportByServer("BI","test-group","2016-11-07");
         Assert.assertNotNull(report);
     }
 
@@ -260,7 +260,7 @@ public class MongodbTransactionQueryServiceUT extends
         order.put("time", "ASC");
 
         TransactionMessageList transactionMessageList =
-                transactionDataQuery.queryHourTransactionMessageList("BI", "test-group", "2016-11-07 13:00:00","门诊收费服务", "", "", "", "", "成功", 0, 100, order);
+                transactionDataQuery.queryHourTransactionMessageList("BI", "test-group", "2016-11-07 14:00:00","门诊收费服务", "", "", "", "", "成功", 0, 100, order);
 
         Assert.assertNotNull(transactionMessageList);
     }
@@ -272,7 +272,7 @@ public class MongodbTransactionQueryServiceUT extends
         order.put("time", "ASC");
 
         TransactionMessageList transactionMessageList =
-                transactionDataQuery.queryTodayTransactionMessageList("BI", "test1", "挂号", "", "", "", "", "成功", 0, 100, order);
+                transactionDataQuery.queryTodayTransactionMessageList("BI", "test-group", "门诊收费服务", "", "", "", "", "成功", 0, 100, order);
 
         Assert.assertNotNull(transactionMessageList);
     }
@@ -284,7 +284,7 @@ public class MongodbTransactionQueryServiceUT extends
         order.put("time", "ASC");
 
         TransactionMessageList transactionMessageList =
-                transactionDataQuery.queryDayTransactionMessageList("BI","test-group", "2016-11-04", "门诊收费服务2", "", "", "", "", "成功", 0, 100, order);
+                transactionDataQuery.queryDayTransactionMessageList("BI","test-group", "2016-11-09", "门诊收费服务", "", "", "", "", "成功", 0, 100, order);
 
         Assert.assertNotNull(transactionMessageList);
     }
@@ -296,7 +296,7 @@ public class MongodbTransactionQueryServiceUT extends
         order.put("time", "ASC");
 
         TransactionMessageList transactionMessageList =
-                transactionDataQuery.queryWeekTransactionMessageList("BI", "test1", "2016-10-24", "挂号", "", "", "", "", "成功", 0, 100, order);
+                transactionDataQuery.queryWeekTransactionMessageList("BI", "test-group", "2016-10-31", "门诊收费服务", "", "", "", "", "成功", 0, 100, order);
 
         Assert.assertNotNull(transactionMessageList);
     }

@@ -1262,7 +1262,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         long endDate = 0;
         try {
             startDate = simpleDateFormat.parse(hour.replace(hour.substring(14,19),"00:00")).getTime();
-            endDate = simpleDateFormat.parse(hour.substring(0,14)+"59:59").getTime();
+            endDate = startDate + HOUR;
 
         } catch (ParseException e) {
             throw new RuntimeException();
@@ -1371,7 +1371,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         long endDate = 0;
         try {
             startDate = simpleDateFormat.parse(date  +  " " + "00:00:00").getTime();
-            endDate = simpleDateFormat.parse(date  +  " " + "23:59:59").getTime();
+            endDate = startDate + DAY;
 
         } catch (ParseException e) {
             throw new RuntimeException();
@@ -1432,13 +1432,13 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         cal.add(Calendar.DATE,6);
 
         String startTime = week + " 00:00:00";
-        String endTime = simp.format(cal.getTime()) + " 23:59:59";
+       // String endTime = simp.format(cal.getTime()) + " 23:59:59";
 
         long startDate = 0;
         long endDate = 0;
         try {
             startDate = simpleDateFormat.parse(startTime).getTime();
-            endDate = simpleDateFormat.parse(endTime).getTime();
+            endDate = startDate + DAY * 7;
 
         } catch (ParseException e) {
             throw new RuntimeException();
@@ -1494,18 +1494,18 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
         Calendar calendar = Calendar.getInstance();
         int year=Integer.parseInt(month.substring(0,4));
-        int mon =Integer.parseInt(month.substring(5,7))-1;
+        int mon =Integer.parseInt(month.substring(5,7));
         calendar.set(year, mon, 1);
-        calendar.roll(Calendar.DATE, -1);
-
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        int maxDay = calendar.get(Calendar.DAY_OF_MONTH);
         String startTime = month + " 00:00:00";
-        String endTime = simp.format(calendar.getTime()) + " 23:59:59";
+       // String endTime = simp.format(calendar.getTime()) + " 23:59:59";
 
         long startDate = 0;
         long endDate = 0;
         try {
             startDate = simpleDateFormat.parse(startTime).getTime();
-            endDate = simpleDateFormat.parse(endTime).getTime();
+            endDate = startDate + maxDay * DAY;
 
         } catch (ParseException e) {
             throw new RuntimeException();
