@@ -67,6 +67,7 @@ public class TransactionReportPO {
         transactionReportVO.setStartTime(this.startTime);
         transactionReportVO.setEndTime(this.endTime);
         transactionReportVO.setIp(this.ip);
+        transactionReportVO.setGroup(this.group);
 
         List<TransactionMachineVO> machines = new ArrayList<>();
         if (this.getMachines() != null) {

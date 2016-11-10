@@ -17,6 +17,8 @@ public class Task {
 
     private String reportDomain;
 
+    private String reportGroup;
+
     private java.util.Date reportPeriod;
 
     private int status;
@@ -190,6 +192,14 @@ public class Task {
 
     public void setCjsj(String cjsj) {
         this.cjsj = cjsj;
+    }
+
+    public String getReportGroup() {
+        return reportGroup;
+    }
+
+    public void setReportGroup(String reportGroup) {
+        this.reportGroup = reportGroup;
     }
 
     @Override

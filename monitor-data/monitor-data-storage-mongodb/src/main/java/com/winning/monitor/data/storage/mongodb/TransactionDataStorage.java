@@ -353,6 +353,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
         Query query = new Query();
         query.fields().include("machines.transactionTypes.transactionNames");
         query.addCriteria(new Criteria("domain").is(domain));
+        query.addCriteria(new Criteria("group").is(group));
         query.addCriteria(new Criteria("startTime").is(startTime));
         query.addCriteria(new Criteria("machines.transactionTypes.name").is(typeName));
         query.addCriteria(new Criteria("type").is(type));
@@ -405,6 +406,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
             TransactionReportPO transactionReportPO = new TransactionReportPO(transactionReport);
 
             Query query = new Query();
+            query.addCriteria(new Criteria("group").is(transactionReport.getGroup()));
             query.addCriteria(new Criteria("domain").is(transactionReport.getDomain()));
             query.addCriteria(new Criteria("startTime").is(transactionReport.getStartTime()));
             query.addCriteria(new Criteria("endTime").is(transactionReport.getEndTime()));
@@ -458,6 +460,7 @@ public class TransactionDataStorage implements ITransactionDataStorage {
         TransactionReportVO transactionReportVO = new TransactionReportVO();
         transactionReportVO.setId(ConvertUtils.getStringValue(reportMap.get("id")));
         transactionReportVO.setDomain(ConvertUtils.getStringValue(reportMap.get("domain")));
+        transactionReportVO.setGroup(ConvertUtils.getStringValue(reportMap.get("group")));
         transactionReportVO.setIndex(ConvertUtils.getIntValue(reportMap.get("idx")));
         transactionReportVO.setIps(ConvertUtils.getStringSetValue(reportMap.get("ips")));
         transactionReportVO.setType(TransactionReportType.valueOf(ConvertUtils.getStringValue(reportMap.get("type"))));

@@ -36,7 +36,7 @@ public class TransactionReportBuilder implements TaskBuilder {
     }
 
     @Override
-    public boolean buildDailyTask(String group, String name, String domain, Date period) {
+    public boolean buildDailyTask(String name, String group, String domain, Date period) {
 
         try {
             long startTime = period.getTime();
@@ -68,17 +68,17 @@ public class TransactionReportBuilder implements TaskBuilder {
     }
 
     @Override
-    public boolean buildHourlyTask(String group, String name, String domain, Date period) {
+    public boolean buildHourlyTask(String name, String group, String domain, Date period) {
         try {
             long startTime = period.getTime();
-            Date endTime = new Date(startTime + TimeHelper.ONE_HOUR);
+            Date endTime = new Date(startTime + TimeHelper.ONE_HOUR - TimeHelper.ONE_SECOND);
 
             String kssj = this.sdf.format(period);
             String jssj = this.sdf.format(endTime);
 
             //查询出所有时间段内的实时数据
             List<TransactionReportVO> reports =
-                    this.transactionDataStorage.queryRealtimeTransactionReports(domain,
+                    this.transactionDataStorage.queryRealtimeTransactionReports(group, domain,
                             kssj, jssj);
 
             HistoryTransactionReportMerger transactionReportMerger = new HistoryTransactionReportMerger(0, 1);
@@ -89,7 +89,7 @@ public class TransactionReportBuilder implements TaskBuilder {
                 return true;
             }
 
-            endTime = new Date(endTime.getTime() - TimeHelper.ONE_SECOND);
+            //endTime = new Date(endTime.getTime() - TimeHelper.ONE_SECOND);
             report.setStartTime(this.sdf.format(period));
             report.setEndTime(this.sdf.format(endTime));
             report.setType(TransactionReportType.HOURLY);
@@ -106,7 +106,7 @@ public class TransactionReportBuilder implements TaskBuilder {
     }
 
     @Override
-    public boolean buildMonthlyTask(String group, String name, String domain, Date period) {
+    public boolean buildMonthlyTask(String name, String group, String domain, Date period) {
         try {
             Date end = null;
 
@@ -125,7 +125,8 @@ public class TransactionReportBuilder implements TaskBuilder {
             }
 
             report.setIp(NetworkInterfaceManager.INSTANCE.getLocalHostAddress());
-            Date endTime = new Date(end.getTime() - TimeHelper.ONE_SECOND);
+            Date endTime = new Date(TaskHelper.nextMonthStart(period).getTime() - TimeHelper.ONE_SECOND);
+//            Date endTime = new Date(end.getTime() - TimeHelper.ONE_SECOND);
             report.setStartTime(this.sdf.format(period));
             report.setEndTime(this.sdf.format(endTime));
             report.setType(TransactionReportType.MONTHLY);
@@ -143,7 +144,7 @@ public class TransactionReportBuilder implements TaskBuilder {
     }
 
     @Override
-    public boolean buildWeeklyTask(String group, String name, String domain, Date period) {
+    public boolean buildWeeklyTask(String name, String group, String domain, Date period) {
         try {
             Date end = null;
 
@@ -161,7 +162,8 @@ public class TransactionReportBuilder implements TaskBuilder {
                 return true;
             }
 
-            Date endTime = new Date(end.getTime() - TimeHelper.ONE_SECOND);
+            Date endTime = new Date(period.getTime() + TimeHelper.ONE_WEEK - TimeHelper.ONE_SECOND);
+            //new Date(end.getTime() - TimeHelper.ONE_SECOND);
             report.setStartTime(this.sdf.format(period));
             report.setEndTime(this.sdf.format(endTime));
             report.setType(TransactionReportType.WEEKLY);

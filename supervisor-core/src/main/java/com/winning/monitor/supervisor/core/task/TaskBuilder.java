@@ -6,12 +6,12 @@ public interface TaskBuilder {
 
     String getName();
 
-    boolean buildDailyTask(String group, String name, String domain, Date period);
+    boolean buildDailyTask(String name, String group, String domain, Date period);
 
-    boolean buildHourlyTask(String group, String name, String domain, Date period);
+    boolean buildHourlyTask(String name, String group, String domain, Date period);
 
-    boolean buildMonthlyTask(String group, String name, String domain, Date period);
+    boolean buildMonthlyTask(String name, String group, String domain, Date period);
 
-    boolean buildWeeklyTask(String group, String name, String domain, Date period);
+    boolean buildWeeklyTask(String name, String group, String domain, Date period);
 
 }

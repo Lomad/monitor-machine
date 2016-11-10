@@ -94,7 +94,7 @@ public class TransactionReportManager extends AbstractReportManager<TransactionR
                 logger.info("正在创建{}报表任务...", new Date(startTime));
 
                 try {
-                    taskManager.createTask(new Date(startTime), transactionReport.getDomain(),
+                    taskManager.createTask(new Date(startTime), transactionReport.getGroup(), transactionReport.getDomain(),
                             TransactionReportBuilder.TASK_BUILDER_NAME, TaskManager.TaskProlicy.ALL);
                     logger.info("创建报表任务完成!");
                 } catch (Exception e) {
@@ -103,7 +103,8 @@ public class TransactionReportManager extends AbstractReportManager<TransactionR
             }
         }
 
-        this.cleanup(startTime);
+        if (storagePolicy.forDatabase())
+            this.cleanup(startTime);
     }
 
 
