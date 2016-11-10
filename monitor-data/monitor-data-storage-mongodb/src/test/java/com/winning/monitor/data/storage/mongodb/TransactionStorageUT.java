@@ -50,7 +50,7 @@ public class TransactionStorageUT extends
     public void testQueryTransactionReports() {
         List<TransactionReportVO> list =
                 transactionDataStorage.queryRealtimeTransactionReports
-                        ("","microservice", "2016-09-18 13:00:00");
+                        ("", "microservice", "2016-09-18 13:00:00");
 
         Assert.assertNotNull(list);
     }
@@ -69,7 +69,7 @@ public class TransactionStorageUT extends
         this.mongoTemplate.find(query, Person.class, "PERSON");
     }
 
-    @Test
+//    @Test
     public void testQueryRealtimeTransactionReports(String group) {
         Map<String, Object> map = new HashMap<>();
         map.put("domain", "test1");
@@ -93,14 +93,14 @@ public class TransactionStorageUT extends
 
     @Test
     public void testQueryMessageTree() throws ParseException {
-        Date start = this.simpleDateFormat.parse("2016-10-01 00:00:00");
-        Date end = this.simpleDateFormat.parse("2016-10-25 23:00:00");
+        Date start = this.simpleDateFormat.parse("2016-11-07 13:00:00");
+        Date end = this.simpleDateFormat.parse("2016-11-07 14:00:00");
 
         LinkedHashMap<String, String> order = new LinkedHashMap<>();
         order.put("time", "ASC");
 
         MessageTreeList list =
-                messageTreeStorage.queryMessageTree("BI", "test2", start.getTime(), end.getTime(),
+                messageTreeStorage.queryMessageTree("BI", "test-group", start.getTime(), end.getTime(),
                         null, 0, 1, order);
 
         System.out.println();
@@ -110,7 +110,7 @@ public class TransactionStorageUT extends
 
         for (int i = 1; i < list.getTotalSize(); i++) {
             list =
-                    messageTreeStorage.queryMessageTree("BI","test2", start.getTime(), end.getTime(),
+                    messageTreeStorage.queryMessageTree("BI", "test2", start.getTime(), end.getTime(),
                             null, i, 1, order);
             System.out.println(i + ":" + list.getMessageTrees().get(0).getMessage().getTimestamp());
         }
