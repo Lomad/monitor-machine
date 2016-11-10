@@ -66,8 +66,6 @@ $(document).ready(function () {
     });
     var data = {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status,time:global_Object.time};
     fTable.queryDataInPage(global_Object.url,data);
-    console.log(data);
-    console.log(global_Object.url);
 });
 var global_Object = {
     serverAppName:$("serverAppName").val(),
@@ -94,7 +92,8 @@ var global_Object = {
         json=[];
         index2=0;
         json2=[];
-        fTable.queryDataInPage(global_Object.url, {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status,hour:global_Object.hour});
+        var datas = {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status,time:global_Object.time};
+        fTable.queryDataInPage(global_Object.url, datas);
     },
     bzClick:function(obj,index){
 //console.log(json[index]);
@@ -128,7 +127,6 @@ var global_Object = {
     },
     detail: function (obj,json) {
         $("#xqEdit").modal("show");
-        //console.log(json);
         var html ="";
         for(var key in json){
             html +="<tr><td>"+key+"</td><td>"+json[key]+"</td></tr>";

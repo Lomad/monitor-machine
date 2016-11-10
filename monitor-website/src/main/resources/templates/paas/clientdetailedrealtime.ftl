@@ -10,27 +10,28 @@
     <div class="col-md-12  lh50">
         <div class="col-md-10">
             <span>
-                ${serverAppName} > ${transactionTypeName} >
-                <#if type == "指定小时">
-                ${time}
+                <#if clientAppName =="">
+                    ${clientAppName}
                 <#else>
-                ${type}
+                    ${clientAppName}>
                 </#if>
-                <#if serverIpAddress =="">
+                <#if type == "指定小时">
+                    ${time}>
+                <#else>
+                    ${type}>
+                </#if>
+                ${serverAppName}>
+                ${transactionTypeName}
+                <#--<#if serverIpAddress =="">
                     > 所有主机
                 <#else>
                     > ${serverIpAddress}
-                </#if>
-                <#if clientAppName =="">
-                     ${clientAppName}
-                <#else>
-                    > ${clientAppName}
-                </#if>
-                <#if clientIpAddress =="">
+                </#if>-->
+                <#--<#if clientIpAddress =="">
                     > 所有客户端
                 <#else>
                     > ${clientIpAddress}
-                </#if>
+                </#if>-->
              </span>
          </div>
          <div class="col-md-2">

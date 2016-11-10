@@ -24,16 +24,16 @@
 
             <ul class="dropdown-menu" role="menu" id="time3v" aria-labelledby="dropdownMenu1"
                 style="max-height: 200px;margin-top:12px;overflow:scroll;">
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">0:00-0:59</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">1:00-1:59</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">2:00-2:59</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">3:00-3:59</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">4:00-4:59</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">5:00-5:59</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">6:00-6:59</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">7:00-7:59</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">8:00-8:59</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">9:00-9:59</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">00:00-00:59</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">01:00-01:59</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">02:00-02:59</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">03:00-03:59</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">04:00-04:59</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">05:00-05:59</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">06:00-06:59</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">07:00-07:59</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">08:00-08:59</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">09:00-09:59</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">10:00-10:59</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">11:00-11:59</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">12:00-12:59</a></li>
@@ -73,14 +73,17 @@
                 <tr>
                     <th class="tac">服务类型</th>
                     <th>服务名称</th>
-                    <th class="numeric sorting"  data-id="totalCount">调用次数</th>
-                    <th class="numeric sorting"  data-id="avg">平均耗时</th>
+                    <#--<th class="numeric sorting"  data-id="totalCount">调用次数</th>
+                    <th class="numeric sorting"  data-id="avg">平均耗时</th>-->
+                    <th class="numeric"  data-id="totalCount">调用次数</th>
+                    <th class="numeric"  data-id="avg">平均耗时</th>
                     <th class="numeric">99%</th>
                     <th class="numeric">95%</th>
                     <th class="numeric">最短耗时</th>
                     <th class="numeric">最大耗时</th>
                     <th class="numeric">吞吐量</th>
-                    <th class="numeric sorting"  data-id="failCount">失败次数</th>
+                    <#--<th class="numeric sorting"  data-id="failCount">失败次数</th>-->
+                    <th class="numeric"  data-id="failCount">失败次数</th>
                     <th class="numeric">失败率</th>
                     <th class="numeric ">方差</th>
                     <th class="numeric">显示图表</th>

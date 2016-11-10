@@ -18,6 +18,8 @@ $(document).ready(function () {
     global_Object.type = $("#type").val();
     global_Object.value = $("#value").val();
     global_Object.dateValue = $("#dateValue").val();
+    global_Object.historypagetype = $("#historypagetype").val();
+    //alert(global_Object.historypagetype);
     if (global_Object.type == "day") {
         global_Object.url = contextPath+"/paas/queryDayTransactionMessageList"
     }
@@ -68,10 +70,11 @@ $(document).ready(function () {
         "responsive": true,
         "width": "100%"
     });
-    var datas = {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status,date:global_Object.dateValue};
-    console.log("------------------------------")
-    console.log(datas)
-    console.log(global_Object.url)
+    //if(global_Object.historypagetype == "server"){
+        var datas = {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status,date:global_Object.dateValue};
+    //}else if(global_Object.historypagetype == "client"){
+    //    var datas = {serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status,date:global_Object.dateValue};
+    //}
     fTable.queryDataInPage(global_Object.url,datas);
 });
 var global_Object = {
@@ -84,6 +87,7 @@ var global_Object = {
     type:$("#type").val(),
     value:$("value").val(),
     dateValue:$("#dateValue").val(),
+    historypagetype :$("#historypagetype").val(),
     url:contextPath+"/paas/queryDayTransactionMessageList",
     initDomEvent:function(){
         $("#statusselect a").on("click", function () {
@@ -101,11 +105,10 @@ var global_Object = {
         index2=0;
         json2=[];
         var datas = {date:global_Object.dateValue,serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status};
-        console.log(datas);
         fTable.queryDataInPage(global_Object.url,datas);
     },
     bzClick:function(obj,index){
-        console.log(json[index]);
+        //console.log(json[index]);
         if ($(obj).hasClass("fa-chevron-down")) {
             var tableHtml = '<tr class="" style="display: none"><td colspan="12"><div class="ml15 mr15"> <table class="table table-head  table-condensed flip-content"> <thead class="flip-content ">';
             tableHtml += '<tr>';

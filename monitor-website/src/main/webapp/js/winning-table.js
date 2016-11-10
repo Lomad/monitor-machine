@@ -71,7 +71,6 @@
 
     WinningTable.prototype.refreshDataTable = function (option) {
         this.dataTables = $(this.$el).DataTable(option);
-
         if (this.options.toolbar != null) {
             var toolbar = $(this.options.toolbar).clone(true);
             (toolbar).appendTo($('.button-toolbar'));
@@ -94,6 +93,7 @@
             serverSide: true,
             ajax: function (data, callback, settings) {
                 //console.log(data);
+
                 var reqParams = {
                     pageSize: data.length,
                     start: data.start,
@@ -105,7 +105,8 @@
                 }
                 var params = $.extend(reqParams, reqdatas);
                 $.post(ajaxurl, {datas:JSON.stringify(params)}, function (res) {
-                    console.log(res);
+                    //console.log(res);
+                    $("#loading").hide();
                     callback({
                         recordsTotal: res.totalSize,
                         recordsFiltered: res.totalSize,

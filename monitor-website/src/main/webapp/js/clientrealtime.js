@@ -10,11 +10,11 @@ $(document).ready(function () {
     //for(var i=0;i<20;i++){
     //    global_Object.tableData.push(json);
     //}
-    $.post(contextPath+"/paas/qeryAllDomain", {}, function (data) {
+    $.post(contextPath+"/paas/qeryAllClient", {}, function (data) {
         $("#flname").html(data[0] + ' <i class="fa  fa-caret-down"></i>');
         global_Object.flname = data[0];
         global_Object.queryTableData();
-
+        console.log("length:"+data.length+";data[0]:"+data[0]);
         var li = [];
         $.each(data, function (i, v) {
             var option = '<li role="presentation"><a role="menuitem" tabindex="-1">' + v + '</a></li>';
@@ -35,38 +35,39 @@ var global_Object = {
     tableDataOld: [],
     tableData: [],
     flname: "",
-    url: contextPath+"/paas/queryTransactionTypeList",
+    url: contextPath+"/paas/queryLastHourClientReportByClient",
     totalSize: 0,
     type:"最近一小时",
     time:"",
     initDomEvent: function () {
         $("#time1").on("click", function () {
-            global_Object.url = contextPath+"/paas/queryTransactionTypeList";
+            global_Object.url = contextPath+"/paas/queryLastHourClientReportByClient";
             global_Object.type="最近一小时";
             $(this).addClass("active").siblings().removeClass("active");
             global_Object.queryTableData();
         });
+
         $("#time2").on("click", function () {
-            global_Object.url = contextPath+"/paas/queryTodayTransactionTypeReportByServer";
+            global_Object.url = contextPath+"/paas/queryTodayClientReportByClient";
             global_Object.type="当天";
             $(this).addClass("active").siblings().removeClass("active");
             global_Object.queryTableData();
         });
-        $("#time3").on("click", function () {
-            global_Object.url = contextPath+"/paas/queryTransactionTypeList";
 
-            $(this).addClass("active").siblings().removeClass("active");
-            //global_Object.queryTableData();
-        });
         $("#time3v li").on("click", function () {
-            global_Object.time =$(this).text(); //$(this).text().split('-')[0];
+            global_Object.url = contextPath+"/paas/queryHourClientReportByClient";
+            $("#time3").addClass("active").siblings().removeClass("active");
+            //global_Object.time =$(this).text(); //$(this).text().split('-')[0];
+            global_Object.time=global_Object.getNowFormatDate()+" "+$(this).text().split('-')[0]+":00";
             global_Object.type="指定小时";
             $("#time3").html($(this).text() + ' <i class="fa  fa-caret-down"></i>');
             global_Object.queryTableData();
         });
+
         $("#querybtn").on("click",function(){
             global_Object.setTableData("search",this);
         });
+
         $("#fTable .sorting").on("click", function () {
             if ($(this).hasClass("desc")) {
                 $(this).addClass("asc").removeClass("desc");
@@ -76,29 +77,28 @@ var global_Object = {
                 $(this).addClass("desc").removeClass("asc");
                 global_Object.setTableData("desc",this);
             }
-
         });
     },
     queryTableData:function(){
-        $.post(global_Object.url, {flname: global_Object.flname}, function (data) {
-         console.log(data);
-         global_Object.tableDataOld =data.transactionStatisticDatas;
-         global_Object.tableData = data.transactionStatisticDatas;
-         global_Object.totalSize = data.totalSize;
-         global_Object.setTable(global_Object.flname);
+        $.post(global_Object.url, {clientAppName: global_Object.flname, hour: global_Object.time }, function (data) {
+             console.log(data);
+             global_Object.tableDataOld =data.transactionStatisticDatas;
+             global_Object.tableData = data.transactionStatisticDatas;
+             global_Object.totalSize = data.totalSize;
+             global_Object.setTable();
          });
     },
-    setTable: function (flname) {
+    setTable: function () {
         var alltr = function (length, i, data) {
-            var tr = '<tr data-transactiontypename="'+data.transactionTypeName+'" data-serveripaddress="'+data.serverIpAddress+'">';
+            var tr = '<tr data-transactiontypename="'+data.transactionTypeName+'" data-serveripaddress="'+data.serverIpAddress + '" data-serverappname="'+data.serverAppName +'">';
             if(i==0){
-                tr+='<td rowspan='+length+' class="vam tac">'+data.transactionTypeName+'</td>';
+                tr+='<td rowspan='+length+' class="vam tac">'+data.serverAppName+'</td>';
             }
             //if (type == "transactionTypeName") {
             //    tr += '<td>' + flname + '</td>';
             //    tr += '<td><a onclick="global_Object.openPostWindow(this)" href="javascript:void(0)">' + data.transactionTypeName + '</a></td>';
             //}
-            tr += '<td>' + data.serverAppName + '</td>';
+            tr += '<td>' + data.transactionTypeName + '</td>';
             tr += '<td><a onclick="global_Object.openPostTotalCount(this)" href="javascript:void(0)">' + data.totalCount + '次</a></td>';
             tr += '<td><a onclick="global_Object.openPostAvg(this)" href="javascript:void(0)">' + data.avg + 'ms</a></td>';
             tr += '<td>' + data.line99Value + 'ms</td>';
@@ -115,7 +115,14 @@ var global_Object = {
         };
 
         var html = [];
-        $.each(global_Object.tableData, function (i, v) {
+        var StatisticDatas = global_Object.tableData;
+        var length = StatisticDatas.length;
+        if (StatisticDatas != null && StatisticDatas.length > 0) {
+            $.each(StatisticDatas, function (i, v) {
+                html.push(alltr(length,i,v));
+            });
+        }
+        /*$.each(global_Object.tableData, function (i, v) {
             var StatisticDatas = v.transactionStatisticDataDetails;
             var length =StatisticDatas.length;
             if (StatisticDatas != null && StatisticDatas.length > 0) {
@@ -123,8 +130,8 @@ var global_Object = {
                     html.push(alltr(length,i2,v2));
                 });
             }
-        });
-        console.log(html);
+        });*/
+        //console.log(html);
         $("#fTable tbody").html(html.join(""));
         /* 子表动作 == 删除
         $("#fTable .icon").on("click", function () {
@@ -201,20 +208,20 @@ var global_Object = {
             }
             global_Object.tableData=array;
         }
-        global_Object.setTable(global_Object.flname);
+        global_Object.setTable();
     },
     /* ‘调用次数’之跳转锚点 */
     openPostTotalCount:function(obj){
         var url =contextPath+"/paas/clientdetailedrealtime";
         console.log($(obj).parents("tr"));
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":""};
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":$(obj).parents("tr").data("serverappname")==undefined?"":$(obj).parents("tr").data("serverappname"),"type":global_Object.type,"time":global_Object.time,"clientAppName":global_Object.flname,"clientIpAddress":"","status":""};
         JqCommon.openPostWindow(url,datas);
     },
     /* ‘平均耗时’ 之跳转锚点 */
     openPostAvg:function(obj){
         var url =contextPath+"/paas/clientsteprealtime";
         //alert($(obj).parents("tr").data("transactiontypename"))
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time};
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":$(obj).parents("tr").data("serverappname")==undefined?"":$(obj).parents("tr").data("serverappname"),"type":global_Object.type,"time":global_Object.time,"clientAppName":global_Object.flname};
         //console.log(datas);
         //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
@@ -225,16 +232,21 @@ var global_Object = {
         $("#picEdit").modal("show");
         var url =""
         if(global_Object.type=="最近一小时"){
-            url =contextPath+"/paas/queryLastHourTransactionTypeCallTimesReportByServer";
+            url =contextPath+"/paas/queryLastHourTransactionTypeCallTimesReportByClient";
         }
         else if(global_Object.type=="当天"){
-            url =contextPath+"/paas/queryTodayTransactionTypeCallTimesReportByServer";
+            url =contextPath+"/paas/queryTodayTransactionTypeCallTimesReportByClient";
         }
         else if(global_Object.type=="指定小时"){
-            url =contextPath+"/paas/queryLastHourTransactionTypeCallTimesReportByServer";
+            url =contextPath+"/paas/queryHourTransactionTypeCallTimesReportByClient";
         }
-
-        $.post(url, {serverAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress")}, function (data) {
+        var request = { clientAppName: global_Object.flname,
+                         serverAppName:$(obj).parents("tr").data("serverappname")==undefined?"":$(obj).parents("tr").data("serverappname"),
+                         transactionTypeName:$(obj).parents("tr").data("transactiontypename"),
+                         hour:global_Object.time
+                        };
+        $.post(url, request, function (data) {
+            console.log(data);
             var json=[];
             var name =[]
             for(var key in data.durations){
@@ -284,9 +296,25 @@ var global_Object = {
     },
     /* '失败次数' 之跳转锚点 */
     openPostFalse:function(obj){
-        var url =contextPath+"/paas/serverdetailedrealtime";
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":"","status":"失败"};
+        var url =contextPath+"/paas/clientdetailedrealtime";
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":$(obj).parents("tr").data("serverappname")==undefined?"":$(obj).parents("tr").data("serverappname"),"type":global_Object.type,"time":global_Object.time,"clientAppName":"","clientIpAddress":global_Object.flname,"status":"失败"};
         JqCommon.openPostWindow(url,datas);
+    },
+
+    getNowFormatDate:function(){
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
     }
 
 }

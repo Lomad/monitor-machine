@@ -150,6 +150,11 @@
 
                 </tbody>
             </table>
+            <div id="loading"  style="text-align: center;padding: 50px;">
+                <div style="width: 94%">
+                    <img src="${contextPath}/images/loading.gif">
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -21,9 +21,11 @@ public class ClientCallTransactionTypeStatisticDataMerger {
     private Map<String, Map<String, TransactionTypeVO>> transactionTypeMap;
     private String clientDomain;
 
+
     public ClientCallTransactionTypeStatisticDataMerger(String clientDomain) {
         this.clientDomain = clientDomain;
         this.transactionTypeMap = new LinkedHashMap<>();
+
     }
 
     public void add(TransactionReportVO report) {
@@ -32,23 +34,23 @@ public class ClientCallTransactionTypeStatisticDataMerger {
                 if (StringUtils.isEmpty(client.getDomain()) || !clientDomain.equals(client.getDomain()))
                     continue;
 
-                Map<String, TransactionTypeVO> clientDomainMap = this.transactionTypeMap.get(client.getDomain());
-                if (clientDomainMap == null) {
-                    clientDomainMap = new LinkedHashMap<>();
-                    this.transactionTypeMap.put(client.getDomain(), clientDomainMap);
+                Map<String, TransactionTypeVO> serverDomainMap = this.transactionTypeMap.get(report.getDomain());
+                    if (serverDomainMap == null) {
+                        serverDomainMap = new LinkedHashMap<>();
+                        this.transactionTypeMap.put(report.getDomain(), serverDomainMap);
                 }
 
                 for (TransactionTypeVO transactionType : client.getTransactionTypes()) {
                     //如果是统计TransactionType数据
                     TransactionTypeVO oldTransactionType =
-                            clientDomainMap.get(transactionType.getName());
+                            serverDomainMap.get(transactionType.getName());
 
                     //当前AppClientDomain不存在,则加入当前的AppClientDomain
                     if (oldTransactionType == null) {
                         oldTransactionType = new TransactionTypeVO();
                         oldTransactionType.setId(transactionType.getId());
                         oldTransactionType.setName(transactionType.getName());
-                        clientDomainMap.put(transactionType.getName(), oldTransactionType);
+                        serverDomainMap.put(transactionType.getName(), oldTransactionType);
                     }
 
                     //合并TransactionType
@@ -63,13 +65,13 @@ public class ClientCallTransactionTypeStatisticDataMerger {
         TransactionStatisticReport transactionStatisticReport = new TransactionStatisticReport();
 
         for (Map.Entry<String, Map<String, TransactionTypeVO>> entry : this.transactionTypeMap.entrySet()) {
-            String serverDomain = entry.getKey();
+            String serverAppName = entry.getKey();
             Map<String, TransactionTypeVO> transactionTypeMap = entry.getValue();
 
             for (Map.Entry<String, TransactionTypeVO> callerEntry : transactionTypeMap.entrySet()) {
                 TransactionTypeVO transactionTypeVO = callerEntry.getValue();
                 TransactionStatisticData statisticData =
-                        this.toTransactionStatisticData(serverDomain, transactionTypeVO);
+                        this.toTransactionStatisticData(serverAppName, transactionTypeVO);
                 transactionStatisticReport.addTransactionStatisticData(statisticData);
             }
         }
@@ -83,6 +85,7 @@ public class ClientCallTransactionTypeStatisticDataMerger {
 
         TransactionStatisticData statisticData = new TransactionStatisticData();
         statisticData.setServerAppName(serverDomain);
+        statisticData.setClientAppName(this.clientDomain);
         statisticData.setTransactionTypeName(transactionType.getName());
 
         statisticData.setTotalCount(transactionType.getTotalCount());

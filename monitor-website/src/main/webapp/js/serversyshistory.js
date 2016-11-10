@@ -81,7 +81,7 @@ var global_Object = {
             transactionTypeName:global_Object.transactionTypeName,
             serverIpAddress:global_Object.serverIpAddress};
 
-        console.log(datas);
+        //console.log(datas);
 
         $.post(global_Object.url,datas,
             function (data) {
@@ -238,9 +238,10 @@ var global_Object = {
             "clientAppName": $(obj).parents("tr").data("clientappname"),
             "clientIpAddress": $(obj).parents("tr").data("clientipaddress") == undefined ? "" : $(obj).parents("tr").data("clientipaddress"),
             "status":"",
-            historyPageType:"server"
+            "historyPageType":"server"
         };
-        console.log(datas);
+        //console.log(datas);
+        //alert("ss")
         JqCommon.openPostWindow(url, datas);
     }
 

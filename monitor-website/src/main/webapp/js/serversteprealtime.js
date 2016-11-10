@@ -63,8 +63,8 @@ var global_Object = {
             serverIpAddress: global_Object.serverIpAddress,
             time:global_Object.time
         };
-        console.log(datas);
-        console.log(global_Object.url);
+        //console.log(datas);
+        //console.log(global_Object.url);
         $.post(global_Object.url,datas, function (data) {
             //console.log(data);
             global_Object.tableDataOld = data.transactionStatisticDatas;
@@ -121,7 +121,7 @@ var global_Object = {
             name.push(v.transactionName);
             json.push({value: v.avg,name: v.transactionName});
         });
-        console.log(json);
+        //console.log(json);
         var option = {
 
             tooltip : {

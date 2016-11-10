@@ -5,6 +5,7 @@ $(document).ready(function () {
     global_Object.initDomEvent();
     $.post(contextPath+"/paas/qeryAllDomain", {}, function (data) {
         $("#flname").html(data[0] + ' <i class="fa  fa-caret-down"></i>');
+        //alert(data[0]);
         global_Object.flname = data[0];
         global_Object.queryTableData();
         var li = [];
@@ -35,11 +36,14 @@ var global_Object = {
             autoclose: true,//选中之后自动隐藏日期选择框
             format: "yyyy-mm-dd",//日期格式
             weekStart:1,
-            showWeekNumbers:true
+            showWeekNumbers:true,
+            endDate:"-1d"
+
+
         });
+        //alert(new Date())
         global_Object.formatdate = global_Object.getYesterdayFormatDate();
         $("#date_picker").datepicker('update',global_Object.formatdate);
-        global_Object.queryTableData();
         $("#sel a").on('click',function(){
             var data =$(this).attr("data");
             $("#selbtn").html($(this).text()+' <i class="fa  fa-caret-down"></i>');
@@ -97,7 +101,9 @@ var global_Object = {
                 autoclose: true,//选中之后自动隐藏日期选择框
                 format: "yyyy-mm-dd",//日期格式
                 weekStart:1,
-                showWeekNumbers:true
+                showWeekNumbers:true,
+                endDate:"-1d"
+
             });
             global_Object.url = contextPath+"/paas/queryDayTransactionTypeReportByServer";
             global_Object.formatdate = global_Object.getYesterdayFormatDate();
@@ -113,7 +119,8 @@ var global_Object = {
                 weekStart:1,
                 showWeekNumbers:true,
                 calendarWeeks: true,
-                todayHighlight: true
+                todayHighlight: true,
+                endDate:"-1d"
                 //daysOfWeekDisabled:[0,2,3,4,5,6]
                 //beforeShowDay: function(date){
                 //    var day = date.getDay();
@@ -143,7 +150,8 @@ var global_Object = {
                 weekStart:1,
                 showWeekNumbers:true,
                 startView: 'year',
-                minViewMode:1
+                minViewMode:1,
+                endDate:new Date()
             });
             global_Object.url = contextPath+"/paas/queryMonthTransactionTypeReportByServer";
             var date = new Date();
@@ -175,7 +183,7 @@ var global_Object = {
         return (getdate(monday)+"-"+getdate(millSeconds));
     },
     queryTableData: function () {
-        //console.log(global_Object.flname)
+        //console.log(global_Object.flname);
         //console.log(global_Object.url)
         //console.log(global_Object.formatdate);
         $.post(global_Object.url, {flname: global_Object.flname,date:global_Object.formatdate}, function (data) {
@@ -183,7 +191,11 @@ var global_Object = {
             global_Object.tableDataOld =data.transactionStatisticDatas;
             global_Object.tableData = data.transactionStatisticDatas;
             global_Object.totalSize = data.totalSize;
-            global_Object.setTable();
+            if(global_Object.totalSize>0){
+                global_Object.setTable();
+            }else{
+                $("#fTable tbody").html('<tr class="odd"><td valign="top" colspan="13" class="dataTables_empty">表中数据为空</td></tr>');
+            }
         });
     },
 
@@ -319,10 +331,23 @@ var global_Object = {
     queryPic: function (obj) {
         $("#echart").css("width", $("#picEdit").width() * 0.6 - 30);
         $("#picEdit").modal("show");
-        var url =contextPath+"/paas/queryTodayTransactionTypeCallTimesReportByServer";
-        $.post(url, {serverAppName: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress")}, function (data) {
+        var url =""
+        if(global_Object.type=="day"){
+            url =contextPath+"/paas/queryDayTransactionTypeCallTimesReportByServer";
+        }
+        else if(global_Object.type=="week"){
+            url =contextPath+"/paas/queryWeekTransactionTypeCallTimesReportByServer";
+        }
+        else if(global_Object.type=="month"){
+            url =contextPath+"/paas/queryMonthTransactionTypeCallTimesReportByServer";
+        }
+        var datas = {flname: global_Object.flname,transactionTypeName:$(obj).parents("tr").data("transactiontypename"),serverIpAddress:$(obj).parents("tr").data("serveripaddress"),date:global_Object.formatdate};
+        //console.log(datas);
+        //console.log(url)
+        $.post(url,datas, function (data) {
             var json=[];
             var name =[]
+            console.log(data);
             for(var key in data.durations){
                 name.push(key);
                 json.push(data.durations[key]);
@@ -369,29 +394,22 @@ var global_Object = {
     },
     openPostWindow:function(obj){
         global_Object.value = $("#datevalue").val();
-        //console.log(global_Object.type);
         var url =contextPath+"/paas/serversyshistory";
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,historyPageType:"server",dateValue:global_Object.formatdate};
-        console.log(datas);
-        //alert($(obj).data("transactionyypename"))
+        //console.log(datas);
         JqCommon.openPostWindow(url,datas);
     },
     openPostAvg:function(obj){
         global_Object.value = $("#datevalue").val();
         var url =contextPath+"/paas/serverstephistory";
-        //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,historyPageType:"server",dateValue:global_Object.formatdate};
         //console.log(datas);
-        //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
     },
     openPostTotalCount:function(obj){
         global_Object.value = $("#datevalue").val();
         var url =contextPath+"/paas/serverdetailedhistory";
-        //alert($(obj).parents("tr").data("transactiontypename"))
         var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":"",historyPageType:"server",dateValue:global_Object.formatdate};
-        console.log(datas);
-        //alert($(obj).data("transactionyypename"))
         JqCommon.openPostWindow(url,datas);
     },
     openPostFalse:function(obj){

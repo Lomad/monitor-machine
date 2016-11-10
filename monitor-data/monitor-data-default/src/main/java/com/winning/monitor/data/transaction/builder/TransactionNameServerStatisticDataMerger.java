@@ -18,15 +18,18 @@ public class TransactionNameServerStatisticDataMerger {
     private final static TransactionReportMerger transactionMerger = new TransactionReportMerger();
 
     private final String serverDomain;
+    private final String clientAppName;
     private final String serverIpAddress;
     private final String transactionTypeName;
 
     private Map<String, TransactionNameVO> transactionNames;
 
     public TransactionNameServerStatisticDataMerger(String serverDomain,
+                                                    String clientAppName,
                                                     String serverIpAddress,
                                                     String transactionTypeName) {
         this.serverDomain = serverDomain;
+        this.clientAppName = clientAppName;
         this.serverIpAddress = serverIpAddress;
         this.transactionTypeName = transactionTypeName;
         this.transactionNames = new LinkedHashMap<>();
@@ -35,13 +38,17 @@ public class TransactionNameServerStatisticDataMerger {
     public void add(TransactionReportVO report) {
         for (TransactionMachineVO machine : report.getMachines()) {
             String serverIp = machine.getIp();
+
             //如果不是指定的IP地址
             if (StringUtils.hasText(this.serverIpAddress) &&
                     !this.serverIpAddress.equals(serverIp))
                 continue;
 
             for (TransactionClientVO client : machine.getTransactionClients()) {
-
+                String clientDomain = client.getDomain();
+                if (StringUtils.hasText(this.clientAppName) &&
+                        !this.clientAppName.equals(clientDomain))
+                    continue;
                 for (TransactionTypeVO transactionType : client.getTransactionTypes()) {
                     if (!transactionType.getName().equals(transactionTypeName))
                         continue;
@@ -71,7 +78,7 @@ public class TransactionNameServerStatisticDataMerger {
         for (Map.Entry<String, TransactionNameVO> entry : this.transactionNames.entrySet()) {
 
             TransactionStatisticData statisticData =
-                    this.toTransactionStatisticData(serverIpAddress, null, entry.getValue());
+                    this.toTransactionStatisticData(serverIpAddress,clientAppName, null, entry.getValue());
 
             transactionStatisticReport.addTransactionStatisticData(statisticData);
         }
@@ -80,7 +87,7 @@ public class TransactionNameServerStatisticDataMerger {
         return transactionStatisticReport;
     }
 
-    private TransactionStatisticData toTransactionStatisticData(String serverIp, Caller caller,
+    private TransactionStatisticData toTransactionStatisticData(String serverIp,String clientAppName, Caller caller,
                                                                 TransactionNameVO transactionName) {
 
         TransactionStatisticData statisticData = new TransactionStatisticData();
@@ -91,6 +98,9 @@ public class TransactionNameServerStatisticDataMerger {
 
         if (serverIp != null) {
             statisticData.setServerIpAddress(serverIp);
+        }
+        if (clientAppName != null) {
+            statisticData.setClientAppName(clientAppName);
         }
         if (caller != null) {
             statisticData.setClientAppName(caller.getName());
