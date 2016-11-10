@@ -30,8 +30,8 @@ public class TransactionReportBuilderUT extends
 
     @Test
     public void testMergeAllHourlyReport() throws ParseException {
-        Date period = sdf.parse("2016-10-20 14:00:00");
-        Date end = sdf.parse("2016-11-07 16:00:00");
+        Date period = sdf.parse("2016-11-04 00:00:00");
+        Date end = sdf.parse("2016-11-05 00:00:00");
 
         while (true) {
             if (period.getTime() > end.getTime())
@@ -46,8 +46,8 @@ public class TransactionReportBuilderUT extends
 
     @Test
     public void testMergeAllDailyReport() throws ParseException {
-        Date period = sdf.parse("2016-10-31 00:00:00");
-        Date end = sdf.parse("2016-11-10 00:00:00");
+        Date period = sdf.parse("2016-11-04 00:00:00");
+        Date end = sdf.parse("2016-11-05 00:00:00");
 
         while (true) {
             if (period.getTime() > end.getTime())
