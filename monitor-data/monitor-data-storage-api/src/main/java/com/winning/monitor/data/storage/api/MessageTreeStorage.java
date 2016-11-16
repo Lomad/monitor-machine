@@ -19,5 +19,7 @@ public interface MessageTreeStorage {
                                      int startIndex, int pageSize,
                                      LinkedHashMap<String, String> orderBy);
 
+    MessageTreeList queryMessageTree(String group,String messageId,String domain);
+
 
 }

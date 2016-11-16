@@ -109,6 +109,25 @@ public class MongoMessageTreeStorage implements MessageTreeStorage {
         return messageTreeList;
     }
 
+    @Override
+    public MessageTreeList queryMessageTree(String group,String messageId, String domain) {
+
+        Query query = new Query();
+        query.addCriteria(new Criteria("domain").is(domain));
+        query.addCriteria(new Criteria("group").is(group));
+        query.addCriteria(new Criteria("messageId").is(messageId));
+
+        List<MessageTreePO> messageTrees =
+                this.mongoTemplate.find(query, MessageTreePO.class,
+                        this.getCollectionName(domain));
+
+        MessageTreeList messageTreeList = new MessageTreeList();
+        for (MessageTreePO messageTreePO : messageTrees) {
+            messageTreeList.addMessageTree(messageTreePO.getMessageTree());
+        }
+
+        return messageTreeList;
+    }
 
     public String getCollectionName(String domain) {
         return "Messages-" + domain;
