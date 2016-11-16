@@ -1526,6 +1526,14 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         return transactionMessageList;
     }
 
+    @Override
+    public String queryTransactionMessageListDetails(String group,
+                                                              String messageId,
+                                                              String serverAppName) {
+        String  messageList = String.valueOf(this.messageTreeStorage.queryMessageTree(group, messageId,serverAppName));
+        return messageList;
+    }
+
     private TransactionMessage toTransactionMessage(MessageTree messageTree) {
         DefaultTransaction transaction = (DefaultTransaction) messageTree.getMessage();
         TransactionMessage transactionMessage = this.toTransactionMessage(transaction);

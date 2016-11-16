@@ -4,7 +4,7 @@ import com.winning.monitor.data.api.transaction.domain.TransactionCallTimesRepor
 import com.winning.monitor.data.api.transaction.domain.TransactionMessageList;
 import com.winning.monitor.data.api.transaction.domain.TransactionStatisticReport;
 
-import java.text.ParseException;
+
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
@@ -582,5 +582,13 @@ TransactionMessageList queryLastHourTransactionMessageList(String group,
                                                                    int startIndex, int pageSize,
                                                                    LinkedHashMap<String, String> orderBy);
 
+
+
+    /**
+     * 获取指定月内的调用消息明细记录
+     *  @param group               系统类别
+     * @param messageId           记录Id
+     * @param serverAppName       应用服务系统名称,非空  */
+    String queryTransactionMessageListDetails(String group, String messageId, String serverAppName) ;
 
 }

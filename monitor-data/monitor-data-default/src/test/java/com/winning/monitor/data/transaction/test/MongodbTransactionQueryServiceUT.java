@@ -329,6 +329,12 @@ public class MongodbTransactionQueryServiceUT extends
     }
 
     @Test
+    public void testTransactionMessageListDetails() {
+        String str = transactionDataQuery.queryTransactionMessageListDetails("BI","207fef85-797a-4145-9197-346d415bae1a","HIS");
+        Assert.assertNotNull(str);
+    }
+
+    @Test
     public void testComputerHour() {
         int hour = Integer.parseInt("2016-01-01 20:00:00".substring(11, 13));
         Assert.assertTrue(hour == 20);
