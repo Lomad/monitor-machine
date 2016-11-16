@@ -2,10 +2,7 @@ package com.winning.monitor.data.transaction.test;
 
 import com.winning.monitor.agent.logging.message.Caller;
 import com.winning.monitor.data.api.ITransactionDataQueryService;
-import com.winning.monitor.data.api.transaction.domain.TransactionCallTimesReport;
-import com.winning.monitor.data.api.transaction.domain.TransactionMessageList;
-import com.winning.monitor.data.api.transaction.domain.TransactionStatisticData;
-import com.winning.monitor.data.api.transaction.domain.TransactionStatisticReport;
+import com.winning.monitor.data.api.transaction.domain.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -330,7 +327,7 @@ public class MongodbTransactionQueryServiceUT extends
 
     @Test
     public void testTransactionMessageListDetails() {
-        String str = transactionDataQuery.queryTransactionMessageListDetails("BI","207fef85-797a-4145-9197-346d415bae1a","HIS");
+        TransactionMessageListDetail str = transactionDataQuery.queryTransactionMessageListDetails("BI","207fef85-797a-4145-9197-346d415bae1a","HIS");
         Assert.assertNotNull(str);
     }
 

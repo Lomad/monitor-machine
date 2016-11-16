@@ -4,10 +4,7 @@ import com.winning.monitor.agent.logging.message.LogMessage;
 import com.winning.monitor.agent.logging.message.MessageTree;
 import com.winning.monitor.agent.logging.transaction.DefaultTransaction;
 import com.winning.monitor.data.api.ITransactionDataQueryService;
-import com.winning.monitor.data.api.transaction.domain.TransactionCallTimesReport;
-import com.winning.monitor.data.api.transaction.domain.TransactionMessage;
-import com.winning.monitor.data.api.transaction.domain.TransactionMessageList;
-import com.winning.monitor.data.api.transaction.domain.TransactionStatisticReport;
+import com.winning.monitor.data.api.transaction.domain.*;
 import com.winning.monitor.data.api.transaction.vo.*;
 import com.winning.monitor.data.api.vo.Range2;
 import com.winning.monitor.data.storage.api.ITransactionDataStorage;
@@ -1527,11 +1524,17 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     }
 
     @Override
-    public String queryTransactionMessageListDetails(String group,
-                                                              String messageId,
-                                                              String serverAppName) {
-        String  messageList = String.valueOf(this.messageTreeStorage.queryMessageTree(group, messageId,serverAppName));
-        return messageList;
+    public TransactionMessageListDetail queryTransactionMessageListDetails(String group,
+                                                                           String messageId,
+                                                                           String serverAppName) {
+        MessageTreeList  messageList = this.messageTreeStorage.queryMessageTree(group, messageId,serverAppName);
+
+        TransactionMessageListDetail detail = new TransactionMessageListDetail();
+        for (MessageTree messageTree : messageList.getMessageTrees()) {
+            DefaultTransaction transaction = (DefaultTransaction) messageTree.getMessage();
+            detail.setData(transaction.getData());
+        }
+        return detail;
     }
 
     private TransactionMessage toTransactionMessage(MessageTree messageTree) {
@@ -1543,6 +1546,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         transactionMessage.setClientType(messageTree.getCaller().getType());
         transactionMessage.setServerAppName(messageTree.getDomain());
         transactionMessage.setServerIpAddress(messageTree.getIpAddress());
+        transactionMessage.setMessageId(messageTree.getMessageId());
 
         return transactionMessage;
     }
@@ -1553,6 +1557,7 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         transactionMessage.setTransactionTypeName(transaction.getType());
         transactionMessage.setTransactionName(transaction.getName());
         transactionMessage.setUseTime(transaction.getDurationInMillis());
+
 
         if (transaction.getData() !=null) {
             for(Map.Entry<String,Object> entry : transaction.getData().entrySet()){

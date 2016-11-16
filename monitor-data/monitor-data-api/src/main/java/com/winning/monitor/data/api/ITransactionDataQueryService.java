@@ -2,6 +2,7 @@ package com.winning.monitor.data.api;
 
 import com.winning.monitor.data.api.transaction.domain.TransactionCallTimesReport;
 import com.winning.monitor.data.api.transaction.domain.TransactionMessageList;
+import com.winning.monitor.data.api.transaction.domain.TransactionMessageListDetail;
 import com.winning.monitor.data.api.transaction.domain.TransactionStatisticReport;
 
 
@@ -589,6 +590,6 @@ TransactionMessageList queryLastHourTransactionMessageList(String group,
      *  @param group               系统类别
      * @param messageId           记录Id
      * @param serverAppName       应用服务系统名称,非空  */
-    String queryTransactionMessageListDetails(String group, String messageId, String serverAppName) ;
+    TransactionMessageListDetail queryTransactionMessageListDetails(String group, String messageId, String serverAppName) ;
 
 }

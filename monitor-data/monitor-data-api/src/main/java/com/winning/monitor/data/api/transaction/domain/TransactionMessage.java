@@ -15,6 +15,10 @@ public class TransactionMessage {
     //开始时间yyyy-MM-dd HH:mm:ss
     private String startTime;
 
+    //记录id
+    private String messageId;
+
+
     //服务类别名称
     private String transactionTypeName;
     //服务步骤名称
@@ -155,4 +159,13 @@ public class TransactionMessage {
     public void setGroup(String group) {
         this.group = group;
     }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
+
 }
