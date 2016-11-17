@@ -148,11 +148,19 @@ var global_Object = {
         $.post(url, datas, function(result) {
             var html = "";
             var json = result.data;
+            //console.log(result);
+            //console.log(json);
+            var lt = new RegExp("<","g"); // replace(lt, "&lt;")
+            var fr = new RegExp("</","g"); // replace(fr, "&lt;&frasl;")
+            var gt = new RegExp(">","g"); // replace(gt, "&gt;")
             for (var key in json) {
-                html += "<tr><td>" + key + "</td><td>" + json[key] + "</td></tr>";
+                var temp = json[key].trim();
+                var value = temp.replace(/[\r\n]/g,"").replace(fr,"&lt;&frasl;").replace(gt, "&gt;").replace(lt, "&lt;");
+                html += '<tr><td>' + key + '</td><td>' + value + '</td></tr>';
                 //name.push(key);
                 //json.push(data.durations[key]);
             }
+            html = html+"";
             $("#xqTable tbody").html(html);
         });
     }
