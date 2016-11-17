@@ -79,7 +79,8 @@ $(document).ready(function () {
                 "title": "详细参数", "data": "startTime", "orderable": false,
                 "render": function (data, type, full, meta) {
                     json2.push(full.datas);
-                    var html = '<i class="fa icon cp fa-exchange"  onclick=global_Object.detail(this,'+JSON.stringify(full.datas)+')></i> ';
+                    var messageId = JSON.stringify(full.messageId);
+                    var html = '<i class="fa icon cp fa-exchange"  onclick=global_Object.detail(this,'+ messageId +')></i> ';
                     index2++;
                     return html;
                 }
@@ -143,15 +144,21 @@ var global_Object = {
         fTable.queryDataInPage(global_Object.url, reqobj);
     },
 
-    detail: function (obj,json) {
+    //detail: function (obj,json) {
+    detail: function (obj, messageId) {
         $("#xqEdit").modal("show");
-        var html ="";
-        for(var key in json){
-            html +="<tr><td>"+key+"</td><td>"+json[key]+"</td></tr>";
-            //name.push(key);
-            //json.push(data.durations[key]);
-        }
-        $("#xqTable tbody").html(html);
+        var url = "/paas/queryTransactionMessageListDetail";
+        var datas = { serverAppName:global_Object.serverAppName,messageId: messageId};
+        $.post(url, datas, function(result) {
+            var html = "";
+            var json = result.data;
+            for (var key in json) {
+                html += "<tr><td>" + key + "</td><td>" + json[key] + "</td></tr>";
+                //name.push(key);
+                //json.push(data.durations[key]);
+            }
+            $("#xqTable tbody").html(html);
+        });
     },
 
     bzClick:function(obj,index){
@@ -170,7 +177,7 @@ var global_Object = {
             tableHtml += '</tr></thead><tbody>';
             if (json[index] != null && json[index].length > 0) {
                 $.each(json[index],function (i, v) {
-                    tableHtml += '<tr><td>'+(i+1)+'</td><td>'+ v.transactionName+'</td><td>'+v.useTime+'</td><td>'+v.status+'</td><td>'+v.startTime+'</td><td>'+'<i class="fa  icon cp fa-exchange"  onclick=global_Object.detail(this,'+JSON.stringify(v.datas)+')></i> '+'</td></tr>';
+                    tableHtml += '<tr><td>'+(i+1)+'</td><td>'+ v.transactionName+'</td><td>'+v.useTime+'</td><td>'+v.status+'</td><td>'+v.startTime+'</td><td>'+'<i class="fa  icon cp fa-exchange"  onclick=global_Object.detail(this,'+ v.messageId +')></i> '+'</td></tr>';
                 });
             }
             $(obj).parents("tr").after(tableHtml);
