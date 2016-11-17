@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winning.monitor.data.api.ITransactionDataQueryService;
 import com.winning.monitor.data.api.transaction.domain.TransactionCallTimesReport;
 import com.winning.monitor.data.api.transaction.domain.TransactionMessageList;
+import com.winning.monitor.data.api.transaction.domain.TransactionMessageListDetail;
 import com.winning.monitor.data.api.transaction.domain.TransactionStatisticReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -947,6 +948,18 @@ public class PaasController {
         return report;
     }
 
-
+    /**
+     * 获取指定调用记录的参数明细
+     * @param messageId
+     * @param serverAppName
+     * @return Detail:
+     */
+    @RequestMapping(value = {"/paas/queryTransactionMessageListDetail"})
+    @ResponseBody
+    public TransactionMessageListDetail queryTransactionMessageListDetail(String messageId, String serverAppName) {
+        System.out.println("id:"+messageId+",appName:"+serverAppName);
+        TransactionMessageListDetail detail = transactionDataQuery.queryTransactionMessageListDetails(GroupId, messageId, serverAppName);
+        return detail;
+    }
 }
 

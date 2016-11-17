@@ -166,14 +166,14 @@
     </div>
 </div>
 <@modal.editModal id="xqEdit" modaltitle=""    title="详情"   buttonId="">
-<div class="row p15" >
-    <div class="col-md-12" style="height:400px;" >
+<div class="row p8" >
+    <div class="col-md-12" style="height: 400px; word-break: break-all; overflow: scroll" >
         <table id="xqTable" class="table table-head  table-condensed flip-content">
             <thead class="flip-content">
             <tr>
 
-                <th class="" >名称</th>
-                <th class="">值</th>
+                <th class="" style="width: 120px">名称</th>
+                <th class="" >值</th>
 
             </tr>
             </thead>

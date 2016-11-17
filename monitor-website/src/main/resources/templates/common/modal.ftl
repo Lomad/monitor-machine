@@ -10,7 +10,7 @@ modaltitle="usermodal-title"
 modalbody="modal-body-padding"
 formId="">
 <div id="${id}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog ${modalBig}" role="document">
+    <div class="modal-dialog ${modalBig}" role="document" style="width:1000px ">
         <div class="modal-content">
             <div class="modal-header ${modalheader}" style="height: 40px;">
                 <button type="button" class="close" onclick="$('#${id}').modal('hide')" aria-label="Close"><span
