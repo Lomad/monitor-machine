@@ -1,5 +1,8 @@
 package com.winning.monitor.data.api.transaction.domain;
 
+import com.winning.monitor.message.Message;
+
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -15,4 +18,5 @@ public class TransactionMessageListDetail {
     public void setData(Map<String, Object> data) {
         this.data = data;
     }
+
 }

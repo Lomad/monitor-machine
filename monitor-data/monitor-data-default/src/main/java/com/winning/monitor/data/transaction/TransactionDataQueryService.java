@@ -2,6 +2,7 @@ package com.winning.monitor.data.transaction;
 
 import com.winning.monitor.agent.logging.message.LogMessage;
 import com.winning.monitor.agent.logging.message.MessageTree;
+import com.winning.monitor.agent.logging.message.internal.AbstractLogMessage;
 import com.winning.monitor.agent.logging.transaction.DefaultTransaction;
 import com.winning.monitor.data.api.ITransactionDataQueryService;
 import com.winning.monitor.data.api.transaction.domain.*;
@@ -1526,14 +1527,29 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     @Override
     public TransactionMessageListDetail queryTransactionMessageListDetails(String group,
                                                                            String messageId,
+                                                                           int index,
                                                                            String serverAppName) {
         MessageTreeList  messageList = this.messageTreeStorage.queryMessageTree(group, messageId,serverAppName);
 
         TransactionMessageListDetail detail = new TransactionMessageListDetail();
-        for (MessageTree messageTree : messageList.getMessageTrees()) {
-            DefaultTransaction transaction = (DefaultTransaction) messageTree.getMessage();
-            detail.setData(transaction.getData());
-        }
+        if(index == -1){
+            for (MessageTree messageTree : messageList.getMessageTrees()) {
+                DefaultTransaction transaction = (DefaultTransaction) messageTree.getMessage();
+
+                detail.setData(transaction.getData());
+            }
+        }else{
+            for (MessageTree messageTree : messageList.getMessageTrees()) {
+                DefaultTransaction transaction = (DefaultTransaction) messageTree.getMessage();
+                if (transaction.getChildren() != null) {
+
+                        LogMessage logMessage = transaction.getChildren().get(index);
+                        DefaultTransaction childTransaction = (DefaultTransaction) logMessage;
+                       detail.setData(childTransaction.getData());
+                    }
+                }
+            }
+
         return detail;
     }
 

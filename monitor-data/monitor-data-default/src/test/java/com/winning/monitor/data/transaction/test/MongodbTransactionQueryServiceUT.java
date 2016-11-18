@@ -327,7 +327,7 @@ public class MongodbTransactionQueryServiceUT extends
 
     @Test
     public void testTransactionMessageListDetails() {
-        TransactionMessageListDetail str = transactionDataQuery.queryTransactionMessageListDetails("BI","207fef85-797a-4145-9197-346d415bae1a","HIS");
+        TransactionMessageListDetail str = transactionDataQuery.queryTransactionMessageListDetails("BI","207fef85-797a-4145-9197-346d415bae1a",0,"HIS");
         Assert.assertNotNull(str);
     }
 
