@@ -8,7 +8,7 @@
 <!-- BEGIN HEAD -->
 <head>
     <meta charset="utf-8"/>
-    <title>监控平台</title>
+    <title>统一监控平台</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 
@@ -64,20 +64,18 @@
         <ul id="firstMenu" class="nav navbar-nav " style="height: 42px">
             <!-- BEGIN USER LOGIN DROPDOWN -->
 
-
-            <li class="dropdown user  firstMenu" data-level="1"
-               ><a href="#" class="dropdown-toggle" data-toggle="dropdown" >
-                IAAS/系统</a></li>
-
-            <li class="dropdown user firstMenu" data-level="2"
-                    ><a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                PAAS/应用</a></li>
-            <li class="dropdown user  firstMenu" data-level="3"
-                    ><a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        SAAS/业务</a></li>
-            <li class="dropdown user  firstMenu" data-level="4"
-                    ><a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        告警预览</a></li>
+            <#--<li class="dropdown user  firstMenu" data-level="1">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" >IAAS/系统</a>
+            </li>-->
+            <li class="dropdown user firstMenu" data-level="2">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">服务监控</a>
+            </li>
+            <#--<li class="dropdown user  firstMenu" data-level="3">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">SAAS/业务</a>
+            </li>
+            <li class="dropdown user  firstMenu" data-level="4">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">告警预览</a>
+            </li>-->
 
             <!-- END USER LOGIN DROPDOWN -->
         </ul>
@@ -94,8 +92,8 @@
                     <div style="right: 50px; top: 10px; position: absolute; display: block; color: #143e58;
                             font-size: 12px; line-height: 1.2em; width: 45px" 　>
                             <span style="color: white" class="cp">
-                               admin<br/>
-                                123
+                               管理员<br/>
+                               00123
                             </span>
                     </div>
                     <div id="shuxian" style="right: 47px; top: 10px; position: absolute; height: 22px;
@@ -118,8 +116,7 @@
     <!-- END TOP NAVIGATION BAR -->
 </div>
 <!-- END HEADER -->
-<div class="clearfix">
-</div>
+<div class="clearfix"></div>
 <!-- BEGIN CONTAINER -->
 <div class="page-container">
     <!-- BEGIN SIDEBAR -->
@@ -140,11 +137,10 @@
                         </a>
                     </div>
                 </div>
-
                 <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
             </li>
 
-            <li class="" data-level="1" style="display:none">
+            <#--<li class="" data-level="1" style="display:none">
                 <a href="javascript:;">
                     <i class="fa fa-desktop fa-lg"></i>
                     <span class="title">权限管理</span>
@@ -163,7 +159,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li>-->
             <li class="" data-level="2" style="display:none">
                 <a href="${contextPath}/paas/overview">
                     <i class="fa fa-desktop fa-lg"></i>
@@ -175,66 +171,47 @@
                 <a href="javascript:void(0)">
                     <i class="fa fa-desktop fa-lg"></i>
                     <span class="title">实时监控</span>
-                    <span class="arrow "></span>
+                    <span class="arrow"></span>
                 </a>
                 <ul class="sub-menu">
-
                     <li data-level="2">
-                        <a href="${contextPath}/paas/serverrealtime"" >
-                            服务方监控
-                        </a>
+                        <a href="${contextPath}/paas/serverrealtime"" >服务方监控</a>
                     </li>
                     <li data-level="2">
-                        <a href="${contextPath}/paas/clientrealtime"">
-                            消费方监控
-                        </a>
+                        <a href="${contextPath}/paas/clientrealtime"">消费方监控</a>
                     </li>
-
                 </ul>
             </li>
             <li class="" data-level="2" style="display:none">
                 <a href="javascript:;">
                     <i class="fa fa-desktop fa-lg"></i>
                     <span class="title">历史监控</span>
-                    <span class="arrow "></span>
+                    <span class="arrow"></span>
                 </a>
                 <ul class="sub-menu">
-
                     <li data-level="2">
-                        <a href="${contextPath}/paas/serverhistory" >
-                            服务方监控
-                        </a>
+                        <a href="${contextPath}/paas/serverhistory" >服务方监控</a>
                     </li>
                     <li data-level="2">
-                        <a href="${contextPath}/paas/clienthistory">
-                            消费方监控
-                        </a>
+                        <a href="${contextPath}/paas/clienthistory">消费方监控</a>
                     </li>
-
                 </ul>
             </li>
-            <li class="" data-level="3" style="display:none">
+            <#--<li class="" data-level="3" style="display:none">
                 <a href="javascript:;">
                     <i class="fa fa-desktop fa-lg"></i>
                     <span class="title">日志查询</span>
                     <span class="arrow "></span>
                 </a>
                 <ul class="sub-menu">
-
                     <li>
-                        <a href="/log/user">
-                            职工授权记录
-                        </a>
+                        <a href="/log/user">职工授权记录</a>
                     </li>
                     <li>
-                        <a href="/log/role">
-                            角色授权记录
-                        </a>
+                        <a href="/log/role">角色授权记录</a>
                     </li>
                     <li>
-                        <a href="/log/menu">
-                            功能权限授权记录
-                        </a>
+                        <a href="/log/menu">功能权限授权记录</a>
                     </li>
                     <li>
                         <a href="/log/per">
@@ -252,7 +229,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li>-->
         </ul>
         <!-- END SIDEBAR MENU -->
     </div>

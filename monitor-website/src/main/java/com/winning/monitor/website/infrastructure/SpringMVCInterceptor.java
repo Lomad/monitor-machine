@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
  * Created by Admin on 2016/9/7.
  */
 public class SpringMVCInterceptor implements  HandlerInterceptor {
- private  String LOGIN_URL="/dologin";
+ private  String LOGIN_URL="/login";
     /**
      * preHandle方法是进行处理器拦截用的，顾名思义，该方法将在Controller处理之前进行调用，SpringMVC中的Interceptor拦截器是链式的，可以同时存在
      * 多个Interceptor，然后SpringMVC会根据声明的前后顺序一个接一个的执行，而且所有的Interceptor中的preHandle方法都会在
@@ -24,12 +24,12 @@ public class SpringMVCInterceptor implements  HandlerInterceptor {
         // TODO Auto-generated method stub
         Session.setSession(request.getSession());
         //session中获取用户名信息(判断登录的session，暂时注释)
-//        HttpSession session=request.getSession(true);
-//        Object obj = session.getAttribute("loginId");
-//        if (obj==null||"".equals(obj.toString())) {
-//            response.sendRedirect(request.getSession().getServletContext().getContextPath()+LOGIN_URL);
-//            return false;
-//        }
+        HttpSession session=request.getSession(true);
+        Object obj = session.getAttribute("loginId");
+        if (obj==null||"".equals(obj.toString())) {
+            response.sendRedirect(request.getSession().getServletContext().getContextPath()+LOGIN_URL);
+            return false;
+        }
         return true;
     }
 
