@@ -42,7 +42,10 @@ $(document).ready(function () {
             {"title": "服务名称", "data": "transactionTypeName", "orderable": false,
                 "render":function(data, type, full, meta){
                     json.push(full.children);
-                    var html = '<i class="fa  icon cp fa-chevron-down"  onclick="global_Object.bzClick(this,'+index+')"></i> '+data;
+                    console.log(full.messageId);
+                    var id = JSON.stringify(full.messageId);
+                    //var html = '<i class="fa  icon cp fa-chevron-down"  onclick="global_Object.bzClick(this,'+index+','+ messageId +')"></i> '+data;
+                    var html = '<i class="fa  icon cp fa-chevron-down"  onclick=global_Object.bzClick(this,'+index+ ','+id+ ')></i> '+data;
                     index++;
                     return html;
                 }
@@ -60,7 +63,7 @@ $(document).ready(function () {
 
                     console.log(full.messageId);
                     var messageId = JSON.stringify(full.messageId);
-                    var html = '<i class="fa  icon cp fa-bar-chart-o"  onclick=global_Object.detail(this,'+ messageId +')></i> ';
+                    var html = '<i class="fa  icon cp fa-bar-chart-o"  onclick=global_Object.detail(this,'+ messageId +',-1)></i> ';
                     //var html =  '<i class="fa  icon cp fa-bar-chart-o"  onclick=alert(111)></i> ';
                     index2++;
                     return html;
@@ -111,7 +114,7 @@ var global_Object = {
         var datas = {date:global_Object.dateValue,serverAppName:global_Object.serverAppName,transactionTypeName:global_Object.transactionTypeName,serverIpAddress:global_Object.serverIpAddress,clientAppName:global_Object.clientAppName,clientIpAddress:global_Object.clientIpAddress,status:global_Object.status};
         fTable.queryDataInPage(global_Object.url,datas);
     },
-    bzClick:function(obj,index){
+    bzClick:function(obj,index,messageId){
         //console.log(json[index]);
         if ($(obj).hasClass("fa-chevron-down")) {
             var tableHtml = '<tr class="" style="display: none"><td colspan="12"><div class="ml15 mr15"> <table class="table table-head  table-condensed flip-content"> <thead class="flip-content ">';
@@ -126,8 +129,8 @@ var global_Object = {
             tableHtml += '</tr></thead><tbody>';
             if (json[index] != null && json[index].length > 0) {
                 $.each(json[index],function (i, v) {
-                    console.log(v);
-                    tableHtml += '<tr><td>'+(i+1)+'</td><td>'+ v.transactionName+'</td><td>'+v.useTime+'</td><td>'+v.status+'</td><td>'+v.startTime+'</td><td>'+'<i class="fa  icon cp fa-bar-chart-o"  onclick=global_Object.detail(this,'+ v.messageId+')></i> '+'</td></tr>';
+                    //tableHtml += '<tr><td>'+(i+1)+'</td><td>'+ v.transactionName+'</td><td>'+v.useTime+'</td><td>'+v.status+'</td><td>'+v.startTime+'</td><td>'+'<i class="fa  icon cp fa-bar-chart-o"  onclick=global_Object.detail(this,'+ v.messageId +','+ i +')></i> '+'</td></tr>';
+                    tableHtml += '<tr><td>'+(i+1)+'</td><td>'+ v.transactionName+'</td><td>'+v.useTime+'</td><td>'+v.status+'</td><td>'+v.startTime+'</td><td>'+'<i class="fa  icon cp fa-bar-chart-o"  onclick=global_Object.detail(this,"'+messageId+'",'+i+')></i> '+'</td></tr>';
                 });
             }
             $(obj).parents("tr").after(tableHtml);
@@ -141,10 +144,10 @@ var global_Object = {
         }
     },
     //detail: function (obj,json) {
-    detail: function (obj, messageId) {
+    detail: function (obj, messageId,idx) {
         $("#xqEdit").modal("show");
         var url = "/paas/queryTransactionMessageListDetail";
-        var datas = { serverAppName:global_Object.serverAppName,messageId: messageId};
+        var datas = { serverAppName:global_Object.serverAppName,messageId: messageId,index:idx};
         $.post(url, datas, function(result) {
             var html = "";
             var json = result.data;
@@ -154,8 +157,16 @@ var global_Object = {
             var fr = new RegExp("</","g"); // replace(fr, "&lt;&frasl;")
             var gt = new RegExp(">","g"); // replace(gt, "&gt;")
             for (var key in json) {
-                var temp = json[key].trim();
-                var value = temp.replace(/[\r\n]/g,"").replace(fr,"&lt;&frasl;").replace(gt, "&gt;").replace(lt, "&lt;");
+                var temp = json[key];
+
+                var value;
+                if(temp && typeof temp == "string") {
+                    console.log(temp);
+                    value = temp.trim().replace(/[\r\n]/g, "").replace(fr, "&lt;&frasl;").replace(gt, "&gt;").replace(lt, "&lt;");
+                }else{
+                   value = temp;
+                }
+
                 html += '<tr><td>' + key + '</td><td>' + value + '</td></tr>';
                 //name.push(key);
                 //json.push(data.durations[key]);

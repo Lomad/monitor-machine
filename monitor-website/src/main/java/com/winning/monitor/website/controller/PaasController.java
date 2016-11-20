@@ -956,9 +956,9 @@ public class PaasController {
      */
     @RequestMapping(value = {"/paas/queryTransactionMessageListDetail"})
     @ResponseBody
-    public TransactionMessageListDetail queryTransactionMessageListDetail(String messageId, String serverAppName) {
-        System.out.println("id:"+messageId+",appName:"+serverAppName);
-        TransactionMessageListDetail detail = transactionDataQuery.queryTransactionMessageListDetails(GroupId, messageId, serverAppName);
+    public TransactionMessageListDetail queryTransactionMessageListDetail(String messageId,int index, String serverAppName) {
+        System.out.println("id:"+messageId+",appName:"+serverAppName+",index:"+index);
+        TransactionMessageListDetail detail = transactionDataQuery.queryTransactionMessageListDetails(GroupId, messageId, index,serverAppName);
         return detail;
     }
 }
