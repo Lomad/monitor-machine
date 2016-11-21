@@ -89,10 +89,10 @@
         //    console.log( $("#firstMenu>li[data-level='"+level+"']"))
             $("#firstMenu>li[data-level='"+level+"']").trigger("click");
             jQuery(document).ready(function () {
-                $(".page-content").height($(".page-sidebar-menu").height())
-                App.init();                             // initlayout and core plugins
-                Index.init();
-                bootbox.setDefaults("locale", "zh_CN");//bootbox默认中文
+//                $(".page-content").height($(".page-sidebar-menu").height())
+//                App.init();                             // initlayout and core plugins
+//                Index.init();
+//                bootbox.setDefaults("locale", "zh_CN");//bootbox默认中文
             });
 
             function signOut() {
