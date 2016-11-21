@@ -2,6 +2,7 @@ package com.winning.monitor.data.storage.mongodb;
 
 import com.winning.monitor.data.api.transaction.vo.TransactionReportType;
 import com.winning.monitor.data.api.transaction.vo.TransactionReportVO;
+import com.winning.monitor.data.api.transaction.vo.UsersVO;
 import com.winning.monitor.data.storage.api.ITransactionDataStorage;
 import com.winning.monitor.data.storage.api.exception.StorageException;
 import com.winning.monitor.data.storage.mongodb.po.transaction.TransactionReportPO;
@@ -37,6 +38,16 @@ public class TransactionDataStorage implements ITransactionDataStorage {
             throw e;
         }
         logger.info("与mongodb之间的连接成功!");
+    }
+
+
+    @Override
+    public  List<UsersVO> findUsers(String username, String password) {
+        Query query = new Query();
+        query.addCriteria(new Criteria("username").is(username));
+        query.addCriteria(new Criteria("password").is(password));
+        List<UsersVO> users = this.mongoTemplate.find(query, UsersVO.class,"Admins");
+        return users;
     }
 
 

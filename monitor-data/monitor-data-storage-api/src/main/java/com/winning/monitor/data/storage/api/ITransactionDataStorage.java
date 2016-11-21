@@ -3,6 +3,7 @@ package com.winning.monitor.data.storage.api;
 import com.winning.monitor.data.api.transaction.vo.TransactionReportType;
 import com.winning.monitor.data.api.transaction.vo.TransactionReportVO;
 import com.winning.monitor.data.storage.api.exception.StorageException;
+import com.winning.monitor.data.api.transaction.vo.UsersVO;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Map;
  */
 public interface ITransactionDataStorage {
 
+    List<UsersVO> findUsers(String username, String password);
 
     LinkedHashSet<String> findAllTransactionDomains(String group);
 

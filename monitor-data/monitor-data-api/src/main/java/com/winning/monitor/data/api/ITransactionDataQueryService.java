@@ -589,8 +589,9 @@ TransactionMessageList queryLastHourTransactionMessageList(String group,
      * 获取指定月内的调用消息明细记录
      *  @param group               系统类别
      * @param messageId           记录Id
-     * @parm  index                详情的位置,index=-1,表示服务的详情。
-     * @param serverAppName       应用服务系统名称,非空  */
+     * @param  index                详情的位置,index=-1,表示服务的详情。
+     * @param serverAppName       应用服务系统名称,非空
+     */
     TransactionMessageListDetail queryTransactionMessageListDetails(String group,
                                                                     String messageId,
                                                                     int index,
