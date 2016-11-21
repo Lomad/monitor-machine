@@ -104,7 +104,7 @@
                     </div>
                     <div style="right: -10px; top: 17px; position: absolute; display: block; color: #143e58;
                             font-size: 14px; line-height: 1.2em; width: 30px">
-                        <span style="color: white; cursor: pointer" onclick="loginOutT()">退出 </span>
+                        <span style="color: white; cursor: pointer" onclick="signOut()">退出 </span>
                     </div>
 
                 </div>

@@ -22,11 +22,12 @@ public class SpringMVCInterceptor implements  HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
         // TODO Auto-generated method stub
-        Session.setSession(request.getSession());
-        //session中获取用户名信息(判断登录的session，暂时注释)
-        HttpSession session=request.getSession(true);
+        //Session.setSession(request.getSession());
+
+        HttpSession session = request.getSession(true);
         Object obj = session.getAttribute("loginId");
-        if (obj==null||"".equals(obj.toString())) {
+        Session.setSession(session);
+        if ( obj==null || "".equals(obj.toString()) ) {
             response.sendRedirect(request.getSession().getServletContext().getContextPath()+LOGIN_URL);
             return false;
         }
@@ -41,11 +42,9 @@ public class SpringMVCInterceptor implements  HandlerInterceptor {
      * 或者是调用action，然后要在Interceptor之前调用的内容都写在调用invoke之前，要在Interceptor之后调用的内容都写在调用invoke方法之后。
      */
     @Override
-    public void postHandle(HttpServletRequest request,
-                           HttpServletResponse response, Object handler,
-                           ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request,HttpServletResponse response, Object handler, ModelAndView modelAndView)
+            throws Exception {
         // TODO Auto-generated method stub
-
     }
 
     /**
@@ -53,10 +52,8 @@ public class SpringMVCInterceptor implements  HandlerInterceptor {
      * 这个方法的主要作用是用于清理资源的，当然这个方法也只能在当前这个Interceptor的preHandle方法的返回值为true时才会执行。
      */
     @Override
-    public void afterCompletion(HttpServletRequest request,
-                                HttpServletResponse response, Object handler, Exception ex)
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
         // TODO Auto-generated method stub
-
     }
 }

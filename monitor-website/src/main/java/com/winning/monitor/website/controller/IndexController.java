@@ -1,6 +1,9 @@
 package com.winning.monitor.website.controller;
 
-import com.dianping.cat.status.model.entity.MessageInfo;
+
+import com.winning.monitor.data.api.ILogin;
+import com.winning.monitor.data.api.transaction.domain.LoginMessage;
+import com.winning.monitor.website.infrastructure.MessageInfo;
 import com.winning.monitor.website.infrastructure.Session;
 import com.winning.permission.core.api.entity.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +27,8 @@ public class IndexController {
 
 
 
-//    @Autowired
-//    private IUserPermission userPermissionService;
+    @Autowired
+    private ILogin loginService;
 
     @RequestMapping(value = {"/login"})
     public ModelAndView doLogin() {
@@ -33,14 +36,23 @@ public class IndexController {
     }
 
     @RequestMapping(value = {"/logoff"})
-    public @ResponseBody MessageInfo existLogin(HttpServletRequest request,String loginId,String passWord) {
-        MessageInfo msg = new MessageInfo();
+    public @ResponseBody   LoginMessage doLogoff(HttpServletRequest request,String loginId,String passWord) {
+//        MessageInfo msg = new MessageInfo();
 //        MessageInfo =userPermissionService.existLogin(loginId,passWord);
 //        if(msg.getState() !="false"){
 //            UserInfo user = userPermissionService.queryUser(loginId);
 //            Session.setSession(request.getSession(true));
 //            Session.set("loginId", loginId);
 //        }
+//        return msg;
+        LoginMessage msg = new LoginMessage();
+        if(loginId == null || "".equals(loginId)){
+            msg.setState(false);
+            return msg;
+        }
+        msg = loginService.login(loginId,passWord);
+        Session.setSession(request.getSession(true));
+        Session.set("loginId", loginId);
         return msg;
     }
 

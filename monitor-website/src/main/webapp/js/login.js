@@ -18,15 +18,14 @@ $(document).ready(function () {
             if(data.state =="false"){
                 bootbox.alert(data.msg);
                 return false;
-                //location.href = "/admin/usermaagen";
             }
             else if(data.state =="warning"){
                 bootbox.alert(data.msg,function(){
-                    location.href = "/admin/usermanage";
+                    //location.href = "/admin/usermanage";
                 });
             }
             else {
-                location.href = "/admin/usermanage";
+                location.href = "/";
             }
         });
     });

@@ -89,25 +89,22 @@
         //    console.log( $("#firstMenu>li[data-level='"+level+"']"))
             $("#firstMenu>li[data-level='"+level+"']").trigger("click");
             jQuery(document).ready(function () {
-        //        $(".page-content").height($(".page-sidebar-menu").height())
-        //        App.init(); // initlayout and core plugins
-        //        Index.init();
-        //        bootbox.setDefaults("locale", "zh_CN");//bootbox默认中文
-            <#--var loginId='${Session["href"]}';-->
-            <#--if(loginId=="" || loginId=="null"){-->
-            <#--location.href="/dologin";-->
-            <#--}-->
-
-                function loginOutT() {
-                    bootbox.confirm("是否退出登录?", function (result) {
-                        if (result) {
-                            $.post("/loginOut", {}, function (data) {
-                            });
-                            location.href = "/dologin";
-                        }
-                    });
-                }
+                $(".page-content").height($(".page-sidebar-menu").height())
+                App.init();                             // initlayout and core plugins
+                Index.init();
+                bootbox.setDefaults("locale", "zh_CN");//bootbox默认中文
             });
+
+            function signOut() {
+                bootbox.confirm("是否退出登录?", function (result) {
+                    if (result) {
+                        $.post("/logout", {}, function (data) {
+                        });
+                        location.href = "/login";
+                    }
+                });
+            }
+
         </script>
         <#nested >
 
