@@ -176,7 +176,7 @@ var global_Object = {
             tr += '<td>' + data.max + 'ms</td>';
             tr += '<td>' + data.tps + '</td>';
             tr += '<td><a onclick="global_Object.openPostFalse(this)" href="javascript:void(0)">' + data.failCount + '次</a></td>';
-            tr += '<td>' + data.failPercent*100 + '%</td>';
+            tr += '<td>' + data.failPercent + '%</td>';
             tr += '<td>' + data.std + 'ms</td>';
             tr += '<td><i class="fa  fa-bar-chart-o cp" onclick="global_Object.queryPic(this)"></i></td>';
             return tr;

@@ -201,7 +201,7 @@ var global_Object={
             tr += '<td>' + data.max + 'ms</td>';
             tr += '<td>' + data.tps + '</td>';
             tr += '<td>' + data.failCount + '次</td>';
-            tr += '<td>' + data.failPercent*100 + '%</td>';
+            tr += '<td>' + data.failPercent + '%</td>';
             tr += '<td>' + data.std + 'ms</td>';
             tr += '<td><i class="fa  fa-bar-chart-o cp" onclick="global_Object.queryPic(this)"></i></td>';
             tr += '</tr>';
