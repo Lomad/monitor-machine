@@ -22,11 +22,11 @@ public class SpringMVCInterceptor implements  HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
         // TODO Auto-generated method stub
-        //Session.setSession(request.getSession());
+        Session.setSession(request.getSession());
 
         HttpSession session = request.getSession(true);
         Object obj = session.getAttribute("loginId");
-        Session.setSession(session);
+
         if ( obj==null || "".equals(obj.toString()) ) {
             response.sendRedirect(request.getSession().getServletContext().getContextPath()+LOGIN_URL);
             return false;
