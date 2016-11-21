@@ -5,12 +5,14 @@ import com.winning.monitor.data.api.transaction.domain.LoginMessage;
 import com.winning.monitor.data.api.transaction.vo.UsersVO;
 import com.winning.monitor.data.storage.api.ITransactionDataStorage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by sao something on 2016/11/21.
  */
+@Service
 public class Login implements ILogin {
 
 
