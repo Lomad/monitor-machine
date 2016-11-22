@@ -9,13 +9,13 @@ import java.util.Map;
  * Created by sao something on 2016/11/16.
  */
 public class TransactionMessageListDetail {
-    private Map<String, Object> data;
+    private Map<String, String> data;
 
-    public Map<String, Object> getData() {
+    public Map<String, String> getData() {
         return data;
     }
 
-    public void setData(Map<String, Object> data) {
+    public void setData(Map<String, String> data) {
         this.data = data;
     }
 
