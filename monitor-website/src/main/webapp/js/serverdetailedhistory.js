@@ -152,7 +152,7 @@ var global_Object = {
             var html = "";
             var json = result.data;
             //console.log(result);
-            //console.log(json);
+            console.log(json);
             var lt = new RegExp("<","g"); // replace(lt, "&lt;")
             var fr = new RegExp("</","g"); // replace(fr, "&lt;&frasl;")
             var gt = new RegExp(">","g"); // replace(gt, "&gt;")
@@ -164,7 +164,10 @@ var global_Object = {
                     console.log(temp);
                     value = temp.trim().replace(/[\r\n]/g, "").replace(fr, "&lt;&frasl;").replace(gt, "&gt;").replace(lt, "&lt;");
                 }else{
-                   value = temp;
+                    //value = temp;
+                    console.log(temp);
+                    var jstr = JSON.stringify(temp);
+                    value = jstr;
                 }
 
                 html += '<tr><td>' + key + '</td><td>' + value + '</td></tr>';
