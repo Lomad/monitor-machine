@@ -1532,11 +1532,21 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         MessageTreeList  messageList = this.messageTreeStorage.queryMessageTree(group, messageId,serverAppName);
 
         TransactionMessageListDetail detail = new TransactionMessageListDetail();
+        TransactionMessage transactionMessage = new TransactionMessage();
         if(index == -1){
             for (MessageTree messageTree : messageList.getMessageTrees()) {
                 DefaultTransaction transaction = (DefaultTransaction) messageTree.getMessage();
-
-                detail.setData(transaction.getData());
+                if (transaction.getData() !=null) {
+                    for(Map.Entry<String,Object> entry : transaction.getData().entrySet()){
+                        Object value = entry.getValue();
+                        if(value == null){
+                            transactionMessage.getDatas().put(entry.getKey(),"");
+                        }else{
+                            transactionMessage.getDatas().put(entry.getKey(), value.toString());
+                        }
+                    }
+                }
+                detail.setData( transactionMessage.getDatas());
             }
         }else{
             for (MessageTree messageTree : messageList.getMessageTrees()) {
@@ -1545,7 +1555,17 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
                         LogMessage logMessage = transaction.getChildren().get(index);
                         DefaultTransaction childTransaction = (DefaultTransaction) logMessage;
-                       detail.setData(childTransaction.getData());
+                    if (childTransaction.getData() !=null) {
+                        for(Map.Entry<String,Object> entry : childTransaction.getData().entrySet()){
+                            Object value = entry.getValue();
+                            if(value == null){
+                                transactionMessage.getDatas().put(entry.getKey(),"");
+                            }else{
+                                transactionMessage.getDatas().put(entry.getKey(), value.toString());
+                            }
+                        }
+                    }
+                       detail.setData(transactionMessage.getDatas());
                     }
                 }
             }

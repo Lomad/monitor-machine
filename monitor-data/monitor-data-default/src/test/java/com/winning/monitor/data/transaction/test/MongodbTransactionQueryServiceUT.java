@@ -1,6 +1,7 @@
 package com.winning.monitor.data.transaction.test;
 
 import com.winning.monitor.agent.logging.message.Caller;
+import com.winning.monitor.data.api.ILogin;
 import com.winning.monitor.data.api.ITransactionDataQueryService;
 import com.winning.monitor.data.api.transaction.domain.*;
 import org.junit.Assert;
@@ -26,6 +27,9 @@ public class MongodbTransactionQueryServiceUT extends
     @Autowired
     private ITransactionDataQueryService transactionDataQuery;
 
+    @Autowired
+    private ILogin login;
+
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat hourFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -38,6 +42,12 @@ public class MongodbTransactionQueryServiceUT extends
     public void testQueryDomains() {
         LinkedHashSet<String> set = transactionDataQuery.getAllServerAppNames("BI");
         System.out.println(set);
+    }
+
+    @Test
+    public void testQueryUsrs() {
+        LoginMessage set = login.login("admin", "123");
+        Assert.assertNotNull(set);
     }
 
 
@@ -327,7 +337,7 @@ public class MongodbTransactionQueryServiceUT extends
 
     @Test
     public void testTransactionMessageListDetails() {
-        TransactionMessageListDetail str = transactionDataQuery.queryTransactionMessageListDetails("BI","207fef85-797a-4145-9197-346d415bae1a",0,"HIS");
+        TransactionMessageListDetail str = transactionDataQuery.queryTransactionMessageListDetails("BI","1f50a7b2-dd97-4c12-96fd-be4be7e5c856",0,"WinEMPI");
         Assert.assertNotNull(str);
     }
 
