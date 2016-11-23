@@ -3,9 +3,7 @@ package com.winning.monitor.website.controller;
 
 import com.winning.monitor.data.api.ILogin;
 import com.winning.monitor.data.api.transaction.domain.LoginMessage;
-import com.winning.monitor.website.infrastructure.MessageInfo;
 import com.winning.monitor.website.infrastructure.Session;
-import com.winning.permission.core.api.entity.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
