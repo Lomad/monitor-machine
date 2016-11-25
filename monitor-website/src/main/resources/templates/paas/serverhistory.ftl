@@ -118,8 +118,25 @@
 </@modal.editModal>
 <@foot.foot>
     <#assign contextPath=request.contextPath>
-<script src="${contextPath}/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
-<script src="${contextPath}/assets/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js" type="text/javascript"></script>
-<script src="${contextPath}/assets/plugins/echarts/echarts-all.js" type="text/javascript"></script>
-<script src="${contextPath}/js/serverhistory.js" type="text/javascript"></script>
+    <#-- 从Session里面获取“后退”的历史参数提取：这里是将带到服务器的数据取出来，关键之二
+    <#if Session["serverAppName"] ? exists>
+        <#assign serverAppName = Session["serverAppName"]>
+    </#if>
+    <#if Session["type"] ? exists>
+        <#assign dateTimeType = Session["type"]>
+    </#if>
+    <#if Session["dateValue"] ? exists>
+        <#assign dateTimeValue = Session["dateValue"]>
+    </#if>
+    <#if Session["searchKeywords"] ? exists>
+        <#assign searchKeywords = Session["searchKeywords"]>
+    </#if>-->
+    <input type="hidden" id="searchKeywords" value="${searchKeywords}">
+    <input type="hidden" id="serverAppName" value="${serverAppName}">
+    <input type="hidden" id="dateTimeType" value="${dateTimeType}">
+    <input type="hidden" id="dateTimeValue" value="${dateTimeValue}">
+    <script src="${contextPath}/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+    <script src="${contextPath}/assets/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js" type="text/javascript"></script>
+    <script src="${contextPath}/assets/plugins/echarts/echarts-all.js" type="text/javascript"></script>
+    <script src="${contextPath}/js/serverhistory.js" type="text/javascript"></script>
 </@foot.foot>

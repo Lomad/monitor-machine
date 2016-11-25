@@ -4,9 +4,20 @@
 $(document).ready(function () {
     global_Object.initDomEvent();
     $.post(contextPath+"/paas/qeryAllDomain", {}, function (data) {
-        $("#flname").html(data[0] + ' <i class="fa  fa-caret-down"></i>');
-        //alert(data[0]);
-        global_Object.flname = data[0];
+        var serverAppName = $.trim($("#serverAppName").val());
+        // 历史条件恢复
+        if(serverAppName!=null && serverAppName.length!=0){
+            $("#flname").html(serverAppName + ' <i class="fa  fa-caret-down"></i>');
+            global_Object.flname = serverAppName;
+            global_Object.recvDateTime();
+        }
+        else
+        // 原来初始条件
+        {
+            $("#flname").html(data[0] + ' <i class="fa  fa-caret-down"></i>');
+            //alert(data[0]);
+            global_Object.flname = data[0];
+        }
         global_Object.queryTableData();
         var li = [];
         $.each(data, function (i, v) {
@@ -30,6 +41,89 @@ var global_Object = {
     type:"day",
     value:"",
     formatdate:"",
+    dateTimeUpdate: function(type,time){
+        global_Object.type = type;
+
+        if(type == "day"){
+            $('#date_picker').datepicker('update','');
+            $('#date_picker').datepicker('destroy');
+            $("#date_picker").datepicker({
+                language: "zh-CN",
+                autoclose: true,//选中之后自动隐藏日期选择框
+                format: "yyyy-mm-dd",//日期格式
+                weekStart:1,
+                showWeekNumbers:true,
+                endDate:"-1d"
+
+            });
+            global_Object.url = contextPath+"/paas/queryDayTransactionTypeReportByServer";
+            //global_Object.formatdate = global_Object.getYesterdayFormatDate();
+            $("#date_picker").datepicker('update',global_Object.formatdate);
+            $("#datevalue").val(time);
+            global_Object.formatdate = time;
+
+        }else if(type == "week"){
+            $('#date_picker').datepicker('update','');
+            $('#date_picker').datepicker('destroy');
+            $("#date_picker").datepicker({
+                language: "zh-CN",
+                autoclose: true,//选中之后自动隐藏日期选择框
+                format: "yyyy/mm/dd",//日期格式
+                weekStart:1,
+                showWeekNumbers:true,
+                calendarWeeks: true,
+                todayHighlight: true,
+                endDate:"-1d"
+            });
+            global_Object.url = contextPath+"/paas/queryWeekTransactionTypeReportByServer";
+
+            $("#date_picker").datepicker('update',global_Object.formatdate);
+            $("#datevalue").val(time);
+            //global_Object.formatdate = $("#datevalue").val().split("-")[0];
+            var oldDate = $("#datevalue").val().split("-")[0];
+            var newDate = oldDate.split("/");
+            global_Object.formatdate = newDate[0]+"-"+newDate[1]+"-"+newDate[2];
+            console.log("week:time-"+time+",global:"+global_Object.formatdate);
+
+        }else if(type == "month"){
+            $('#date_picker').datepicker('update','');
+            $('#date_picker').datepicker('destroy');
+            $("#date_picker").datepicker({
+                language: "zh-CN",
+                autoclose: true,//选中之后自动隐藏日期选择框
+                format: "yyyy-mm",//日期格式
+                weekStart:1,
+                showWeekNumbers:true,
+                startView: 'year',
+                minViewMode:1,
+                endDate:new Date()
+            });
+            global_Object.url = contextPath+"/paas/queryMonthTransactionTypeReportByServer";
+            global_Object.formatdate = time +"-01";
+            $("#date_picker").datepicker('update',global_Object.formatdate);
+        }
+    },
+    recvDateTime: function(){
+        var dateTimeType = $.trim($("#dateTimeType").val());
+        var dateTimeValue = $.trim($("#dateTimeValue").val());
+
+        if(dateTimeType!=null && dateTimeType.length!=0){
+            if(dateTimeType=="day"){
+                $("#selbtn").html('日查询 <i class="fa  fa-caret-down"></i>');
+                global_Object.dateTimeUpdate(dateTimeType,dateTimeValue);
+                //$('#datevalue').val(dateTimeValue);
+                //global_Object.dateValueUpdate(dateTimeValue);
+            }else if(dateTimeType=="week"){
+                console.log("week:"+dateTimeValue);
+                $("#selbtn").html('周查询 <i class="fa  fa-caret-down"></i>');
+                global_Object.dateTimeUpdate(dateTimeType,dateTimeValue);
+            }else if(dateTimeType=="month"){
+                console.log("month:"+dateTimeValue);
+                $("#selbtn").html('月查询 <i class="fa  fa-caret-down"></i>');
+                global_Object.dateTimeUpdate(dateTimeType,dateTimeValue);
+            }
+        }
+    },
     initDomEvent: function () {
         $("#date_picker").datepicker({
             language: "zh-CN",
@@ -409,7 +503,8 @@ var global_Object = {
     openPostTotalCount:function(obj){
         global_Object.value = $("#datevalue").val();
         var url =contextPath+"/paas/serverdetailedhistory";
-        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":"",historyPageType:"server",dateValue:global_Object.formatdate};
+        var datas={"transactionTypeName":$(obj).parents("tr").data("transactiontypename"),"serverIpAddress":$(obj).parents("tr").data("serveripaddress")==undefined?"":$(obj).parents("tr").data("serveripaddress"),"serverAppName":global_Object.flname,"type":global_Object.type,value:global_Object.value,"clientAppName":"","clientIpAddress":"","status":"",historyPageType:"server",dateValue:global_Object.formatdate,
+                    "searchKeywords":$.trim($("#keyword").val())};
         JqCommon.openPostWindow(url,datas);
     },
     openPostFalse:function(obj){
