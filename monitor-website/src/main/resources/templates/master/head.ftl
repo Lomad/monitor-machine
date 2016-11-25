@@ -13,6 +13,9 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 
     <#assign contextPath=request.contextPath>
+    <#if Session["loginId"] ? exists>
+        <#assign loginId = Session["loginId"]>
+    </#if>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="${contextPath}/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <link href="${contextPath}/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
@@ -93,7 +96,7 @@
                             font-size: 12px; line-height: 1.2em; width: 45px" 　>
                             <span style="color: white" class="cp">
                                管理员<br/>
-                               00123
+                               ${loginId}
                             </span>
                     </div>
                     <div id="shuxian" style="right: 47px; top: 10px; position: absolute; height: 22px;

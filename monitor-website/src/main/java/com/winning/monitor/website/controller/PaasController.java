@@ -6,12 +6,15 @@ import com.winning.monitor.data.api.transaction.domain.TransactionCallTimesRepor
 import com.winning.monitor.data.api.transaction.domain.TransactionMessageList;
 import com.winning.monitor.data.api.transaction.domain.TransactionMessageListDetail;
 import com.winning.monitor.data.api.transaction.domain.TransactionStatisticReport;
+import com.winning.monitor.website.infrastructure.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
@@ -168,13 +171,19 @@ public class PaasController {
     }
 
     @RequestMapping(value = {"/paas/serverdetailedhistory"})
-    public ModelAndView serverdetailedhistory(String datas) {
+    public ModelAndView serverdetailedhistory(HttpServletRequest request,String datas) {
         Map<String, Object> map = null;
         try {
             map = this.objectMapper.readValue(datas, Map.class);
         } catch (IOException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
+
+        Session.setSession(request.getSession(true));
+        Session.set("detailedhistory",datas);//仅供后退功能使用的参数保存
+
+        System.out.println("current attribute:"+ Session.get("detailedhistory"));
+
         ModelAndView mv = new ModelAndView("paas/serverdetailedhistory");
         String transactionTypeName=map.get("transactionTypeName").toString();
         String serverIpAddress=map.get("serverIpAddress").toString();
@@ -187,15 +196,15 @@ public class PaasController {
         String dateValue=map.get("dateValue").toString();
         String historyPageType=map.get("historyPageType").toString();
         mv.addObject("transactionTypeName",transactionTypeName);
-        mv.addObject("serverIpAddress",serverIpAddress);
+        mv.addObject("serverIpAddress", serverIpAddress);
         mv.addObject("serverAppName",serverAppName);
-        mv.addObject("type",type);
+        mv.addObject("type", type);
         mv.addObject("value",time);
-        mv.addObject("clientAppName",clientAppName);
+        mv.addObject("clientAppName", clientAppName);
         mv.addObject("clientIpAddress",clientIpAddress);
-        mv.addObject("status",status);
+        mv.addObject("status", status);
         mv.addObject("dateValue",dateValue);
-        mv.addObject("historyPageType",historyPageType);
+        mv.addObject("historyPageType", historyPageType);
         return mv;
     }
 
@@ -261,8 +270,37 @@ public class PaasController {
     }
 
     @RequestMapping(value = {"/paas/serverhistory"})
-    public ModelAndView serverhistory() {
-        return new ModelAndView("paas/serverhistory");
+    public ModelAndView serverhistory(HttpServletResponse response) {
+        //HttpSession session = request.getSession(true);
+        //String history = (String)session.getAttribute("detailedhistory");
+        String history = (String)Session.get("detailedhistory");
+        System.out.println("back attribute:"+history );
+
+        response.setHeader("Cache-Control","no-store");
+        response.setDateHeader("Expires", 0);
+        response.setHeader("Pragma","no-cache");
+
+        ModelAndView mv = new ModelAndView("paas/serverhistory");
+
+        if(history != null){ //如果历史参数不为空，则将历史参数带回
+            Map<String, Object> map = null;
+            try {
+                map = this.objectMapper.readValue(history, Map.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            String serverAppName=map.get("serverAppName").toString();
+            String type=map.get("type").toString();
+            String time=map.get("value").toString();
+            String searchKeywords=map.get("searchKeywords").toString();
+
+            mv.addObject("serverAppName",serverAppName);
+            mv.addObject("dateTimeType", type);
+            mv.addObject("dateTimeValue",time);
+            mv.addObject("searchKeywords", searchKeywords);
+        }
+        return mv;
     }
 
     @RequestMapping(value = {"/paas/clienthistory"})
