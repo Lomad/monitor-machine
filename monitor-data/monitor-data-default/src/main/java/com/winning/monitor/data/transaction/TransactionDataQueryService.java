@@ -2,10 +2,10 @@ package com.winning.monitor.data.transaction;
 
 import com.winning.monitor.agent.logging.message.LogMessage;
 import com.winning.monitor.agent.logging.message.MessageTree;
-import com.winning.monitor.agent.logging.message.internal.AbstractLogMessage;
 import com.winning.monitor.agent.logging.transaction.DefaultTransaction;
 import com.winning.monitor.data.api.ITransactionDataQueryService;
 import com.winning.monitor.data.api.transaction.domain.*;
+import com.winning.monitor.data.api.transaction.domain.ServerCount;
 import com.winning.monitor.data.api.transaction.vo.*;
 import com.winning.monitor.data.api.vo.Range2;
 import com.winning.monitor.data.storage.api.ITransactionDataStorage;
@@ -52,6 +52,112 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     public LinkedHashSet<String> getAllServerAppNames(String group) {
         return transactionDataStorage.findAllTransactionDomains(group);
     }
+
+    /**
+     * 获取今天和昨天的调用数
+     */
+    @Override
+    public ServerCount getTodayAndYestodaySize() {
+        Map<String, Object> map = new HashMap<>();
+        int todayCount = this.transactionDataStorage.findAllserverSize(this.getToday(),this.getCurrentHour(),map);
+
+        int yesdayCount =this.transactionDataStorage.findAllserverSize(this.getYestoday(),this.getToday(),map);
+        ServerCount serverCount = new ServerCount();
+        serverCount.setTodayCount(todayCount);
+        serverCount.setYestodayCount(yesdayCount);
+        return serverCount;
+
+    }
+
+    @Override
+    public ServerCount getTodayAndYestodayWrongSize() {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("status",1);
+        int todayWrongCount = this.transactionDataStorage.findAllserverSize(this.getToday(),this.getCurrentHour(),map);
+
+        int yesdayWrongCount =this.transactionDataStorage.findAllserverSize(this.getYestoday(),this.getToday(),map);
+        ServerCount serverCount = new ServerCount();
+        serverCount.setTodayCount(todayWrongCount);
+        serverCount.setYestodayCount(yesdayWrongCount);
+        return serverCount;
+
+    }
+
+    @Override
+    public ServerCountWithType getTodaySizeByClientType() {
+
+        Map<String, Object> map = new HashMap<>();
+        LinkedHashMap<String, Long> serverCount = new LinkedHashMap();
+        ServerCountWithType serverCountWithType = new ServerCountWithType();
+        List clientType = this.transactionDataStorage.findAllTransactionTypes();
+        for(int i=0;i<clientType.size();i++) {
+            map.put("clientType", clientType.get(i));
+            Long todayCount = new Long(this.transactionDataStorage.findAllserverSize(this.getToday(), this.getCurrentHour(), map));
+            serverCount.put(clientType.get(i).toString(),todayCount);
+
+        }
+        serverCountWithType.setServerCountMap(serverCount);
+        return  serverCountWithType;
+
+    }
+
+    @Override
+    public ServerCountWithDomainList getTodaySizeByDomain() {
+
+        ServerCountWithDomainList serverCountWithDomainList = new ServerCountWithDomainList();
+        LinkedHashSet<String> domains = this.transactionDataStorage.findAllTransactionDomains("BI");
+        List list = new ArrayList(domains);
+        for(Object i:list){
+
+            ServerCountWithDomain serverCountWithDomain = this.toServerCountWithDomain(i);
+            serverCountWithDomainList.addCountMessage(serverCountWithDomain);
+        }
+        return serverCountWithDomainList;
+    }
+
+    public ServerCountWithDomain toServerCountWithDomain(Object i){
+        Map<String, Object> map = new HashMap<>();
+        ServerCountWithDomain serverCountWithDomain = new ServerCountWithDomain();
+        map.put("status",1);
+        map.put("severAppName",i);
+        Long todayWrongCount = new Long(this.transactionDataStorage.findAllserverSize(this.getToday(),
+                this.getCurrentHour(), map));
+        map.put("status",0);
+        Long todayCount = new Long(this.transactionDataStorage.findAllserverSize(this.getToday(),
+                this.getCurrentHour(), map));
+        Long todayRightCount = todayCount - todayWrongCount;
+        serverCountWithDomain.setServerAppName(i.toString());
+        serverCountWithDomain.setTodayCount(todayCount);
+        serverCountWithDomain.setTodayRightCount(todayRightCount);
+        serverCountWithDomain.setTodayWrongCount(todayWrongCount);
+
+        return serverCountWithDomain;
+    }
+
+    @Override
+    public WrongMessageList getLastHourWrongMessageList() {
+
+        Map<String, Object> map = this.getArgumentMap(null , null,
+                null, null, null, "失败");
+        WrongMessageList wrongMessageList = new WrongMessageList();
+        long start = System.currentTimeMillis();
+        start = start - start % HOUR;
+        long end = start + HOUR;
+        LinkedHashMap<String, String> order = new LinkedHashMap<>();
+        order.put("time", "ASC");
+
+        MessageTreeList messageList = this.messageTreeStorage.queryMessageTree("BI","", start, end, map, 1,1,order);
+        for (MessageTree messageTree : messageList.getMessageTrees()) {
+            DefaultTransaction transaction = (DefaultTransaction) messageTree.getMessage();
+            wrongMessageList.setDomain(messageTree.getDomain());
+            wrongMessageList.setServerIpAddress(messageTree.getIpAddress());
+            wrongMessageList.setTransactionTypeName(transaction.getType());
+            wrongMessageList.setCurrentTime(this.simpleDateFormat.format(new Date(transaction.getTimestamp())));
+        }
+        return wrongMessageList;
+    }
+
 
     /**
      * 获取所有的应用服务系统对应的IP地址
@@ -1576,9 +1682,13 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
     private TransactionMessage toTransactionMessage(MessageTree messageTree) {
         DefaultTransaction transaction = (DefaultTransaction) messageTree.getMessage();
         TransactionMessage transactionMessage = this.toTransactionMessage(transaction);
-
-        transactionMessage.setClientAppName(messageTree.getCaller().getName());
-        transactionMessage.setClientIpAddress(messageTree.getCaller().getIp());
+        if(messageTree.getCaller()!=null) {
+            transactionMessage.setClientAppName(messageTree.getCaller().getName());
+            transactionMessage.setClientIpAddress(messageTree.getCaller().getIp());
+        }else{
+            transactionMessage.setClientAppName(null);
+            transactionMessage.setClientIpAddress(null);
+        }
         transactionMessage.setClientType(messageTree.getCaller().getType());
         transactionMessage.setServerAppName(messageTree.getDomain());
         transactionMessage.setServerIpAddress(messageTree.getIpAddress());
@@ -1662,6 +1772,13 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
 
     private String getToday() {
         long timestamp = System.currentTimeMillis();
+        timestamp = timestamp - timestamp % DAY;
+        Date today = new Date(timestamp);
+        return this.simpleDateFormat.format(today);
+    }
+
+    private String getYestoday() {
+        long timestamp = System.currentTimeMillis()-DAY;
         timestamp = timestamp - timestamp % DAY;
         Date today = new Date(timestamp);
         return this.simpleDateFormat.format(today);

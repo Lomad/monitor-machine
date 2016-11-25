@@ -45,6 +45,43 @@ public class MongodbTransactionQueryServiceUT extends
     }
 
     @Test
+    public void testQueryLogin() {
+        LoginMessage set = login.login("admin", "1234");
+        System.out.println(set);
+    }
+
+
+    @Test
+    public void testTodayAndYestodaySize() {
+        ServerCount set = transactionDataQuery.getTodayAndYestodaySize();
+        Assert.assertNotNull(set);
+    }
+
+    @Test
+    public void testTodayAndYestodayWrongSize() {
+        ServerCount set = transactionDataQuery.getTodayAndYestodayWrongSize();
+        Assert.assertNotNull(set);
+    }
+
+    @Test
+    public void testTodaySizeByClientType() {
+        ServerCountWithType set = transactionDataQuery.getTodaySizeByClientType();
+        Assert.assertNotNull(set);
+    }
+
+    @Test
+    public void testTodaySizeByDomain() {
+        ServerCountWithDomainList set = transactionDataQuery.getTodaySizeByDomain();
+        Assert.assertNotNull(set);
+    }
+
+    @Test
+    public void testLastHourWrongMessageList() {
+        WrongMessageList set = transactionDataQuery.getLastHourWrongMessageList();
+        Assert.assertNotNull(set);
+    }
+
+    @Test
     public void testQueryUsrs() {
         LoginMessage set = login.login("admin", "123");
         Assert.assertNotNull(set);

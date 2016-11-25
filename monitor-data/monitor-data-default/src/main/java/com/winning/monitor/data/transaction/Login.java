@@ -23,7 +23,7 @@ public class Login implements ILogin {
     public LoginMessage login(String username, String password) {
         List<UsersVO> user = this.transactionDataStorage.findUsers(username, password);
         LoginMessage loginMessage = new LoginMessage();
-        if(user != null){
+        if(user.size() > 0){
             loginMessage.setState(true);
         }else{
             loginMessage.setState(false);

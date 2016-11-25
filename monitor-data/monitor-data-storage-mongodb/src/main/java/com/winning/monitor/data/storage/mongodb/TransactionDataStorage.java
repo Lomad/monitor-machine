@@ -50,6 +50,48 @@ public class TransactionDataStorage implements ITransactionDataStorage {
         return users;
     }
 
+    @Override
+    public int findAllserverSize(String startTime, String endTime, Map<String, Object> map) {
+        Query query = new Query();
+        List severCount = null;
+        query.addCriteria(new Criteria("startTime").gte(startTime).lte(endTime));
+        if (map != null && map.containsKey("severAppName"))
+            query.addCriteria(new Criteria("domain").is(map.get("severAppName")));
+        if (map != null && map.containsKey("clientType"))
+            query.addCriteria(new Criteria("machines.transactionClients.type").is(map.get("clientType")));
+        //status=1 失败的调用
+        if (map != null && map.containsKey("status")) {
+            if(map.get("status").equals(1)) {
+                query.addCriteria(new Criteria("machines.transactionClients.transactionTypes.failCount").gt(0));
+                severCount = this.mongoTemplate.getCollection(REALTIME_COLLECTION_NAME)
+                        .distinct("machines.transactionClients.transactionTypes.failCount", query.getQueryObject());
+            }
+            else{
+                severCount = this.mongoTemplate.getCollection(REALTIME_COLLECTION_NAME)
+                        .distinct("machines.transactionClients.transactionTypes.totalCount", query.getQueryObject());
+            }
+
+
+        }else{
+            severCount = this.mongoTemplate.getCollection(REALTIME_COLLECTION_NAME)
+                    .distinct("machines.transactionClients.transactionTypes.totalCount", query.getQueryObject());
+        }
+        int sum = 0;
+
+        for( int i= 0;i<severCount.size();i++){
+            sum+= Integer.parseInt(severCount.get(i).toString());
+        }
+
+        return sum ;
+    }
+
+    @Override
+    public List<String> findAllTransactionTypes() {
+        List<String> transactionTypes = this.mongoTemplate.getCollection(REALTIME_COLLECTION_NAME).distinct("machines.transactionClients.type");
+        Collections.sort(transactionTypes);
+        return transactionTypes;
+    }
+
 
     @Override
     public LinkedHashSet<String> findAllTransactionDomains(String group) {

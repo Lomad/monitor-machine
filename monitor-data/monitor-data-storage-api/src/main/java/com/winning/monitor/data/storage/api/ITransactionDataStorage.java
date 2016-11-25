@@ -16,6 +16,11 @@ public interface ITransactionDataStorage {
 
     List<UsersVO> findUsers(String username, String password);
 
+    int findAllserverSize(String startTime, String endTime, Map<String, Object> map);
+
+
+    List<String> findAllTransactionTypes();
+
     LinkedHashSet<String> findAllTransactionDomains(String group);
 
     LinkedHashSet<String> findAllTransactionClients(String group);

@@ -1,9 +1,6 @@
 package com.winning.monitor.data.api;
 
-import com.winning.monitor.data.api.transaction.domain.TransactionCallTimesReport;
-import com.winning.monitor.data.api.transaction.domain.TransactionMessageList;
-import com.winning.monitor.data.api.transaction.domain.TransactionMessageListDetail;
-import com.winning.monitor.data.api.transaction.domain.TransactionStatisticReport;
+import com.winning.monitor.data.api.transaction.domain.*;
 
 
 import java.util.LinkedHashMap;
@@ -21,6 +18,31 @@ public interface ITransactionDataQueryService {
      * @return
      */
     LinkedHashSet<String> getAllServerAppNames(String group);
+
+    /**
+     * 获取今天和昨天的调用数
+     */
+     ServerCount getTodayAndYestodaySize();
+
+    /**
+     * 获取今天和昨天错误的调用数
+     */
+     ServerCount getTodayAndYestodayWrongSize();
+
+    /**
+     * 根据客户端类型获取客户端调用数
+     */
+     ServerCountWithType getTodaySizeByClientType();
+
+    /**
+     * 根据系统获取系统总调用数，正常调用数，异常调用数
+     */
+    ServerCountWithDomainList getTodaySizeByDomain();
+
+    /**
+     * 获取错误调用的明细
+     */
+     WrongMessageList getLastHourWrongMessageList();
 
 
     /**
