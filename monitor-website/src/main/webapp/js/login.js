@@ -15,8 +15,8 @@ $(document).ready(function () {
         $.post("/logoff",{loginId:username,passWord:password},function(data){
             console.log(data);
             //return;
-            if(data.state =="false"){
-                bootbox.alert(data.msg);
+            if(data.state == false){
+                bootbox.alert("用户名或密码错误");
                 return false;
             }
             else if(data.state =="warning"){
