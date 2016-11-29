@@ -1,5 +1,6 @@
 package com.winning.monitor.data.storage.api;
 
+import com.winning.monitor.data.api.transaction.vo.SumVO;
 import com.winning.monitor.data.api.transaction.vo.TransactionReportType;
 import com.winning.monitor.data.api.transaction.vo.TransactionReportVO;
 import com.winning.monitor.data.storage.api.exception.StorageException;
@@ -16,7 +17,7 @@ public interface ITransactionDataStorage {
 
     List<UsersVO> findUsers(String username, String password);
 
-    int findAllserverSize(String startTime, String endTime, Map<String, Object> map);
+    SumVO findAllserverSize(String startTime, String endTime, Map<String, Object> map);
 
 
     List<String> findAllTransactionTypes();

@@ -4,22 +4,22 @@ package com.winning.monitor.data.api.transaction.domain;
  * Created by sao something on 2016/11/24.
  */
 public class ServerCount {
-    private int todayCount;
-    private int yestodayCount;
+    private long todayCount;
+    private long yestodayCount;
 
-    public int getTodayCount() {
+    public long getTodayCount() {
         return todayCount;
     }
 
-    public void setTodayCount(int todayCount) {
+    public void setTodayCount(long todayCount) {
         this.todayCount = todayCount;
     }
 
-    public int getYestodayCount() {
+    public long getYestodayCount() {
         return yestodayCount;
     }
 
-    public void setYestodayCount(int yestodayCount) {
+    public void setYestodayCount(long yestodayCount) {
         yestodayCount = yestodayCount;
     }
 }

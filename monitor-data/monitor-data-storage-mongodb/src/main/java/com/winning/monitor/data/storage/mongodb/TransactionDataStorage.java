@@ -1,8 +1,6 @@
 package com.winning.monitor.data.storage.mongodb;
 
-import com.winning.monitor.data.api.transaction.vo.TransactionReportType;
-import com.winning.monitor.data.api.transaction.vo.TransactionReportVO;
-import com.winning.monitor.data.api.transaction.vo.UsersVO;
+import com.winning.monitor.data.api.transaction.vo.*;
 import com.winning.monitor.data.storage.api.ITransactionDataStorage;
 import com.winning.monitor.data.storage.api.exception.StorageException;
 import com.winning.monitor.data.storage.mongodb.po.transaction.TransactionReportPO;
@@ -51,38 +49,45 @@ public class TransactionDataStorage implements ITransactionDataStorage {
     }
 
     @Override
-    public int findAllserverSize(String startTime, String endTime, Map<String, Object> map) {
+    public SumVO findAllserverSize(String startTime, String endTime, Map<String, Object> map) {
+        long failSum = 0;
+        long totalSum = 0;
         Query query = new Query();
-        List severCount = null;
         query.addCriteria(new Criteria("startTime").gte(startTime).lte(endTime));
         if (map != null && map.containsKey("severAppName"))
             query.addCriteria(new Criteria("domain").is(map.get("severAppName")));
         if (map != null && map.containsKey("clientType"))
             query.addCriteria(new Criteria("machines.transactionClients.type").is(map.get("clientType")));
-        //status=1 失败的调用
-        if (map != null && map.containsKey("status")) {
-            if(map.get("status").equals(1)) {
-                query.addCriteria(new Criteria("machines.transactionClients.transactionTypes.failCount").gt(0));
-                severCount = this.mongoTemplate.getCollection(REALTIME_COLLECTION_NAME)
-                        .distinct("machines.transactionClients.transactionTypes.failCount", query.getQueryObject());
+
+        List<TransactionReportVO> list =
+                this.mongoTemplate.find(query, TransactionReportVO.class, REALTIME_COLLECTION_NAME);
+        List<TransactionMachineVO> machineVOs = new ArrayList<TransactionMachineVO>();
+        List<TransactionClientVO> clientVOs = new ArrayList<TransactionClientVO>();
+        List<TransactionTypeVO> typeVOs = new ArrayList<TransactionTypeVO>();
+        if (list != null) {
+            for (TransactionReportVO report : list) {
+                //report.initialReport();
+                machineVOs = report.getMachines();
+                for (TransactionMachineVO machs : machineVOs) {
+                    clientVOs = machs.getTransactionClients();
+                    for (TransactionClientVO clients : clientVOs){
+                        typeVOs = clients.getTransactionTypes();
+                        for(TransactionTypeVO types: typeVOs){
+                            long failCount = types.getFailCount();
+                            failSum += failCount;
+                            long tatalCount = types.getTotalCount();
+                            totalSum += tatalCount;
+                        }
+
+                    }
+                }
             }
-            else{
-                severCount = this.mongoTemplate.getCollection(REALTIME_COLLECTION_NAME)
-                        .distinct("machines.transactionClients.transactionTypes.totalCount", query.getQueryObject());
-            }
-
-
-        }else{
-            severCount = this.mongoTemplate.getCollection(REALTIME_COLLECTION_NAME)
-                    .distinct("machines.transactionClients.transactionTypes.totalCount", query.getQueryObject());
         }
-        int sum = 0;
+        SumVO sumVOs = new SumVO();
+        sumVOs.setFailSum(failSum);
+        sumVOs.setTotalSum(totalSum);
 
-        for( int i= 0;i<severCount.size();i++){
-            sum+= Integer.parseInt(severCount.get(i).toString());
-        }
-
-        return sum ;
+        return sumVOs ;
     }
 
     @Override

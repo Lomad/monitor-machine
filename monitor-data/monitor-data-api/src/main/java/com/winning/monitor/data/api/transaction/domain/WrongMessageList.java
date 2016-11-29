@@ -1,5 +1,7 @@
 package com.winning.monitor.data.api.transaction.domain;
 
+import java.util.Map;
+
 /**
  * Created by sao something on 2016/11/25.
  */
@@ -8,6 +10,8 @@ public class WrongMessageList {
     private String transactionTypeName;
     private String serverIpAddress;
     private String currentTime;
+
+    private Map<String,String> tips;
 
     public String getDomain() {
         return domain;
@@ -39,5 +43,13 @@ public class WrongMessageList {
 
     public void setCurrentTime(String currentTime) {
         this.currentTime = currentTime;
+    }
+
+    public Map<String, String> getTips() {
+        return tips;
+    }
+
+    public void setTips(Map<String, String> tips) {
+        this.tips = tips;
     }
 }
