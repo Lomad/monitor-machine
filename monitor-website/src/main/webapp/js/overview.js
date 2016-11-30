@@ -27,7 +27,7 @@ var global_Object = {
          $.post(url, {}, function(obj){
          console.log(obj);
          var chart = echarts.init(document.getElementById('id_svr_count'));
-         var array = [obj.todayCount, obj.yestodayCount];
+         var array = [obj.yestodayCount,obj.todayCount];
          console.log(array);
          var option = {
          title: {
@@ -81,7 +81,7 @@ var global_Object = {
         var url = "/paas/queryTodayYestodayWrongCount";
         var wrong = echarts.init(document.getElementById('id_svr_wrong'));
         $.post(url, {}, function(obj){
-            var array = [obj.todayCount, obj.yestodayCount];
+            var array = [ obj.yestodayCount,obj.todayCount];
             var option = {
                 title: {
                     text: '服务错误量'
