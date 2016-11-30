@@ -151,18 +151,14 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         long end = start + HOUR;
         LinkedHashMap<String, String> order = new LinkedHashMap<>();
         order.put("time", "ASC");
-        LinkedHashMap<String, String> tips = new LinkedHashMap<>();
-        tips.put("error","服务调用失败");
+
         LinkedHashSet<String> domains = this.transactionDataStorage.findAllTransactionDomains("BI");
+
         for(String domain:domains) {
-            MessageTreeList messageList = this.messageTreeStorage.queryMessageTree("BI", domain, start, end, map, 1, 1, order);
+            MessageTreeList messageList = this.messageTreeStorage.queryMessageTree("BI", domain, start, end, map, 1, 10, order);
             for (MessageTree messageTree : messageList.getMessageTrees()) {
-                DefaultTransaction transaction = (DefaultTransaction) messageTree.getMessage();
-                wrongMessageList.setDomain(messageTree.getDomain());
-                wrongMessageList.setServerIpAddress(messageTree.getIpAddress());
-                wrongMessageList.setTransactionTypeName(transaction.getType());
-                wrongMessageList.setCurrentTime(this.simpleDateFormat.format(new Date(transaction.getTimestamp())));
-                wrongMessageList.setTips(tips);
+                WrongMessage wrongMessage = this.toWrongMessage(messageTree);
+                wrongMessageList.addWrongMessage(wrongMessage);
             }
         }
         return wrongMessageList;
@@ -1687,6 +1683,19 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
             }
 
         return detail;
+    }
+
+    private WrongMessage toWrongMessage(MessageTree messageTree){
+        LinkedHashMap<String, String> tips = new LinkedHashMap<>();
+        tips.put("error","服务调用失败");
+        DefaultTransaction transaction = (DefaultTransaction) messageTree.getMessage();
+        WrongMessage wrongMessage = new WrongMessage();
+        wrongMessage.setDomain(messageTree.getDomain());
+        wrongMessage.setServerIpAddress(messageTree.getIpAddress());
+        wrongMessage.setTransactionTypeName(transaction.getType());
+        wrongMessage.setCurrentTime(this.simpleDateFormat.format(new Date(transaction.getTimestamp())));
+        wrongMessage.setTips(tips);
+        return wrongMessage;
     }
 
     private TransactionMessage toTransactionMessage(MessageTree messageTree) {
