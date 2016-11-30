@@ -164,7 +164,7 @@
                 </ul>
             </li>-->
             <li class="" data-level="2" style="display:none">
-                <a href="${contextPath}/paas/overview">
+                <a href="${contextPath}/overview">
                     <i class="fa fa-desktop fa-lg"></i>
                     <span class="title">概览
                     </span>

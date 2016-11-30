@@ -2,10 +2,7 @@ package com.winning.monitor.website.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winning.monitor.data.api.ITransactionDataQueryService;
-import com.winning.monitor.data.api.transaction.domain.TransactionCallTimesReport;
-import com.winning.monitor.data.api.transaction.domain.TransactionMessageList;
-import com.winning.monitor.data.api.transaction.domain.TransactionMessageListDetail;
-import com.winning.monitor.data.api.transaction.domain.TransactionStatisticReport;
+import com.winning.monitor.data.api.transaction.domain.*;
 import com.winning.monitor.website.infrastructure.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,7 +26,7 @@ public class PaasController {
     private ObjectMapper objectMapper = new ObjectMapper();
     private String GroupId = "BI";
 
-    @RequestMapping(value = {"/paas/overview"})
+    @RequestMapping(value = {"/overview"})
     public ModelAndView overview() {
         return new ModelAndView("paas/overview");
     }
@@ -998,6 +995,115 @@ public class PaasController {
         System.out.println("id:"+messageId+",appName:"+serverAppName+",index:"+index);
         TransactionMessageListDetail detail = transactionDataQuery.queryTransactionMessageListDetails(GroupId, messageId, index,serverAppName);
         return detail;
+    }
+
+    /**
+     * 概览页面：今天和昨天的服务访问总量
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryTodayYestodayServerCount"})
+    @ResponseBody
+    public ServerCount queryTodayYestodayServerCount() {
+        ServerCount count = transactionDataQuery.getTodayAndYestodaySize();
+//        ServerCount total = new ServerCount();
+//        total.setTodayCount(3400);
+//        total.setYestodayCount(5400);
+        return count;
+    }
+
+    /**
+     * 概览页面：今天和昨天的服务访问错误数量
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryTodayYestodayWrongCount"})
+    @ResponseBody
+    public ServerCount queryTodayYestodayWrongCount() {
+        ServerCount wrong = transactionDataQuery.getTodayAndYestodayWrongSize();
+//        ServerCount wrong = new ServerCount();
+//        wrong.setTodayCount(239);
+//        wrong.setYestodayCount(456);
+        return wrong;
+    }
+
+    /**
+     * 概览页面：今天访问总量的客户端分类统计
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryTodayCountByClientType"})
+    @ResponseBody
+    public ServerCountWithType queryTodayCountByClientType() {
+        ServerCountWithType count = transactionDataQuery.getTodaySizeByClientType();
+//        ServerCountWithType count = new ServerCountWithType();
+//        LinkedHashMap<String, Long> temp = new  LinkedHashMap<String, Long>();
+//        temp.put("手机端", 340L);
+//        temp.put("PC端",5600L);
+//        temp.put("PAD端",45L);
+//        count.setServerCountMap(temp);
+        return count;
+    }
+
+    /**
+     * 概览页面：今天访问总量的应用名分类统计
+     * @return
+     */
+    @RequestMapping(value = "/paas/queryTodayCountByDomain")
+    @ResponseBody
+    public ServerCountWithDomainList queryTodayCountByDomain(){
+        ServerCountWithDomainList count = transactionDataQuery.getTodaySizeByDomain();
+
+//        ServerCountWithDomainList count = new ServerCountWithDomainList();
+//        ServerCountWithDomain domain = new ServerCountWithDomain();
+//        domain.setServerAppName("HIS");domain.setTodayCount(500L);domain.setTodayRightCount(450L);domain.setTodayWrongCount(500L);
+//        count.addCountMessage(domain);
+//        ServerCountWithDomain domain1 = new ServerCountWithDomain();
+//        domain1.setServerAppName("NIS");domain1.setTodayCount(50L);domain1.setTodayRightCount(450L);domain1.setTodayWrongCount(500L);
+//        count.addCountMessage(domain1);
+//        ServerCountWithDomain domain2 = new ServerCountWithDomain();
+//        domain2.setServerAppName("KIS");domain2.setTodayCount(500L);domain2.setTodayRightCount(450L);domain2.setTodayWrongCount(500L);
+//        count.addCountMessage(domain2);
+//        ServerCountWithDomain domain3 = new ServerCountWithDomain();
+//        domain3.setServerAppName("GIS");domain3.setTodayCount(500L);domain3.setTodayRightCount(450L);domain3.setTodayWrongCount(500L);
+//        count.addCountMessage(domain3);
+//        ServerCountWithDomain domain4 = new ServerCountWithDomain();
+//        domain4.setServerAppName("MIS");domain4.setTodayCount(500L);domain4.setTodayRightCount(450L);domain4.setTodayWrongCount(500L);
+//        count.addCountMessage(domain4);
+//        ServerCountWithDomain domain5 = new ServerCountWithDomain();
+//        domain5.setServerAppName("CDR");domain5.setTodayCount(500L);domain5.setTodayRightCount(450L);domain5.setTodayWrongCount(500L);
+//        count.addCountMessage(domain5);
+
+        return  count;
+    }
+
+    /**
+     * 概览页面：当前一小时的访问错误日志概览
+     * @return
+     */
+    @RequestMapping(value = {"/paas/queryLastHourWrongMessageOverview"})
+    @ResponseBody
+    public WrongMessageList queryLastHourWrongMessageOverview() {
+        WrongMessageList wrong = transactionDataQuery.getLastHourWrongMessageList ();
+
+//        WrongMessageList wrong = new WrongMessageList();
+//        WrongMessage message = new WrongMessage();
+//        message.setDomain("HIS");
+//        message.setTransactionTypeName("患者注册");
+//        message.setServerIpAddress("192.168.22.33");
+//        message.setCurrentTime("11/22 09:30");
+//        Map<String,String> tips = new HashMap<String, String>();
+//        tips.put("alarm","CPU大于98%");
+//        message.setTips(tips);
+//        wrong.addWrongMessage(message);
+//        WrongMessage message1 = new WrongMessage();
+//        message1.setDomain("NIS");
+//        message1.setTransactionTypeName("患者合并");
+//        message1.setServerIpAddress("192.168.22.44");
+//        message1.setCurrentTime("11/22 10:30");
+//        Map<String,String> tips1 = new HashMap<String, String>();
+//        tips1.put("error","CPU大于85%");
+//        message1.setTips(tips1);
+//        wrong.addWrongMessage(message1);
+
+        return wrong;
     }
 }
 
