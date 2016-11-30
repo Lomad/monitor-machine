@@ -1,55 +1,23 @@
 package com.winning.monitor.data.api.transaction.domain;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by sao something on 2016/11/25.
+ * Created by sao something on 2016/11/29.
  */
 public class WrongMessageList {
-    private String domain;
-    private String transactionTypeName;
-    private String serverIpAddress;
-    private String currentTime;
+    List<WrongMessage> wrongMessages = new ArrayList<>();
 
-    private Map<String,String> tips;
-
-    public String getDomain() {
-        return domain;
+    public List<WrongMessage> getWrongMessages() {
+        return wrongMessages;
     }
 
-    public void setDomain(String domain) {
-        this.domain = domain;
+    public void setWrongMessages(List<WrongMessage> wrongMessages) {
+        this.wrongMessages = wrongMessages;
     }
 
-    public String getTransactionTypeName() {
-        return transactionTypeName;
-    }
-
-    public void setTransactionTypeName(String transactionTypeName) {
-        this.transactionTypeName = transactionTypeName;
-    }
-
-    public String getServerIpAddress() {
-        return serverIpAddress;
-    }
-
-    public void setServerIpAddress(String serverIpAddress) {
-        this.serverIpAddress = serverIpAddress;
-    }
-
-    public String getCurrentTime() {
-        return currentTime;
-    }
-
-    public void setCurrentTime(String currentTime) {
-        this.currentTime = currentTime;
-    }
-
-    public Map<String, String> getTips() {
-        return tips;
-    }
-
-    public void setTips(Map<String, String> tips) {
-        this.tips = tips;
+    public void addWrongMessage(WrongMessage wrongMessage){
+        this.wrongMessages.add(wrongMessage);
     }
 }
