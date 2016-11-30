@@ -20,6 +20,6 @@ public class ServerCount {
     }
 
     public void setYestodayCount(long yestodayCount) {
-        yestodayCount = yestodayCount;
+        this.yestodayCount = yestodayCount;
     }
 }
