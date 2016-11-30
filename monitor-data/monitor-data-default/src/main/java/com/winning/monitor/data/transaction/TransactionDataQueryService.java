@@ -1704,11 +1704,13 @@ public class TransactionDataQueryService implements ITransactionDataQueryService
         if(messageTree.getCaller()!=null) {
             transactionMessage.setClientAppName(messageTree.getCaller().getName());
             transactionMessage.setClientIpAddress(messageTree.getCaller().getIp());
+            transactionMessage.setClientType(messageTree.getCaller().getType());
         }else{
-            transactionMessage.setClientAppName(null);
-            transactionMessage.setClientIpAddress(null);
+            transactionMessage.setClientAppName("");
+            transactionMessage.setClientIpAddress("");
+            transactionMessage.setClientType("");
         }
-        transactionMessage.setClientType(messageTree.getCaller().getType());
+
         transactionMessage.setServerAppName(messageTree.getDomain());
         transactionMessage.setServerIpAddress(messageTree.getIpAddress());
         transactionMessage.setMessageId(messageTree.getMessageId());
