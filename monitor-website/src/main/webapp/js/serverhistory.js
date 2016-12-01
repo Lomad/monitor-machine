@@ -464,13 +464,26 @@ var global_Object = {
                 xAxis: [
                     {
                         type: 'category',
-                        data: name
-
+                        data: name,
+                        name: '分',
+                        nameLocation: 'end',
+                        nameTextStyle:{
+                            color: 'black',
+                            fontSize: 14,
+                            fontWeight: 'bolder'
+                        }
                     }
                 ],
                 yAxis: [
                     {
-                        type: 'value'
+                        type: 'value',
+                        name: '次',
+                        nameLocation: 'end',
+                        nameTextStyle:{
+                            color: 'black',
+                            fontSize: 14,
+                            fontWeight: 'bolder'
+                        }
                     }
                 ],
                 series: [
