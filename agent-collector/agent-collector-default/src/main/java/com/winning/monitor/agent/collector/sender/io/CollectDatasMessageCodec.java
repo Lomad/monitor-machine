@@ -63,6 +63,12 @@ public class CollectDatasMessageCodec {
 
     public CollectDatas decode(MessageByteContext ctx) {
         String json = helper.read(ctx, LF);
+
+        if (json.contains("CollectDatas")) {
+            int length = json.length();
+            int point = json.indexOf("messageType");
+            json = json.substring(0, point - 2) + json.substring(length - 1);
+        }
         try {
             CollectDatas collectDatas = objectMapper.readValue(json, CollectDatas.class);
             return collectDatas;
