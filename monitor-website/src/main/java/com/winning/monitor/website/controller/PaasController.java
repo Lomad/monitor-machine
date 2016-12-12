@@ -1,7 +1,9 @@
 package com.winning.monitor.website.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.winning.monitor.data.api.ISystemInfoQueryService;
 import com.winning.monitor.data.api.ITransactionDataQueryService;
+import com.winning.monitor.data.api.systemInfo.SystemInfoReportVO;
 import com.winning.monitor.data.api.transaction.domain.*;
 import com.winning.monitor.website.infrastructure.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class PaasController {
 
     @Autowired
     private ITransactionDataQueryService transactionDataQuery;
+    @Autowired
+    private ISystemInfoQueryService systemInfoQueryService;
+
     private ObjectMapper objectMapper = new ObjectMapper();
     private String GroupId = "BI";
 
@@ -35,6 +40,9 @@ public class PaasController {
     public ModelAndView serverrealtime() {
         return new ModelAndView("paas/serverrealtime");
     }
+
+    @RequestMapping(value = {"/paas/machinerealtime"})
+    public ModelAndView machinerealtime(){return new ModelAndView("paas/machinerealtime");}
 
     @RequestMapping(value = {"/paas/serversysrealtime"})
     public ModelAndView serversysrealtime(String datas) {
@@ -359,6 +367,13 @@ public class PaasController {
         return mv;
     }
 
+    @RequestMapping(value = {"/paas/queryMachineList"})
+    public @ResponseBody
+    SystemInfoReportVO querySystemInfo(String ipAddress){
+        SystemInfoReportVO systemInfoReportVO = systemInfoQueryService.getSystemInfoReport(ipAddress);
+
+        return systemInfoReportVO;
+    }
 
     @RequestMapping(value = {"/paas/qeryAllDomain"})
     public @ResponseBody

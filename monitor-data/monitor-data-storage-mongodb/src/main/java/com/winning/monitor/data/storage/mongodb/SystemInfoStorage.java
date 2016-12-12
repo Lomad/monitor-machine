@@ -13,6 +13,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author Lemod
@@ -21,7 +23,7 @@ import javax.annotation.PostConstruct;
 public class SystemInfoStorage implements ISystemInfoStorage {
 
     private static final Logger logger = LoggerFactory.getLogger(SystemInfoStorage.class);
-    private static final String SYSTEM_INFO_COLLECTION_NAME = "SystemInfoReports";
+    private static final String SYSTEM_INFO_COLLECTION_NAME = "SystemInfoRealTimeReports";
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -61,4 +63,32 @@ public class SystemInfoStorage implements ISystemInfoStorage {
             logger.error("更新数据库失败"+e.getMessage());
         }
     }
+
+    @Override
+    public List<SystemInfoReportVO> queryRealTimeInfo(String ipAddress,String startTime) {
+
+        List<SystemInfoReportVO> systemInfoReportVOList = new ArrayList<>();
+        try {
+            Query query = new Query();
+            query.addCriteria(new Criteria("ipAddress").is(ipAddress));
+            query.addCriteria(new Criteria("startTime").is(startTime));
+            List<SystemInfoReportPO> systemInfoReportPOList;
+
+            systemInfoReportPOList = this.mongoTemplate.find(query,SystemInfoReportPO.class,SYSTEM_INFO_COLLECTION_NAME);
+
+            if (systemInfoReportPOList != null){
+                for (SystemInfoReportPO systemInfoReportPO : systemInfoReportPOList){
+                    SystemInfoReportVO systemInfoReportVO = systemInfoReportPO.toReportVO();
+                    systemInfoReportVOList.add(systemInfoReportVO);
+                }
+            }else {
+                logger.error("");
+            }
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
+
+        return systemInfoReportVOList;
+    }
+
 }

@@ -32,15 +32,15 @@ public class CollectDataAnalyzer extends AbstractMessageAnalyzer<CollectDatas> {
 
     @Override
     protected void process(CollectDatas message) {
-        String domain = message.getHostName();
-        SystemInfoReport infoReport = collectReportManager.getHourlyReport(getStartTime(), null,domain, true);
+        String ipAddress = message.getIpAddress();
+        SystemInfoReport infoReport = collectReportManager.getHourlyReport(getStartTime(), null,ipAddress, true);
 
         if (message.getDatas().size()>0){
             for (CollectData collectData : message.getDatas()){
                 infoReport.addInfo(collectData);
             }
 
-            infoReport.setIpAddress(message.getIpAddress());
+            infoReport.setHostName(message.getHostName());
         }
     }
 

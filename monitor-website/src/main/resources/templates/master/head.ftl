@@ -183,6 +183,9 @@
                     <li data-level="2">
                         <a href="${contextPath}/paas/clientrealtime"">消费方监控</a>
                     </li>
+                    <li data-level="2">
+                        <a href="${contextPath}/paas/machinerealtime"" >主机监控</a>
+                    </li>
                 </ul>
             </li>
             <li class="" data-level="2" style="display:none">

@@ -13,14 +13,14 @@ import java.util.List;
 public class SystemInfoReport {
 
     private String id;
-    private String m_domain;
     private String ipAddress;
+    private String hostName;
     private java.util.Date m_startTime;
     private java.util.Date m_endTime;
     private List<CollectData> infoList = new ArrayList<>();
 
     public SystemInfoReport(String m_domain) {
-        this.m_domain = m_domain;
+        this.ipAddress = m_domain;
     }
 
     public String getId() {
@@ -31,21 +31,21 @@ public class SystemInfoReport {
         this.id = id;
     }
 
-    public String getM_domain() {
-        return m_domain;
-    }
-
-    public SystemInfoReport setM_domain(String m_domain) {
-        this.m_domain = m_domain;
-        return this;
-    }
-
     public String getIpAddress() {
         return ipAddress;
     }
 
-    public void setIpAddress(String ipAddress) {
+    public SystemInfoReport setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+        return this;
+    }
+
+    public String getHostName() {
+        return hostName;
+    }
+
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
     }
 
     public Date getM_startTime() {

@@ -22,8 +22,8 @@ public class CollectDataReportConverter {
         SystemInfoReportVO infoReportVO = new SystemInfoReportVO();
 
         infoReportVO.setId(infoReport.getId());
+        infoReportVO.setHostName(infoReport.getHostName());
         infoReportVO.setIpAddress(infoReport.getIpAddress());
-        infoReportVO.setDomain(infoReport.getM_domain());
         infoReportVO.setStartTime(dateFormat.format(infoReport.getM_startTime()));
         infoReportVO.setEndTime(dateFormat.format(infoReport.getM_endTime()));
         infoReportVO.setInfoList(toCollectDataVO(infoReport.getInfoList()));

@@ -10,8 +10,8 @@ import java.util.List;
 public class SystemInfoReportVO {
 
     private String id;
-    private String domain;
     private String ipAddress;
+    private String hostName;
     private String startTime;
     private String endTime;
     private List<LinkedHashMap<String,Object>> infoList;
@@ -24,20 +24,20 @@ public class SystemInfoReportVO {
         this.id = id;
     }
 
-    public String getDomain() {
-        return domain;
-    }
-
-    public void setDomain(String domain) {
-        this.domain = domain;
-    }
-
     public String getIpAddress() {
         return ipAddress;
     }
 
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+    public void setIpAddress(String domain) {
+        this.ipAddress = domain;
+    }
+
+    public String getHostName() {
+        return hostName;
+    }
+
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
     }
 
     public String getStartTime() {
@@ -62,5 +62,9 @@ public class SystemInfoReportVO {
 
     public void setInfoList(List<LinkedHashMap<String, Object>> infoList) {
         this.infoList = infoList;
+    }
+
+    public void addInfoList(List<LinkedHashMap<String, Object>> infoList){
+        this.infoList.addAll(infoList);
     }
 }

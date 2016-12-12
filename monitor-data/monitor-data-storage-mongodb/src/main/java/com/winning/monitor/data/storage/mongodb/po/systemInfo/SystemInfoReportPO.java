@@ -17,8 +17,8 @@ public class SystemInfoReportPO {
 
     @Id
     private String id;
-    private String domain;
     private String ipAddress;
+    private String hostName;
     private String startTime;
     private String endTime;
     private List<LinkedHashMap<String,Object>> infoList;
@@ -28,8 +28,8 @@ public class SystemInfoReportPO {
 
     public SystemInfoReportPO(SystemInfoReportVO systemInfoReportVO){
         this.id = systemInfoReportVO.getId();
-        this.domain = systemInfoReportVO.getDomain();
         this.ipAddress = systemInfoReportVO.getIpAddress();
+        this.hostName = systemInfoReportVO.getHostName();
         this.startTime = systemInfoReportVO.getStartTime();
         this.endTime = systemInfoReportVO.getEndTime();
 
@@ -45,20 +45,20 @@ public class SystemInfoReportPO {
         this.id = id;
     }
 
-    public String getDomain() {
-        return domain;
-    }
-
-    public void setDomain(String domain) {
-        this.domain = domain;
-    }
-
     public String getIpAddress() {
         return ipAddress;
     }
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    public String getHostName() {
+        return hostName;
+    }
+
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
     }
 
     public String getStartTime() {
@@ -85,4 +85,16 @@ public class SystemInfoReportPO {
         this.infoList = infoList;
     }
 
+    public SystemInfoReportVO toReportVO(){
+        SystemInfoReportVO systemInfoReportVO = new SystemInfoReportVO();
+
+        systemInfoReportVO.setId(this.getId());
+        systemInfoReportVO.setIpAddress(this.getIpAddress());
+        systemInfoReportVO.setHostName(this.getHostName());
+        systemInfoReportVO.setStartTime(this.getStartTime());
+        systemInfoReportVO.setEndTime(this.getEndTime());
+        systemInfoReportVO.setInfoList(this.getInfoList());
+
+        return systemInfoReportVO;
+    }
 }
