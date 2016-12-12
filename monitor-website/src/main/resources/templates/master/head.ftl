@@ -61,7 +61,7 @@
     <div class="header-inner">
         <!-- BEGIN LOGO -->
         <a class="navbar-brand" href="#" style="padding: 0px">
-            <img id="logo_sys" src="${contextPath}/images/1_logo.png" alt="logo" class="img-responsive hidden-480"
+            <img id="logo_sys" src="${contextPath}/images/logo.png" alt="logo" class="img-responsive hidden-480"
                  style="height: 52px; margin-left: 0px; margin-top: 0px"/>
         </a>
         <ul id="firstMenu" class="nav navbar-nav " style="height: 42px">
@@ -182,9 +182,6 @@
                     </li>
                     <li data-level="2">
                         <a href="${contextPath}/paas/clientrealtime"">消费方监控</a>
-                    </li>
-                    <li data-level="2">
-                        <a href="${contextPath}/paas/machinerealtime"" >主机监控</a>
                     </li>
                 </ul>
             </li>

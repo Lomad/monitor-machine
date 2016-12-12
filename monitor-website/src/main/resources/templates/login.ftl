@@ -25,14 +25,18 @@
 <body class="page-header-fixed" style="overflow:hidden">
 <!-- BEGIN HEADER -->
 <!-- BEGIN HEADER -->
-<div class="header loginheader" style="background-color: #0e508a !important;">
+<div class="header loginheader" style="background-color: #ffffff !important;">
     <div class="header-inner">
         <div class="row">
             <div class="col-md-3">
-                <a class="navbar-brand" href="index.html">
+                <#--<a class="navbar-brand" href="index.html">
                     <img src="assets/img/logo.png" alt="logo" class="float-l" />
                     <span class="logotext margin-left-10">统一监控平台</span>
-                </a>
+                </a>-->
+                    <a class="navbar-brand" href="index.html" style="padding: 0px">
+                        <img id="logo_sys" src="${contextPath}/images/1_logo.png" alt="logo" class="img-responsive hidden-480"
+                             style="height: 53px; margin-left: 16px; margin-top: 0px"/>
+                    </a>
             </div>
             <div class="col-md-9" >
             </div>
@@ -79,7 +83,7 @@
     </div>
 </div>
 </div>
-<div class="footer" style="background: #fff; border-top: 1px solid #e2e2e2;">
+<div class="footer" style="background: #fff;height: 60px;line-height: 60px; border-top: 1px solid #e2e2e2;">
     <div id="yymc" class="footer-inner">
     </div>
     <div class="footer-tools" style="color: #aaaaaa;">
