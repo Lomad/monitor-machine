@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +37,33 @@ public class SystemInfoQueryService implements ISystemInfoQueryService{
             resReportVO = systemInfoReportVOList.get(0);
         }
         return resReportVO;
+    }
+
+    @Override
+    public List<SystemInfoReportVO> getSystemInfoReportList() {
+        List<SystemInfoReportVO> systemInfoReportVOList = new ArrayList<>();
+
+        List<SystemInfoReportVO> reportVOList = this.systemInfoStorage.queryRealTimeInfoList(this.getCurrentTime());
+        if (reportVOList == null||reportVOList.size() == 0) {
+            return null;
+        }else {
+            SystemInfoStatisticReportMerger merger = new SystemInfoStatisticReportMerger();
+            for (SystemInfoReportVO tempVO : reportVOList){
+                for (SystemInfoReportVO addVO : systemInfoReportVOList){
+                    if (addVO != null){
+                        if (addVO.getIpAddress().equals(tempVO.getIpAddress())) {
+                            SystemInfoReportVO reportVO = merger.mergeDoubleVO(addVO, tempVO);
+
+                            systemInfoReportVOList.remove(addVO);
+                            systemInfoReportVOList.add(reportVO);
+                        }else {
+                            systemInfoReportVOList.add(tempVO);
+                        }
+                    }
+                }
+            }
+        }
+        return systemInfoReportVOList;
     }
 
     private String getCurrentTime(){

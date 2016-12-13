@@ -14,4 +14,6 @@ public interface ISystemInfoStorage {
     void storeCollectDataReport(SystemInfoReportVO infoReportVO)throws StorageException;
 
     List<SystemInfoReportVO> queryRealTimeInfo(String domain,String startTime);
+
+    List<SystemInfoReportVO> queryRealTimeInfoList(String startTime);
 }

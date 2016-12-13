@@ -15,6 +15,9 @@ public class SystemInfoStatisticReportMerger {
 
     private List<SystemInfoReportVO> initInfoList;
 
+    public SystemInfoStatisticReportMerger() {
+    }
+
     public SystemInfoStatisticReportMerger(List<SystemInfoReportVO> initInfoList) {
         this.initInfoList = initInfoList;
     }
@@ -39,5 +42,18 @@ public class SystemInfoStatisticReportMerger {
         resInfoReportVO.setId(ID);
 
         return resInfoReportVO;
+    }
+
+    public SystemInfoReportVO mergeDoubleVO(SystemInfoReportVO startVO,SystemInfoReportVO lastVO){
+        SystemInfoReportVO systemInfoReportVO = new SystemInfoReportVO();
+
+        systemInfoReportVO.setIpAddress(lastVO.getIpAddress());
+        systemInfoReportVO.setHostName(lastVO.getHostName());
+        systemInfoReportVO.setStartTime(lastVO.getStartTime());
+        systemInfoReportVO.setEndTime(lastVO.getEndTime());
+        systemInfoReportVO.setInfoList(startVO.getInfoList());
+        systemInfoReportVO.addInfoList(lastVO.getInfoList().subList(1,lastVO.getInfoList().size()));
+
+        return systemInfoReportVO;
     }
 }

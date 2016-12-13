@@ -82,7 +82,7 @@ public class SystemInfoStorage implements ISystemInfoStorage {
                     systemInfoReportVOList.add(systemInfoReportVO);
                 }
             }else {
-                logger.error("");
+                logger.info("无指定主机信息");
             }
         }catch (Exception e){
             logger.error(e.getMessage());
@@ -91,4 +91,28 @@ public class SystemInfoStorage implements ISystemInfoStorage {
         return systemInfoReportVOList;
     }
 
+    @Override
+    public List<SystemInfoReportVO> queryRealTimeInfoList(String startTime) {
+        List<SystemInfoReportVO> systemInfoReportVOList = new ArrayList<>();
+        try {
+            Query query = new Query();
+            query.addCriteria(new Criteria("startTime").is(startTime));
+            List<SystemInfoReportPO> systemInfoReportPOList;
+
+            systemInfoReportPOList = this.mongoTemplate.find(query,SystemInfoReportPO.class,SYSTEM_INFO_COLLECTION_NAME);
+
+            if (systemInfoReportPOList != null){
+                for (SystemInfoReportPO systemInfoReportPO : systemInfoReportPOList){
+                    SystemInfoReportVO systemInfoReportVO = systemInfoReportPO.toReportVO();
+                    systemInfoReportVOList.add(systemInfoReportVO);
+                }
+            }else {
+                logger.info("当前主机数量为零");
+            }
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
+
+        return systemInfoReportVOList;
+    }
 }
