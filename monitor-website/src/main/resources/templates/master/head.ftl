@@ -73,6 +73,9 @@
             <li class="dropdown user firstMenu" data-level="2">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">服务监控</a>
             </li>
+            <li class="dropdown machine firstMenu" data-level="3">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">主机监控</a>
+            </li>
             <#--<li class="dropdown user  firstMenu" data-level="3">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">SAAS/业务</a>
             </li>
@@ -199,6 +202,21 @@
                         <a href="${contextPath}/paas/clienthistory">消费方监控</a>
                     </li>
                 </ul>
+            </li>
+
+            <li class="" data-level="3" style="display:none">
+                <a href="${contextPath}/machineOverview">
+                    <i class="fa fa-desktop fa-lg"></i>
+                    <span class="title">概览
+                    </span>
+                </a>
+            </li>
+            <li class="" data-level="3" style="display:none">
+                <a href="${contextPath}/machineList">
+                    <i class="fa fa-desktop fa-lg"></i>
+                    <span class="title">主机列表
+                    </span>
+                </a>
             </li>
             <#--<li class="" data-level="3" style="display:none">
                 <a href="javascript:;">
