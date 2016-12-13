@@ -17,24 +17,18 @@ public enum NetworkInterfaceManager {
     public InetAddress findValidateIp(List<InetAddress> addresses) {
         InetAddress local = null;
         for (InetAddress address : addresses) {
-            if (address instanceof Inet4Address) {
-                if (address.isLoopbackAddress() || address.isSiteLocalAddress()) {
-                    if (local == null) {
-                        local = address;
-                    } else if (address.isSiteLocalAddress() && !address.isLoopbackAddress()) {
-                        // site local address has higher priority than other address
-                        local = address;
-                    } else if (local.isSiteLocalAddress() && address.isSiteLocalAddress()) {
-                        // site local address with a host name has higher
-                        // priority than one without host name
-                        if (local.getHostName().equals(local.getHostAddress())
-                                && !address.getHostName().equals(address.getHostAddress())) {
+            if (address instanceof Inet4Address && !address.isLoopbackAddress()) {
+                if (local == null){
+                    local = address;
+                }else {
+                    if (address.isSiteLocalAddress()){
+                        if (local.isSiteLocalAddress()){
+                            if (local.getHostName().equals(local.getHostAddress())
+                                    && !address.getHostName().equals(address.getHostAddress()))
+                                local = address;
+                        }else {
                             local = address;
                         }
-                    }
-                } else {
-                    if (local == null) {
-                        local = address;
                     }
                 }
             }
