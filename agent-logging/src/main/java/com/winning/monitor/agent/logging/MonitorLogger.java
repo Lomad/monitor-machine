@@ -29,7 +29,6 @@ public class MonitorLogger {
     private ConfigManager configContainer;
     private MessageTreeSenderTaskManager messageTreeSenderTaskManager;
 
-
     private MonitorLogger() {
     }
 
@@ -51,9 +50,14 @@ public class MonitorLogger {
     }
 
     private static boolean isInitialized() {
-        synchronized (s_instance) {
-            return s_init;
+        boolean checkMonitor = true;
+        try {
+            checkAndInitialize();
+        }catch (Exception e){
+            e.printStackTrace();
+            checkMonitor = false;
         }
+        return checkMonitor;
     }
 
     private static void initialize(File configFile) {
@@ -65,7 +69,7 @@ public class MonitorLogger {
         }
 
         if (jsonMap == null)
-            throw new RuntimeException("CAT 初始化失败,未找到配置文件");
+            throw new RuntimeException("监控平台 初始化失败,未找到配置文件");
 
         s_instance.configContainer = new ConfigManager(jsonMap);
 
@@ -107,7 +111,11 @@ public class MonitorLogger {
     }
 
     public static Transaction beginTransactionType(String type) {
-        return MonitorLogger.getMessageProducer().newTransaction(type, "");
+        if (isInitialized()) {
+            return MonitorLogger.getMessageProducer().newTransaction(type, "");
+        }else {
+            return null;
+        }
     }
 
     public static Transaction beginTransactionName(Transaction type, String name) {
@@ -122,6 +130,5 @@ public class MonitorLogger {
         checkAndInitialize();
         return s_instance.messageProducer;
     }
-
 
 }
