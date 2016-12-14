@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 public class SystemInfoStatisticReportMerger {
 
-    private static final String ID = UUID.randomUUID().toString();
+    //private static final String ID = UUID.randomUUID().toString();
 
     private List<SystemInfoReportVO> initInfoList;
 
@@ -39,7 +39,7 @@ public class SystemInfoStatisticReportMerger {
                     subList(1,tempVO.getInfoList().size()));
         }
 
-        resInfoReportVO.setId(ID);
+        resInfoReportVO.setId(UUID.randomUUID().toString());
 
         return resInfoReportVO;
     }
@@ -47,6 +47,7 @@ public class SystemInfoStatisticReportMerger {
     public SystemInfoReportVO mergeDoubleVO(SystemInfoReportVO startVO,SystemInfoReportVO lastVO){
         SystemInfoReportVO systemInfoReportVO = new SystemInfoReportVO();
 
+        systemInfoReportVO.setId(UUID.randomUUID().toString());
         systemInfoReportVO.setIpAddress(lastVO.getIpAddress());
         systemInfoReportVO.setHostName(lastVO.getHostName());
         systemInfoReportVO.setStartTime(lastVO.getStartTime());
